@@ -15,7 +15,12 @@ function isAuthorized(request: NextRequest): boolean {
 function toValidIsoOrNull(value: string | null): string | null {
   if (!value) return null;
   const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? null : date.toISOString();
+  if (Number.isNaN(date.getTime())) return null;
+  // Guard against a hallucinated past date (the model getting "today" wrong) —
+  // treat anything more than a day stale as "no real deadline" rather than
+  // silently dropping the query from matching.
+  const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
+  return date.getTime() < oneDayAgo ? null : date.toISOString();
 }
 
 function detectSource(fromEmail: string, subject: string): string {

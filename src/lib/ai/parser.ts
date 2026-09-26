@@ -44,22 +44,29 @@ const EXTRACT_QUERIES_TOOL: Anthropic.Tool = {
   },
 };
 
-const SYSTEM_PROMPT = `You extract individual journalist/editor source requests from a
+function buildSystemPrompt(today: string): string {
+  return `You extract individual journalist/editor source requests from a
 newsletter digest (HARO, SOS/Source of Sources, Help A B2B Writer, etc).
+
+Today's date is ${today}.
 
 Rules:
 - Each newsletter contains multiple unrelated requests; split them into separate items.
 - Skip ads, sponsored sections, footers, unsubscribe links, and platform boilerplate.
 - "reply_email" is the address journalists are told to respond to, if present.
-- "deadline" must be an ISO 8601 date/time if you can find one, otherwise null.
+- "deadline" must be an ISO 8601 date/time, resolved relative to today's date above
+  (e.g. "this Friday" or "end of week" -> the correct upcoming date, not a past one).
+  Only use null if there is truly no time reference in the text.
 - Keep "body" close to the original wording — do not summarize away requirements.
 - If you cannot find any real requests, return an empty queries array.`;
+}
 
 export async function parseNewsletter(rawText: string): Promise<ParsedQuery[]> {
+  const today = new Date().toISOString().slice(0, 10);
   const message = await anthropic.messages.create({
     model: "claude-haiku-4-5",
     max_tokens: 4096,
-    system: SYSTEM_PROMPT,
+    system: buildSystemPrompt(today),
     tools: [EXTRACT_QUERIES_TOOL],
     tool_choice: { type: "tool", name: "extract_queries" },
     messages: [
