@@ -74,9 +74,14 @@ export default async function DashboardPage() {
               </li>
             ))}
           </ul>
-          <Link href="/app/approvals" className="text-sm underline">
-            View pending approvals →
-          </Link>
+          <div className="flex gap-4">
+            <Link href="/app/approvals" className="text-sm underline">
+              View pending approvals →
+            </Link>
+            <Link href="/app/backlinks" className="text-sm underline">
+              View backlinks →
+            </Link>
+          </div>
         </>
       )}
     </div>
