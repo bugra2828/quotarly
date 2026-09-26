@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 export default async function AdminPage() {
   const supabase = await createClient();
@@ -31,6 +32,9 @@ export default async function AdminPage() {
       <p className="text-sm text-muted-foreground">
         Total profiles in system: {clientCount ?? 0}
       </p>
+      <Link href="/admin/queries" className="text-sm underline">
+        View journalist queries →
+      </Link>
     </div>
   );
 }

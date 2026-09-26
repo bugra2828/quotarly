@@ -1,0 +1,80 @@
+import Anthropic from "@anthropic-ai/sdk";
+
+export type ParsedQuery = {
+  title: string;
+  body: string;
+  category: string | null;
+  outlet_name: string | null;
+  outlet_domain: string | null;
+  journalist_name: string | null;
+  reply_email: string | null;
+  requirements: string | null;
+  deadline: string | null; // ISO 8601, or null if not found
+};
+
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+const EXTRACT_QUERIES_TOOL: Anthropic.Tool = {
+  name: "extract_queries",
+  description:
+    "Extract individual journalist source requests from a HARO/SOS/Help A B2B Writer style newsletter.",
+  input_schema: {
+    type: "object",
+    properties: {
+      queries: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            title: { type: "string" },
+            body: { type: "string" },
+            category: { type: ["string", "null"] },
+            outlet_name: { type: ["string", "null"] },
+            outlet_domain: { type: ["string", "null"] },
+            journalist_name: { type: ["string", "null"] },
+            reply_email: { type: ["string", "null"] },
+            requirements: { type: ["string", "null"] },
+            deadline: { type: ["string", "null"] },
+          },
+          required: ["title", "body"],
+        },
+      },
+    },
+    required: ["queries"],
+  },
+};
+
+const SYSTEM_PROMPT = `You extract individual journalist/editor source requests from a
+newsletter digest (HARO, SOS/Source of Sources, Help A B2B Writer, etc).
+
+Rules:
+- Each newsletter contains multiple unrelated requests; split them into separate items.
+- Skip ads, sponsored sections, footers, unsubscribe links, and platform boilerplate.
+- "reply_email" is the address journalists are told to respond to, if present.
+- "deadline" must be an ISO 8601 date/time if you can find one, otherwise null.
+- Keep "body" close to the original wording — do not summarize away requirements.
+- If you cannot find any real requests, return an empty queries array.`;
+
+export async function parseNewsletter(rawText: string): Promise<ParsedQuery[]> {
+  const message = await anthropic.messages.create({
+    model: "claude-haiku-4-5",
+    max_tokens: 4096,
+    system: SYSTEM_PROMPT,
+    tools: [EXTRACT_QUERIES_TOOL],
+    tool_choice: { type: "tool", name: "extract_queries" },
+    messages: [
+      {
+        role: "user",
+        content: rawText.slice(0, 50_000),
+      },
+    ],
+  });
+
+  const toolUse = message.content.find(
+    (block): block is Anthropic.ToolUseBlock => block.type === "tool_use"
+  );
+  if (!toolUse) return [];
+
+  const input = toolUse.input as { queries?: ParsedQuery[] };
+  return input.queries ?? [];
+}
