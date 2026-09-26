@@ -11,6 +11,12 @@ function isAuthorized(request: NextRequest): boolean {
   return password === process.env.INBOUND_WEBHOOK_SECRET;
 }
 
+function toValidIsoOrNull(value: string | null): string | null {
+  if (!value) return null;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date.toISOString();
+}
+
 function detectSource(fromEmail: string, subject: string): string {
   const from = fromEmail.toLowerCase();
   const subj = subject.toLowerCase();
@@ -66,7 +72,7 @@ export async function POST(request: NextRequest) {
     const queries = await parseNewsletter(textBody || htmlBody);
 
     if (queries.length > 0) {
-      await supabase.from("queries").insert(
+      const { error: queriesError } = await supabase.from("queries").insert(
         queries.map((q) => ({
           inbound_email_id: inboundEmail.id,
           source,
@@ -78,9 +84,16 @@ export async function POST(request: NextRequest) {
           journalist_name: q.journalist_name,
           reply_email: q.reply_email,
           requirements: q.requirements,
-          deadline: q.deadline,
+          deadline: toValidIsoOrNull(q.deadline),
         }))
       );
+
+      if (queriesError) {
+        return NextResponse.json(
+          { ok: false, queries_found: queries.length, error: queriesError.message },
+          { status: 500 }
+        );
+      }
     }
 
     await supabase
