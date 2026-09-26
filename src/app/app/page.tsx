@@ -24,6 +24,13 @@ export default async function DashboardPage() {
     .select("*")
     .eq("owner_id", user.id);
 
+  const { data: subscription } = await supabase
+    .from("subscriptions")
+    .select("plan, status")
+    .eq("owner_id", user.id)
+    .eq("status", "active")
+    .maybeSingle();
+
   return (
     <div className="mx-auto max-w-2xl space-y-6 p-8">
       <div className="flex items-center justify-between">
@@ -47,6 +54,19 @@ export default async function DashboardPage() {
         <p>
           <span className="text-muted-foreground">Expert profiles:</span>{" "}
           {expertProfiles?.length ?? 0}
+        </p>
+        <p>
+          <span className="text-muted-foreground">Subscription:</span>{" "}
+          {subscription ? (
+            `${subscription.plan} (active)`
+          ) : (
+            <>
+              None —{" "}
+              <Link href="/pricing" className="underline">
+                view plans
+              </Link>
+            </>
+          )}
         </p>
       </div>
 
