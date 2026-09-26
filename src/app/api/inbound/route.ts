@@ -1,5 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { parseNewsletter } from "@/lib/ai/parser";
+import { runMatchingForQueries } from "@/lib/ai/pipeline";
 import { type NextRequest, NextResponse } from "next/server";
 
 function isAuthorized(request: NextRequest): boolean {
@@ -71,22 +72,27 @@ export async function POST(request: NextRequest) {
   try {
     const queries = await parseNewsletter(textBody || htmlBody);
 
+    let insertedIds: string[] = [];
+
     if (queries.length > 0) {
-      const { error: queriesError } = await supabase.from("queries").insert(
-        queries.map((q) => ({
-          inbound_email_id: inboundEmail.id,
-          source,
-          title: q.title,
-          body: q.body,
-          category: q.category,
-          outlet_name: q.outlet_name,
-          outlet_domain: q.outlet_domain,
-          journalist_name: q.journalist_name,
-          reply_email: q.reply_email,
-          requirements: q.requirements,
-          deadline: toValidIsoOrNull(q.deadline),
-        }))
-      );
+      const { data: inserted, error: queriesError } = await supabase
+        .from("queries")
+        .insert(
+          queries.map((q) => ({
+            inbound_email_id: inboundEmail.id,
+            source,
+            title: q.title,
+            body: q.body,
+            category: q.category,
+            outlet_name: q.outlet_name,
+            outlet_domain: q.outlet_domain,
+            journalist_name: q.journalist_name,
+            reply_email: q.reply_email,
+            requirements: q.requirements,
+            deadline: toValidIsoOrNull(q.deadline),
+          }))
+        )
+        .select("id");
 
       if (queriesError) {
         return NextResponse.json(
@@ -94,12 +100,20 @@ export async function POST(request: NextRequest) {
           { status: 500 }
         );
       }
+
+      insertedIds = inserted?.map((q) => q.id) ?? [];
     }
 
     await supabase
       .from("inbound_emails")
       .update({ parsed: true })
       .eq("id", inboundEmail.id);
+
+    // Awaited so it actually finishes before the serverless function exits
+    // (a fire-and-forget promise can get killed once the response is sent).
+    // Best-effort — a matching/writing failure shouldn't fail the webhook,
+    // the raw queries are already saved and can be matched later.
+    await runMatchingForQueries(insertedIds).catch(() => {});
 
     return NextResponse.json({ ok: true, queries_found: queries.length });
   } catch (err) {

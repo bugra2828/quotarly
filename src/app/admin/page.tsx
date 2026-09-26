@@ -32,9 +32,14 @@ export default async function AdminPage() {
       <p className="text-sm text-muted-foreground">
         Total profiles in system: {clientCount ?? 0}
       </p>
-      <Link href="/admin/queries" className="text-sm underline">
-        View journalist queries →
-      </Link>
+      <div className="flex gap-4">
+        <Link href="/admin/queries" className="text-sm underline">
+          View journalist queries →
+        </Link>
+        <Link href="/admin/pitches" className="text-sm underline">
+          View generated pitches →
+        </Link>
+      </div>
     </div>
   );
 }
