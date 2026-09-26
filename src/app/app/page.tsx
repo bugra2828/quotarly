@@ -63,16 +63,21 @@ export default async function DashboardPage() {
           </Link>
         </div>
       ) : (
-        <ul className="space-y-2">
-          {expertProfiles.map((ep) => (
-            <li key={ep.id} className="rounded-lg border p-4 text-sm">
-              <p className="font-medium">{ep.display_name}</p>
-              <p className="text-muted-foreground">
-                {ep.job_title} {ep.company ? `@ ${ep.company}` : ""}
-              </p>
-            </li>
-          ))}
-        </ul>
+        <>
+          <ul className="space-y-2">
+            {expertProfiles.map((ep) => (
+              <li key={ep.id} className="rounded-lg border p-4 text-sm">
+                <p className="font-medium">{ep.display_name}</p>
+                <p className="text-muted-foreground">
+                  {ep.job_title} {ep.company ? `@ ${ep.company}` : ""}
+                </p>
+              </li>
+            ))}
+          </ul>
+          <Link href="/app/approvals" className="text-sm underline">
+            View pending approvals →
+          </Link>
+        </>
       )}
     </div>
   );
