@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/app/actions/auth";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -48,6 +49,31 @@ export default async function DashboardPage() {
           {expertProfiles?.length ?? 0}
         </p>
       </div>
+
+      {!expertProfiles?.length ? (
+        <div className="rounded-lg border border-dashed p-6 text-center">
+          <p className="mb-3 text-sm text-muted-foreground">
+            You haven&apos;t created an expert profile yet.
+          </p>
+          <Link
+            href="/app/onboarding"
+            className="inline-block rounded-md bg-black px-4 py-2 text-sm font-medium text-white"
+          >
+            Create your profile
+          </Link>
+        </div>
+      ) : (
+        <ul className="space-y-2">
+          {expertProfiles.map((ep) => (
+            <li key={ep.id} className="rounded-lg border p-4 text-sm">
+              <p className="font-medium">{ep.display_name}</p>
+              <p className="text-muted-foreground">
+                {ep.job_title} {ep.company ? `@ ${ep.company}` : ""}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

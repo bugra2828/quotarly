@@ -1,0 +1,141 @@
+import { createExpertProfile } from "@/app/actions/expert-profile";
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+
+export default async function OnboardingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const { error } = await searchParams;
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    redirect("/login");
+  }
+
+  return (
+    <div className="mx-auto max-w-xl space-y-6 p-8">
+      <div>
+        <h1 className="text-xl font-semibold">Create your expert profile</h1>
+        <p className="text-sm text-muted-foreground">
+          This is what journalists will see quoted in their articles.
+        </p>
+      </div>
+
+      {error && (
+        <p className="rounded-md bg-red-50 p-3 text-sm text-red-700">
+          {error}
+        </p>
+      )}
+
+      <form action={createExpertProfile} className="space-y-4">
+        <Field label="Full name" name="display_name" required />
+        <Field label="Job title" name="job_title" placeholder="Founder & CEO" />
+        <Field label="Company" name="company" />
+        <Field
+          label="Website URL"
+          name="website_url"
+          type="url"
+          placeholder="https://yourcompany.com"
+        />
+        <Field
+          label="Target URL (link destination)"
+          name="target_url"
+          type="url"
+          placeholder="https://yourcompany.com/pricing"
+        />
+        <TextArea
+          label="Bio"
+          name="bio"
+          placeholder="2-3 sentences about your background and expertise."
+        />
+        <Field
+          label="Expertise topics (comma-separated)"
+          name="expertise_topics"
+          placeholder="SaaS pricing, B2B marketing, fundraising"
+        />
+        <Field
+          label="Excluded topics (comma-separated)"
+          name="excluded_topics"
+          placeholder="crypto, politics"
+        />
+        <Field
+          label="Tone of voice"
+          name="tone"
+          placeholder="friendly, authoritative, data-driven..."
+        />
+        <TextArea
+          label="Sample quotes (comma-separated)"
+          name="sample_quotes"
+          placeholder="Something you've said before that sounds like you"
+        />
+        <Field
+          label="LinkedIn URL"
+          name="linkedin_url"
+          type="url"
+          placeholder="https://linkedin.com/in/..."
+        />
+
+        <button
+          type="submit"
+          className="w-full rounded-md bg-black px-3 py-2 text-sm font-medium text-white"
+        >
+          Save profile
+        </button>
+      </form>
+    </div>
+  );
+}
+
+function Field({
+  label,
+  name,
+  type = "text",
+  placeholder,
+  required,
+}: {
+  label: string;
+  name: string;
+  type?: string;
+  placeholder?: string;
+  required?: boolean;
+}) {
+  return (
+    <label className="block space-y-1">
+      <span className="text-sm font-medium">{label}</span>
+      <input
+        type={type}
+        name={name}
+        placeholder={placeholder}
+        required={required}
+        className="w-full rounded-md border px-3 py-2 text-sm"
+      />
+    </label>
+  );
+}
+
+function TextArea({
+  label,
+  name,
+  placeholder,
+}: {
+  label: string;
+  name: string;
+  placeholder?: string;
+}) {
+  return (
+    <label className="block space-y-1">
+      <span className="text-sm font-medium">{label}</span>
+      <textarea
+        name={name}
+        placeholder={placeholder}
+        rows={3}
+        className="w-full rounded-md border px-3 py-2 text-sm"
+      />
+    </label>
+  );
+}
