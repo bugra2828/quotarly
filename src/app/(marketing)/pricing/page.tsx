@@ -59,11 +59,11 @@ export default async function PricingPage() {
           <div
             key={plan.id}
             className={`flex flex-col bg-paper p-6 ${
-              plan.featured ? "border-t-4 border-wire" : "border-t-4 border-transparent"
+              plan.featured ? "border-t-4 border-brand" : "border-t-4 border-transparent"
             }`}
           >
             <p
-              className={`text-sm ${plan.featured ? "text-wire" : "text-ink-soft"}`}
+              className={`text-sm ${plan.featured ? "text-brand" : "text-ink-soft"}`}
             >
               {plan.featured ? "Most chosen" : " "}
             </p>
@@ -83,14 +83,14 @@ export default async function PricingPage() {
             {user ? (
               <a
                 href={buildCheckoutUrl(plan.id, user.id, user.email!)}
-                className="mt-6 rounded-sm bg-ink px-4 py-2 text-center text-sm font-medium text-paper transition-colors hover:bg-ink-soft"
+                className="mt-6 rounded-full bg-brand px-4 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-brand/90"
               >
                 Subscribe
               </a>
             ) : (
               <Link
                 href="/login"
-                className="mt-6 rounded-sm bg-ink px-4 py-2 text-center text-sm font-medium text-paper transition-colors hover:bg-ink-soft"
+                className="mt-6 rounded-full bg-brand px-4 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-brand/90"
               >
                 Log in to subscribe
               </Link>

@@ -14,18 +14,18 @@ export default function Image() {
           flexDirection: "column",
           justifyContent: "center",
           padding: "80px",
-          backgroundColor: "#e9e6dc",
-          color: "#201d18",
+          backgroundColor: "#08090d",
+          color: "#f2f2f5",
         }}
       >
-        <div style={{ fontSize: 72, fontWeight: 600, display: "flex" }}>
+        <div style={{ fontSize: 72, fontWeight: 600, display: "flex", color: "#4f7dfd" }}>
           Quotarly
         </div>
         <div
           style={{
             marginTop: 24,
             fontSize: 32,
-            color: "#4d473c",
+            color: "#9a9aa8",
             maxWidth: 820,
             display: "flex",
           }}

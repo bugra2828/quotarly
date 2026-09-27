@@ -16,6 +16,9 @@
   --color-rule: var(--rule);
   --color-wire: var(--wire);
   --color-press: var(--press);
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --color-surface: var(--surface);
   --font-display: var(--font-display);
   --font-dispatch: var(--font-dispatch);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -57,12 +60,15 @@
 }
 
 :root {
-  --paper: #e9e6dc;
-  --ink: #201d18;
-  --ink-soft: #4d473c;
-  --rule: #b9b3a3;
-  --wire: #a8321f;
-  --press: #35513b;
+  --paper: #08090d;
+  --ink: #f2f2f5;
+  --ink-soft: #9a9aa8;
+  --rule: rgba(255, 255, 255, 0.1);
+  --wire: #ff5c4d;
+  --press: #34d399;
+  --brand: #4f7dfd;
+  --brand-soft: #2a3a72;
+  --surface: #121319;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -133,10 +139,40 @@
 
 .press-texture {
   background-image: radial-gradient(
-    rgba(32, 29, 24, 0.08) 1px,
+    rgba(255, 255, 255, 0.06) 1px,
     transparent 1px
   );
   background-size: 18px 18px;
+}
+
+.glow-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glow-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  opacity: 0.35;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
 }
 
 .tape-edge {

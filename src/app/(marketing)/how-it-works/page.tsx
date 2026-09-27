@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 const stages = [
   {
     title: "Onboarding",
-    swatch: "bg-ink",
+    swatch: "bg-brand",
     body: "You give Quotarly your site, your bio, the topics you'll talk about and the ones you won't, and a few quotes that sound like you. It reads your site and drafts a first pass at your profile — you correct anything it got wrong.",
   },
   {
@@ -58,7 +58,7 @@ export default function HowItWorksPage() {
         {stages.map((stage, i) => (
           <div key={stage.title}>
             <span
-              className={`flex h-7 w-7 items-center justify-center rounded-[3px] font-dispatch text-sm font-medium text-paper ${stage.swatch}`}
+              className={`flex h-7 w-7 items-center justify-center rounded-[3px] font-dispatch text-sm font-medium text-white ${stage.swatch}`}
             >
               {i + 1}
             </span>
