@@ -175,6 +175,22 @@
   animation: marquee 28s linear infinite;
 }
 
+/* Give every real button, and every link styled as a pill button, a tactile
+   press: it visibly sinks in on click instead of just changing color. */
+button:not(:disabled),
+a[class*="rounded-full"][class*="hover:"] {
+  transition-property: transform, background-color, border-color, color, opacity;
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  button:not(:disabled):active,
+  a[class*="rounded-full"][class*="hover:"]:active {
+    transform: scale(0.96);
+  }
+}
+
 .tape-edge {
   position: relative;
 }

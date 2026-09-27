@@ -1,32 +1,58 @@
-import { signInWithMagicLink } from "@/app/actions/auth";
+import { signInWithMagicLink, signInWithGoogle } from "@/app/actions/auth";
 import Link from "next/link";
 
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ sent?: string; error?: string }>;
+  searchParams: Promise<{ sent?: string; error?: string; mode?: string }>;
 }) {
-  const { sent, error } = await searchParams;
+  const { sent, error, mode } = await searchParams;
+  const isSignup = mode === "signup";
 
   return (
     <div className="press-texture flex min-h-screen items-center justify-center bg-paper px-4 text-ink">
       <div className="w-full max-w-sm space-y-6">
-        <div className="space-y-2 text-center">
-          <Link href="/" className="inline-flex items-center gap-2.5">
-            <svg width="26" height="26" viewBox="0 0 28 28" aria-hidden="true">
-              <rect width="28" height="28" rx="5" fill="var(--ink)" />
-              <path
-                d="M9.3 10c-1.5 0-2.6 1.1-2.6 2.6 0 1.4 1 2.5 2.3 2.6-.3 1.1-1.1 2-2.3 2.3l.3 1.1c1.9-.4 3.3-2 3.3-4.2v-1.3c0-1.4-1.1-2.5-2.5-2.5.2 0-.3 0-.5 0zm8.4 0c-1.5 0-2.6 1.1-2.6 2.6 0 1.4 1 2.5 2.3 2.6-.3 1.1-1.1 2-2.3 2.3l.3 1.1c1.9-.4 3.3-2 3.3-4.2v-1.3c0-1.4-1.1-2.5-2.5-2.5.2 0-.3 0-.5 0z"
-                fill="var(--paper)"
-              />
-              <circle cx="21.5" cy="6.5" r="2.6" fill="var(--brand)" />
-            </svg>
-            <span className="font-display text-xl font-semibold tracking-tight">
-              Quotarly
-            </span>
+        <Link href="/" className="flex items-center justify-center gap-2.5">
+          <svg width="26" height="26" viewBox="0 0 28 28" aria-hidden="true">
+            <rect width="28" height="28" rx="5" fill="var(--ink)" />
+            <path
+              d="M9.3 10c-1.5 0-2.6 1.1-2.6 2.6 0 1.4 1 2.5 2.3 2.6-.3 1.1-1.1 2-2.3 2.3l.3 1.1c1.9-.4 3.3-2 3.3-4.2v-1.3c0-1.4-1.1-2.5-2.5-2.5.2 0-.3 0-.5 0zm8.4 0c-1.5 0-2.6 1.1-2.6 2.6 0 1.4 1 2.5 2.3 2.6-.3 1.1-1.1 2-2.3 2.3l.3 1.1c1.9-.4 3.3-2 3.3-4.2v-1.3c0-1.4-1.1-2.5-2.5-2.5.2 0-.3 0-.5 0z"
+              fill="var(--paper)"
+            />
+            <circle cx="21.5" cy="6.5" r="2.6" fill="var(--brand)" />
+          </svg>
+          <span className="font-display text-xl font-semibold tracking-tight">
+            Quotarly
+          </span>
+        </Link>
+
+        <div className="flex rounded-full border border-rule p-1 text-sm">
+          <Link
+            href="/login"
+            className={`flex-1 rounded-full py-2 text-center font-medium transition-colors hover:opacity-90 ${
+              !isSignup ? "bg-ink text-paper" : "text-ink-soft"
+            }`}
+          >
+            Log in
           </Link>
+          <Link
+            href="/login?mode=signup"
+            className={`flex-1 rounded-full py-2 text-center font-medium transition-colors hover:opacity-90 ${
+              isSignup ? "bg-ink text-paper" : "text-ink-soft"
+            }`}
+          >
+            Sign up
+          </Link>
+        </div>
+
+        <div className="space-y-1 text-center">
+          <h1 className="font-display text-xl font-semibold tracking-tight">
+            {isSignup ? "Create your account" : "Welcome back"}
+          </h1>
           <p className="text-sm text-ink-soft">
-            Sign in with a magic link sent to your email.
+            {isSignup
+              ? "Get started with a magic link — no password to set."
+              : "Sign in with a magic link sent to your email."}
           </p>
         </div>
 
@@ -41,19 +67,52 @@ export default async function LoginPage({
           </p>
         )}
 
+        <form action={signInWithGoogle}>
+          <button
+            type="submit"
+            className="flex w-full items-center justify-center gap-2.5 rounded-full border border-rule bg-surface px-3 py-2.5 text-sm font-medium text-ink transition-colors hover:border-ink"
+          >
+            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+              <path
+                fill="#4285F4"
+                d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.71v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.61z"
+              />
+              <path
+                fill="#34A853"
+                d="M9 18c2.43 0 4.47-.8 5.96-2.19l-2.92-2.26c-.81.54-1.84.87-3.04.87-2.34 0-4.32-1.58-5.03-3.7H.95v2.33A9 9 0 0 0 9 18z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M3.97 10.72A5.4 5.4 0 0 1 3.68 9c0-.6.1-1.18.29-1.72V4.95H.95A9 9 0 0 0 0 9c0 1.45.35 2.83.95 4.05l3.02-2.33z"
+              />
+              <path
+                fill="#EA4335"
+                d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .95 4.95l3.02 2.33C4.68 5.16 6.66 3.58 9 3.58z"
+              />
+            </svg>
+            Continue with Google
+          </button>
+        </form>
+
+        <div className="flex items-center gap-3 text-xs text-ink-soft">
+          <span className="h-px flex-1 bg-rule" />
+          or
+          <span className="h-px flex-1 bg-rule" />
+        </div>
+
         <form action={signInWithMagicLink} className="space-y-3">
           <input
             type="email"
             name="email"
             required
             placeholder="you@example.com"
-            className="w-full rounded-md border border-rule bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none"
+            className="w-full rounded-full border border-rule bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none"
           />
           <button
             type="submit"
             className="w-full rounded-full bg-brand px-3 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand/90"
           >
-            Send magic link
+            {isSignup ? "Create account" : "Send magic link"}
           </button>
         </form>
       </div>
