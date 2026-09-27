@@ -48,17 +48,19 @@ export default async function ApprovalsPage({
   const queryById = new Map((queries ?? []).map((q) => [q.id, q]));
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6 p-8">
-      <h1 className="text-xl font-semibold">Pending approvals</h1>
+    <div className="mx-auto max-w-3xl space-y-6 px-6 py-12">
+      <h1 className="font-display text-2xl font-semibold tracking-tight">
+        Pending approvals
+      </h1>
 
       {error && (
-        <p className="rounded-md bg-red-50 p-3 text-sm text-red-700">
+        <p className="rounded-md border border-wire/40 bg-wire/10 p-3 text-sm text-wire">
           {error}
         </p>
       )}
 
       {!pitches?.length && (
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-ink-soft">
           Nothing waiting for your approval right now.
         </p>
       )}
@@ -72,19 +74,23 @@ export default async function ApprovalsPage({
             query?.deadline && new Date(query.deadline) < new Date();
 
           return (
-            <li key={p.id} className="space-y-3 rounded-lg border p-4">
+            <li
+              key={p.id}
+              className="space-y-4 rounded-md border border-rule bg-surface p-5"
+            >
               <div>
-                <p className="text-xs uppercase text-muted-foreground">
-                  Journalist question {query?.outlet_name ? `— ${query.outlet_name}` : ""}
+                <p className="font-dispatch text-xs text-ink-soft">
+                  Journalist question
+                  {query?.outlet_name ? ` — ${query.outlet_name}` : ""}
                 </p>
-                <p className="font-medium">{query?.title}</p>
-                <p className="mt-1 whitespace-pre-wrap text-sm text-muted-foreground">
+                <p className="mt-1 font-medium text-ink">{query?.title}</p>
+                <p className="mt-1 whitespace-pre-wrap text-sm text-ink-soft">
                   {query?.body}
                 </p>
                 {query?.deadline && (
                   <p
-                    className={`mt-1 text-xs ${
-                      deadlinePassed ? "text-red-600" : "text-muted-foreground"
+                    className={`mt-2 font-dispatch text-xs ${
+                      deadlinePassed ? "text-wire" : "text-ink-soft"
                     }`}
                   >
                     Deadline: {new Date(query.deadline).toLocaleString()}
@@ -94,7 +100,7 @@ export default async function ApprovalsPage({
               </div>
 
               <div>
-                <p className="text-xs uppercase text-muted-foreground">
+                <p className="font-dispatch text-xs text-ink-soft">
                   Your draft (match score: {match?.score})
                 </p>
                 <form action={approvePitch} className="mt-2 space-y-2">
@@ -103,16 +109,16 @@ export default async function ApprovalsPage({
                     type="text"
                     defaultValue={p.subject}
                     disabled
-                    className="w-full rounded-md border bg-muted px-3 py-2 text-sm"
+                    className="w-full rounded-md border border-rule bg-paper px-3 py-2 text-sm text-ink-soft"
                   />
                   <textarea
                     name="body"
                     defaultValue={p.body}
                     rows={8}
-                    className="w-full rounded-md border px-3 py-2 text-sm"
+                    className="w-full rounded-md border border-rule bg-paper px-3 py-2 text-sm text-ink focus:border-brand focus:outline-none"
                   />
                   {hasVerify && (
-                    <p className="text-xs text-amber-700">
+                    <p className="text-xs text-wire">
                       This draft has [VERIFY: ...] placeholders — edit them
                       out before you can send.
                     </p>
@@ -121,7 +127,7 @@ export default async function ApprovalsPage({
                     <button
                       type="submit"
                       disabled={!!deadlinePassed}
-                      className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+                      className="rounded-full bg-brand px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand/90 disabled:opacity-50"
                     >
                       Approve & send
                     </button>
@@ -131,7 +137,7 @@ export default async function ApprovalsPage({
                   <input type="hidden" name="pitch_id" value={p.id} />
                   <button
                     type="submit"
-                    className="text-sm text-muted-foreground underline"
+                    className="text-sm text-ink-soft underline hover:text-ink"
                   >
                     Reject
                   </button>

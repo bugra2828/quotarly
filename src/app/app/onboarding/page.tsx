@@ -18,16 +18,18 @@ export default async function OnboardingPage({
   }
 
   return (
-    <div className="mx-auto max-w-xl space-y-6 p-8">
+    <div className="mx-auto max-w-xl space-y-6 px-6 py-12">
       <div>
-        <h1 className="text-xl font-semibold">Create your expert profile</h1>
-        <p className="text-sm text-muted-foreground">
+        <h1 className="font-display text-2xl font-semibold tracking-tight">
+          Create your expert profile
+        </h1>
+        <p className="mt-1 text-sm text-ink-soft">
           This is what journalists will see quoted in their articles.
         </p>
       </div>
 
       {error && (
-        <p className="rounded-md bg-red-50 p-3 text-sm text-red-700">
+        <p className="rounded-md border border-wire/40 bg-wire/10 p-3 text-sm text-wire">
           {error}
         </p>
       )}
@@ -82,7 +84,7 @@ export default async function OnboardingPage({
 
         <button
           type="submit"
-          className="w-full rounded-md bg-black px-3 py-2 text-sm font-medium text-white"
+          className="w-full rounded-full bg-brand px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand/90"
         >
           Save profile
         </button>
@@ -105,14 +107,14 @@ function Field({
   required?: boolean;
 }) {
   return (
-    <label className="block space-y-1">
-      <span className="text-sm font-medium">{label}</span>
+    <label className="block space-y-1.5">
+      <span className="text-sm font-medium text-ink">{label}</span>
       <input
         type={type}
         name={name}
         placeholder={placeholder}
         required={required}
-        className="w-full rounded-md border px-3 py-2 text-sm"
+        className="w-full rounded-md border border-rule bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none"
       />
     </label>
   );
@@ -128,13 +130,13 @@ function TextArea({
   placeholder?: string;
 }) {
   return (
-    <label className="block space-y-1">
-      <span className="text-sm font-medium">{label}</span>
+    <label className="block space-y-1.5">
+      <span className="text-sm font-medium text-ink">{label}</span>
       <textarea
         name={name}
         placeholder={placeholder}
         rows={3}
-        className="w-full rounded-md border px-3 py-2 text-sm"
+        className="w-full rounded-md border border-rule bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none"
       />
     </label>
   );
