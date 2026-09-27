@@ -1,13 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import { isValidSignature, mapPlan } from "@/lib/lemonsqueezy/webhook";
 import { type NextRequest, NextResponse } from "next/server";
-import crypto from "node:crypto";
-
-function isValidSignature(rawBody: string, signature: string | null): boolean {
-  if (!signature) return false;
-  const secret = process.env.LEMONSQUEEZY_WEBHOOK_SECRET!;
-  const digest = crypto.createHmac("sha256", secret).update(rawBody).digest("hex");
-  return crypto.timingSafeEqual(Buffer.from(digest), Buffer.from(signature));
-}
 
 type LemonSqueezyWebhookPayload = {
   meta: {
@@ -25,19 +18,11 @@ type LemonSqueezyWebhookPayload = {
   };
 };
 
-function mapPlan(productName: string): string {
-  const name = productName.toLowerCase();
-  if (name.includes("agency")) return "agency";
-  if (name.includes("pro")) return "pro";
-  if (name.includes("starter")) return "starter";
-  return productName;
-}
-
 export async function POST(request: NextRequest) {
   const rawBody = await request.text();
   const signature = request.headers.get("x-signature");
 
-  if (!isValidSignature(rawBody, signature)) {
+  if (!isValidSignature(rawBody, signature, process.env.LEMONSQUEEZY_WEBHOOK_SECRET!)) {
     return NextResponse.json({ error: "invalid signature" }, { status: 401 });
   }
 

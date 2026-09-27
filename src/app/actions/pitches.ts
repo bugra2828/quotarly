@@ -3,6 +3,11 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendPitchEmail } from "@/lib/email/send-pitch";
+import {
+  isPastDeadline,
+  hasUnresolvedVerifyTag,
+  hasReachedDailyLimit,
+} from "@/lib/pitches/rules";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
@@ -42,7 +47,7 @@ export async function approvePitch(formData: FormData) {
 
   const finalBody = editedBody || pitch.body;
 
-  if (finalBody.includes("[VERIFY")) {
+  if (hasUnresolvedVerifyTag(finalBody)) {
     redirect(
       `/app/approvals?error=${encodeURIComponent(
         "Remove all [VERIFY: ...] placeholders before sending."
@@ -60,7 +65,7 @@ export async function approvePitch(formData: FormData) {
     .eq("status", "sent")
     .gte("sent_at", startOfDay.toISOString());
 
-  if ((sentToday ?? 0) >= DAILY_SEND_LIMIT_PER_PROFILE) {
+  if (hasReachedDailyLimit(sentToday ?? 0, DAILY_SEND_LIMIT_PER_PROFILE)) {
     redirect(
       `/app/approvals?error=${encodeURIComponent(
         `Daily send limit (${DAILY_SEND_LIMIT_PER_PROFILE}) reached for this profile. Try again tomorrow.`
@@ -91,7 +96,7 @@ export async function approvePitch(formData: FormData) {
     redirect("/app/approvals?error=missing_reply_email");
   }
 
-  if (query.deadline && new Date(query.deadline) < new Date()) {
+  if (isPastDeadline(query.deadline)) {
     await supabase.from("pitches").update({ status: "expired" }).eq("id", pitchId);
     redirect("/app/approvals?error=deadline_passed");
   }
