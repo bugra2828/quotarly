@@ -4,16 +4,19 @@ const dispatch = [
   {
     time: "9:14 AM",
     label: "Received",
+    color: "text-ink-soft",
     body: "A retail-industry newsletter is looking for a founder who's scaled a support team past 50 people.",
   },
   {
     time: "9:16 AM",
     label: "Matched & drafted",
+    color: "text-press",
     body: "Scored against your profile, then written up in your voice from your bio and past quotes.",
   },
   {
     time: "9:20 AM",
     label: "Waiting on you",
+    color: "text-wire",
     body: "The quote sits in your approval queue until you say send. Nothing goes out on its own.",
   },
 ];
@@ -21,14 +24,17 @@ const dispatch = [
 const steps = [
   {
     title: "Onboarding",
+    swatch: "bg-ink",
     body: "Tell Quotarly your expertise, your tone, and the page you want linked. It reads your site to draft a first pass at your profile; you fix what's wrong.",
   },
   {
     title: "Match & draft",
+    swatch: "bg-press",
     body: "Every query from HARO, Featured, SOS and Help A B2B Writer gets scored against your profile. The ones that clear your bar get a quote drafted in your voice.",
   },
   {
     title: "You approve, we send",
+    swatch: "bg-wire",
     body: "Nothing reaches a journalist without your yes. Approve, edit, or reject — then Quotarly sends it and tracks whether the link lands.",
   },
 ];
@@ -63,9 +69,9 @@ export default function Home() {
           </div>
         </div>
 
-        <div>
+        <div className="rounded-sm bg-paper/60 p-6 shadow-[0_1px_0_var(--rule)]">
           <p className="text-sm text-ink-soft">One query, start to finish</p>
-          <ol className="relative mt-4 space-y-6 border-l border-rule pl-6">
+          <ol className="tape-edge relative mt-4 space-y-6 pl-6">
             {dispatch.map((item, i) => (
               <li
                 key={item.label}
@@ -75,7 +81,7 @@ export default function Home() {
                 <p className="font-dispatch text-xs text-ink-soft">
                   {item.time}
                 </p>
-                <p className="mt-1 text-sm font-medium text-wire">
+                <p className={`mt-1 text-sm font-medium ${item.color}`}>
                   {item.label}
                 </p>
                 <p className="mt-1 text-sm text-ink-soft">{item.body}</p>
@@ -94,11 +100,13 @@ export default function Home() {
         </h2>
         <div className="mt-10 grid gap-10 sm:grid-cols-3">
           {steps.map((step, i) => (
-            <div key={step.title} className="border-l border-rule pl-6">
-              <p className="font-dispatch text-sm text-ink-soft">
+            <div key={step.title}>
+              <span
+                className={`flex h-7 w-7 items-center justify-center rounded-[3px] font-dispatch text-sm font-medium text-paper ${step.swatch}`}
+              >
                 {i + 1}
-              </p>
-              <h3 className="mt-2 font-display text-lg font-semibold">
+              </span>
+              <h3 className="mt-3 font-display text-lg font-semibold">
                 {step.title}
               </h3>
               <p className="mt-2 text-sm leading-6 text-ink-soft">
@@ -135,21 +143,23 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-t border-rule py-20 text-center">
-        <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
-          Ready to see what's out there for you?
-        </h2>
-        <p className="mx-auto mt-4 max-w-md text-sm text-ink-soft">
-          Onboarding takes a few minutes. The first matches usually show up
-          within a day.
-        </p>
-        <div className="mt-8">
-          <Link
-            href="/login"
-            className="inline-block rounded-sm bg-ink px-6 py-3 text-sm font-medium text-paper transition-colors hover:bg-ink-soft"
-          >
-            Get started
-          </Link>
+      <section className="-mx-6 mt-4 bg-ink px-6 py-20 text-center text-paper">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+            Ready to see what's out there for you?
+          </h2>
+          <p className="mx-auto mt-4 max-w-md text-sm text-paper/70">
+            Onboarding takes a few minutes. The first matches usually show up
+            within a day.
+          </p>
+          <div className="mt-8">
+            <Link
+              href="/login"
+              className="inline-block rounded-sm bg-wire px-6 py-3 text-sm font-medium text-paper transition-colors hover:bg-wire/90"
+            >
+              Get started
+            </Link>
+          </div>
         </div>
       </section>
     </div>

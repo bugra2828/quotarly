@@ -59,10 +59,12 @@ export default async function PricingPage() {
           <div
             key={plan.id}
             className={`flex flex-col bg-paper p-6 ${
-              plan.featured ? "ring-1 ring-inset ring-wire" : ""
+              plan.featured ? "border-t-4 border-wire" : "border-t-4 border-transparent"
             }`}
           >
-            <p className="text-sm text-ink-soft">
+            <p
+              className={`text-sm ${plan.featured ? "text-wire" : "text-ink-soft"}`}
+            >
               {plan.featured ? "Most chosen" : " "}
             </p>
             <h2 className="mt-1 font-display text-xl font-semibold">

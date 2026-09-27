@@ -18,11 +18,21 @@ export default async function MarketingLayout({
   } = await supabase.auth.getUser();
 
   return (
-    <div className="flex min-h-full flex-col bg-paper text-ink">
+    <div className="press-texture flex min-h-full flex-col bg-paper text-ink">
       <header className="border-b border-rule">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
-          <Link href="/" className="font-display text-lg font-semibold tracking-tight">
-            Quotarly
+          <Link href="/" className="flex items-center gap-2.5">
+            <svg width="26" height="26" viewBox="0 0 28 28" aria-hidden="true">
+              <rect width="28" height="28" rx="5" fill="var(--ink)" />
+              <path
+                d="M9.3 10c-1.5 0-2.6 1.1-2.6 2.6 0 1.4 1 2.5 2.3 2.6-.3 1.1-1.1 2-2.3 2.3l.3 1.1c1.9-.4 3.3-2 3.3-4.2v-1.3c0-1.4-1.1-2.5-2.5-2.5.2 0-.3 0-.5 0zm8.4 0c-1.5 0-2.6 1.1-2.6 2.6 0 1.4 1 2.5 2.3 2.6-.3 1.1-1.1 2-2.3 2.3l.3 1.1c1.9-.4 3.3-2 3.3-4.2v-1.3c0-1.4-1.1-2.5-2.5-2.5.2 0-.3 0-.5 0z"
+                fill="var(--paper)"
+              />
+              <circle cx="21.5" cy="6.5" r="2.6" fill="var(--wire)" />
+            </svg>
+            <span className="font-display text-lg font-semibold tracking-tight">
+              Quotarly
+            </span>
           </Link>
           <nav className="flex items-center gap-6 text-sm">
             {navLinks.map((link) => (
