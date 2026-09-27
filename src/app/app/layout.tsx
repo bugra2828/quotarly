@@ -10,7 +10,7 @@ const navLinks = [
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="press-texture flex min-h-full flex-col bg-paper text-ink">
+    <div className="press-texture flex min-h-screen flex-col bg-paper text-ink">
       <header className="sticky top-0 z-50 border-b border-rule bg-paper/75 backdrop-blur">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
           <Link href="/app" className="flex items-center gap-2.5">
