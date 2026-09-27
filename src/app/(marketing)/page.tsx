@@ -118,6 +118,66 @@ export default function Home() {
       </section>
 
       <section className="border-t border-rule py-20">
+        <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+          What lands in your queue
+        </h2>
+        <p className="mt-3 max-w-lg text-sm leading-6 text-ink-soft">
+          A drafted quote, the journalist's question next to it, and a
+          deadline. You read it, edit if you want, and decide.
+        </p>
+
+        <div className="mt-10 overflow-hidden rounded-md border border-rule">
+          <div className="flex items-center gap-2 border-b border-rule bg-paper/60 px-4 py-2.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-wire" />
+            <span className="h-2.5 w-2.5 rounded-full bg-press" />
+            <span className="h-2.5 w-2.5 rounded-full bg-ink" />
+            <span className="ml-3 font-dispatch text-xs text-ink-soft">
+              quotarly.com/app/approvals
+            </span>
+          </div>
+
+          <div className="grid gap-0 sm:grid-cols-2">
+            <div className="border-b border-rule p-6 sm:border-r sm:border-b-0">
+              <div className="flex items-center justify-between">
+                <p className="font-dispatch text-xs text-ink-soft">
+                  The Growth Brief
+                </p>
+                <p className="font-dispatch text-xs text-wire">
+                  4h left
+                </p>
+              </div>
+              <p className="mt-3 text-sm leading-6 text-ink">
+                "Looking for a founder who's scaled a support team past 50
+                people — what actually broke first?"
+              </p>
+            </div>
+
+            <div className="p-6">
+              <p className="font-dispatch text-xs text-ink-soft">
+                Your drafted quote
+              </p>
+              <p className="mt-3 text-sm leading-6 text-ink-soft">
+                "The first thing that broke wasn't headcount, it was
+                handoffs — tickets sat untouched between shifts until we
+                gave every queue a single owner."
+              </p>
+              <div className="mt-5 flex gap-3">
+                <span className="rounded-sm bg-ink px-4 py-2 text-xs font-medium text-paper">
+                  Approve &amp; send
+                </span>
+                <span className="rounded-sm border border-rule px-4 py-2 text-xs font-medium text-ink-soft">
+                  Reject
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p className="mt-4 text-xs text-ink-soft">
+          Illustrative — the layout of your real approval queue.
+        </p>
+      </section>
+
+      <section className="border-t border-rule py-20">
         <div className="grid gap-10 sm:grid-cols-2">
           <div>
             <h2 className="font-display text-2xl font-semibold tracking-tight">
