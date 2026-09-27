@@ -1,4 +1,6 @@
-import { createClient } from "@/lib/supabase/server";
+import type { createAdminClient } from "@/lib/supabase/admin";
+
+type SupabaseLike = ReturnType<typeof createAdminClient>;
 
 export type MonthlyStats = {
   expertName: string;
@@ -23,10 +25,10 @@ export function monthRange(month: string) {
 }
 
 export async function getMonthlyStats(
+  supabase: SupabaseLike,
   expertProfileId: string,
   month: string
 ): Promise<MonthlyStats | null> {
-  const supabase = await createClient();
   const { start, end } = monthRange(month);
 
   const { data: expertProfile } = await supabase

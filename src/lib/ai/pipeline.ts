@@ -1,6 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { matchQueryToProfile, quickKeywordOverlap } from "@/lib/ai/matcher";
 import { writePitch } from "@/lib/ai/writer";
+import { sendPendingApprovalNotification } from "@/lib/email/notify";
 
 // Runs the matcher + writer for a batch of newly-inserted queries against every
 // active expert profile. Called right after the inbound webhook parses a
@@ -16,6 +17,8 @@ export async function runMatchingForQueries(queryIds: string[]) {
   ]);
 
   if (!queries?.length || !profiles?.length) return;
+
+  const ownerEmailByProfileId = new Map<string, string>();
 
   for (const query of queries) {
     if (query.deadline && new Date(query.deadline) < new Date()) continue;
@@ -68,6 +71,26 @@ export async function runMatchingForQueries(queryIds: string[]) {
           body: pitch.body,
           status: "pending_approval",
         });
+
+        let ownerEmail = ownerEmailByProfileId.get(profile.id);
+        if (ownerEmail === undefined) {
+          const { data: ownerProfile } = await supabase
+            .from("profiles")
+            .select("email")
+            .eq("id", profile.owner_id)
+            .single();
+          ownerEmail = String(ownerProfile?.email ?? "");
+          ownerEmailByProfileId.set(profile.id, ownerEmail);
+        }
+
+        if (ownerEmail) {
+          await sendPendingApprovalNotification({
+            toEmail: ownerEmail,
+            outletName: query.outlet_name,
+            queryTitle: query.title,
+            deadline: query.deadline,
+          }).catch(() => {});
+        }
       } catch {
         // Best-effort — one bad match/pitch shouldn't break the batch.
         continue;

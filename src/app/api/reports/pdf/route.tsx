@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const stats = await getMonthlyStats(expertProfileId, month);
+  const stats = await getMonthlyStats(supabase, expertProfileId, month);
   if (!stats) {
     return NextResponse.json({ error: "not found" }, { status: 404 });
   }

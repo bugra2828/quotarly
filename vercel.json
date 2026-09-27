@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/track-backlinks",
       "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/cron/monthly-reports",
+      "schedule": "0 8 1 * *"
     }
   ]
 }

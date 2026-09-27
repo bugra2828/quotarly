@@ -32,7 +32,7 @@ export default async function ReportsPage() {
   const statsByProfile = await Promise.all(
     (expertProfiles ?? []).map(async (ep) => ({
       profile: ep,
-      stats: await getMonthlyStats(ep.id, month),
+      stats: await getMonthlyStats(supabase, ep.id, month),
     }))
   );
 
