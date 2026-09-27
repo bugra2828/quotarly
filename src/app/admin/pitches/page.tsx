@@ -1,19 +1,17 @@
 import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
+
+const statusColor: Record<string, string> = {
+  sent: "bg-press/15 text-press",
+  approved: "bg-press/15 text-press",
+  pending_approval: "bg-wire/15 text-wire",
+  failed: "bg-wire/15 text-wire",
+  rejected: "bg-ink-soft/15 text-ink-soft",
+  expired: "bg-ink-soft/15 text-ink-soft",
+  draft: "bg-ink-soft/15 text-ink-soft",
+};
 
 export default async function AdminPitchesPage() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-  if (profile?.role !== "admin") redirect("/app");
 
   const { data: pitches } = await supabase
     .from("pitches")
@@ -22,11 +20,11 @@ export default async function AdminPitchesPage() {
     .limit(50);
 
   return (
-    <div className="mx-auto max-w-4xl space-y-4 p-8">
-      <h1 className="text-xl font-semibold">Generated pitches</h1>
-      <p className="text-sm text-muted-foreground">
-        {pitches?.length ?? 0} pitches
-      </p>
+    <div className="mx-auto max-w-4xl space-y-4 px-6 py-12">
+      <h1 className="font-display text-2xl font-semibold tracking-tight">
+        Generated pitches
+      </h1>
+      <p className="text-sm text-ink-soft">{pitches?.length ?? 0} pitches</p>
 
       <ul className="space-y-4">
         {pitches?.map((p) => {
@@ -41,29 +39,33 @@ export default async function AdminPitchesPage() {
             : p.expert_profiles;
 
           return (
-            <li key={p.id} className="rounded-lg border p-4 text-sm">
+            <li key={p.id} className="rounded-md border border-rule bg-surface p-4 text-sm">
               <div className="flex items-center justify-between">
-                <span className="font-medium">
+                <span className="font-medium text-ink">
                   {expert?.display_name} → {query?.title ?? "(query)"}
                 </span>
-                <span className="rounded bg-muted px-2 py-0.5 text-xs uppercase text-muted-foreground">
+                <span
+                  className={`font-dispatch rounded-full px-2.5 py-0.5 text-xs ${
+                    statusColor[p.status] ?? "bg-ink-soft/15 text-ink-soft"
+                  }`}
+                >
                   {p.status}
                 </span>
               </div>
               {match && (
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-ink-soft">
                   Match score: {match.score} — {match.reasoning}
                 </p>
               )}
-              <p className="mt-2 font-medium">Subject: {p.subject}</p>
-              <p className="mt-1 whitespace-pre-wrap">{p.body}</p>
+              <p className="mt-2 font-medium text-ink">Subject: {p.subject}</p>
+              <p className="mt-1 whitespace-pre-wrap text-ink-soft">{p.body}</p>
             </li>
           );
         })}
       </ul>
 
       {!pitches?.length && (
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-ink-soft">
           No pitches yet — waiting for a matching query.
         </p>
       )}
