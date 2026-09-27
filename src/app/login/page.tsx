@@ -1,13 +1,23 @@
-import { signInWithMagicLink, signInWithGoogle } from "@/app/actions/auth";
+import {
+  signInWithPassword,
+  signUpWithPassword,
+  signInWithGoogle,
+} from "@/app/actions/auth";
 import Link from "next/link";
 
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ sent?: string; error?: string; mode?: string }>;
+  searchParams: Promise<{
+    error?: string;
+    mode?: string;
+    email?: string;
+    confirm?: string;
+  }>;
 }) {
-  const { sent, error, mode } = await searchParams;
+  const { error, mode, email, confirm } = await searchParams;
   const isSignup = mode === "signup";
+  const signupStep = email ? "password" : "email";
 
   return (
     <div className="press-texture flex min-h-screen items-center justify-center bg-paper px-4 text-ink">
@@ -47,74 +57,142 @@ export default async function LoginPage({
 
         <div className="space-y-1 text-center">
           <h1 className="font-display text-xl font-semibold tracking-tight">
-            {isSignup ? "Create your account" : "Welcome back"}
+            {confirm
+              ? "Check your email"
+              : isSignup
+                ? signupStep === "email"
+                  ? "Create your account"
+                  : "Set a password"
+                : "Welcome back"}
           </h1>
           <p className="text-sm text-ink-soft">
-            {isSignup
-              ? "Get started with a magic link — no password to set."
-              : "Sign in with a magic link sent to your email."}
+            {confirm
+              ? "We sent a confirmation link — click it to activate your account."
+              : isSignup
+                ? signupStep === "email"
+                  ? "Start with your email."
+                  : `For ${email}`
+                : "Sign in with your email and password."}
           </p>
         </div>
 
-        {sent && (
-          <p className="rounded-md border border-press/40 bg-press/10 p-3 text-sm text-press">
-            Check your inbox — we sent you a sign-in link.
-          </p>
-        )}
         {error && (
           <p className="rounded-md border border-wire/40 bg-wire/10 p-3 text-sm text-wire">
             {error}
           </p>
         )}
 
-        <form action={signInWithGoogle}>
-          <button
-            type="submit"
-            className="flex w-full items-center justify-center gap-2.5 rounded-full border border-rule bg-surface px-3 py-2.5 text-sm font-medium text-ink transition-colors hover:border-ink"
-          >
-            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
-              <path
-                fill="#4285F4"
-                d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.71v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.61z"
-              />
-              <path
-                fill="#34A853"
-                d="M9 18c2.43 0 4.47-.8 5.96-2.19l-2.92-2.26c-.81.54-1.84.87-3.04.87-2.34 0-4.32-1.58-5.03-3.7H.95v2.33A9 9 0 0 0 9 18z"
-              />
-              <path
-                fill="#FBBC05"
-                d="M3.97 10.72A5.4 5.4 0 0 1 3.68 9c0-.6.1-1.18.29-1.72V4.95H.95A9 9 0 0 0 0 9c0 1.45.35 2.83.95 4.05l3.02-2.33z"
-              />
-              <path
-                fill="#EA4335"
-                d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .95 4.95l3.02 2.33C4.68 5.16 6.66 3.58 9 3.58z"
-              />
-            </svg>
-            Continue with Google
-          </button>
-        </form>
+        {!confirm && (
+          <>
+            <form action={signInWithGoogle}>
+              <button
+                type="submit"
+                className="flex w-full items-center justify-center gap-2.5 rounded-full border border-rule bg-surface px-3 py-2.5 text-sm font-medium text-ink transition-colors hover:border-ink"
+              >
+                <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+                  <path
+                    fill="#4285F4"
+                    d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.71v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.61z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M9 18c2.43 0 4.47-.8 5.96-2.19l-2.92-2.26c-.81.54-1.84.87-3.04.87-2.34 0-4.32-1.58-5.03-3.7H.95v2.33A9 9 0 0 0 9 18z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M3.97 10.72A5.4 5.4 0 0 1 3.68 9c0-.6.1-1.18.29-1.72V4.95H.95A9 9 0 0 0 0 9c0 1.45.35 2.83.95 4.05l3.02-2.33z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .95 4.95l3.02 2.33C4.68 5.16 6.66 3.58 9 3.58z"
+                  />
+                </svg>
+                Continue with Google
+              </button>
+            </form>
 
-        <div className="flex items-center gap-3 text-xs text-ink-soft">
-          <span className="h-px flex-1 bg-rule" />
-          or
-          <span className="h-px flex-1 bg-rule" />
-        </div>
+            <div className="flex items-center gap-3 text-xs text-ink-soft">
+              <span className="h-px flex-1 bg-rule" />
+              or
+              <span className="h-px flex-1 bg-rule" />
+            </div>
+          </>
+        )}
 
-        <form action={signInWithMagicLink} className="space-y-3">
-          <input
-            type="email"
-            name="email"
-            required
-            placeholder="you@example.com"
-            className="w-full rounded-full border border-rule bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none"
-          />
-          <button
-            type="submit"
-            className="w-full rounded-full bg-brand px-3 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand/90"
-          >
-            {isSignup ? "Create account" : "Send magic link"}
-          </button>
-        </form>
+        {confirm ? null : !isSignup ? (
+          <form action={signInWithPassword} className="space-y-3">
+            <input
+              type="email"
+              name="email"
+              required
+              placeholder="you@example.com"
+              className="w-full rounded-full border border-rule bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none"
+            />
+            <input
+              type="password"
+              name="password"
+              required
+              placeholder="Password"
+              className="w-full rounded-full border border-rule bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none"
+            />
+            <button
+              type="submit"
+              className="w-full rounded-full bg-brand px-3 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand/90"
+            >
+              Log in
+            </button>
+          </form>
+        ) : signupStep === "email" ? (
+          <form method="GET" action="/login" className="space-y-3">
+            <input type="hidden" name="mode" value="signup" />
+            <input
+              type="email"
+              name="email"
+              required
+              placeholder="you@example.com"
+              className="w-full rounded-full border border-rule bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none"
+            />
+            <button
+              type="submit"
+              className="w-full rounded-full bg-brand px-3 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand/90"
+            >
+              Continue
+            </button>
+          </form>
+        ) : (
+          <form action={signUpWithPassword} className="space-y-3">
+            <input type="hidden" name="email" value={email} />
+            <input
+              type="password"
+              name="password"
+              required
+              placeholder="Password"
+              className="w-full rounded-full border border-rule bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none"
+            />
+            <input
+              type="password"
+              name="confirm_password"
+              required
+              placeholder="Confirm password"
+              className="w-full rounded-full border border-rule bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none"
+            />
+            <p className="text-xs text-ink-soft">
+              At least 10 characters, one uppercase letter, one number.
+            </p>
+            <button
+              type="submit"
+              className="w-full rounded-full bg-brand px-3 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand/90"
+            >
+              Create account
+            </button>
+            <Link
+              href="/login?mode=signup"
+              className="block text-center text-xs text-ink-soft underline"
+            >
+              Use a different email
+            </Link>
+          </form>
+        )}
       </div>
     </div>
   );
