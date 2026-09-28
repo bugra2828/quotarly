@@ -329,19 +329,41 @@ function StatTile({
   trend?: { percent: number | null; direction: "up" | "down" | "flat" } | null;
   href?: string;
 }) {
-  const content = (
-    <>
+  if (href) {
+    return (
+      <Link
+        href={href}
+        className="block bg-brand p-5 transition-all duration-100 hover:bg-brand/90 active:scale-[0.97]"
+      >
+        <p className="font-display text-2xl font-semibold text-white">
+          {value}
+        </p>
+        <div className="mt-1 flex items-center gap-1.5">
+          <p className="text-sm font-semibold text-white/85">{label}</p>
+          {trend && trend.percent !== null && (
+            <span
+              className={`text-xs font-medium ${
+                trend.direction === "up" ? "text-press" : "text-white/70"
+              }`}
+            >
+              {trend.direction === "up" ? "↑" : trend.direction === "down" ? "↓" : ""}
+              {Math.abs(trend.percent)}%
+            </span>
+          )}
+        </div>
+      </Link>
+    );
+  }
+
+  return (
+    <div className="bg-paper p-5">
       <p className="font-display text-2xl font-semibold">{value}</p>
       <div className="mt-1 flex items-center gap-1.5">
         <p className="text-sm font-semibold text-ink-soft">{label}</p>
         {trend && trend.percent !== null && (
           <span
             className={`text-xs font-medium ${
-              trend.direction === "up"
-                ? "text-press"
-                : trend.direction === "down"
-                  ? "text-ink-soft"
-                  : "text-ink-soft"
+              trend.direction === "up" ? "text-press" : "text-ink-soft"
             }`}
           >
             {trend.direction === "up" ? "↑" : trend.direction === "down" ? "↓" : ""}
@@ -349,22 +371,6 @@ function StatTile({
           </span>
         )}
       </div>
-    </>
+    </div>
   );
-
-  if (href) {
-    return (
-      <Link
-        href={href}
-        className="group relative block bg-paper p-5 transition-all duration-100 hover:bg-surface active:scale-[0.97]"
-      >
-        <span className="absolute right-4 top-5 text-xl font-bold text-brand">
-          →
-        </span>
-        {content}
-      </Link>
-    );
-  }
-
-  return <div className="bg-paper p-5">{content}</div>;
 }
