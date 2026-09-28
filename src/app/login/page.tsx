@@ -47,6 +47,7 @@ export default async function LoginPage({
           </span>
         </Link>
 
+        <div className="card-elevated-brand space-y-6 rounded-lg border border-rule bg-surface p-8">
         <div className="flex rounded-full border border-rule p-1 text-sm">
           <Link
             href="/login"
@@ -189,6 +190,7 @@ export default async function LoginPage({
             </Link>
           </form>
         )}
+        </div>
       </div>
     </div>
   );
