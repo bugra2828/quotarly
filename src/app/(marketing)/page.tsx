@@ -256,7 +256,7 @@ export default function Home() {
                         <p className={`mt-1 text-sm font-semibold ${item.color}`}>
                           {item.label}
                         </p>
-                        <p className="mt-1 text-sm text-ink-soft">
+                        <p className="mt-1 text-base text-ink">
                           {item.body}
                         </p>
                       </div>
