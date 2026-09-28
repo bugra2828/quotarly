@@ -15,7 +15,7 @@ const stages = [
   {
     title: "Match & draft",
     swatch: "bg-press",
-    body: "Quotarly watches the queries coming in from HARO, Featured, SOS and Help A B2B Writer. Each one is scored against your profile. Anything below your bar is dropped silently — no noise in your inbox. Anything above it gets a quote drafted in your voice, built from your bio and past answers.",
+    body: "Quotarly watches the queries coming in from the journalist sources we monitor. Each one is scored against your profile. Anything below your bar is dropped silently — no noise in your inbox. Anything above it gets a quote drafted in your voice, built from your bio and past answers.",
   },
   {
     title: "You approve, we send",
@@ -32,7 +32,7 @@ const stages = [
 const timeline = [
   {
     period: "Day one",
-    body: "Onboarding, plus a first read of what's currently moving through HARO, Featured, SOS and Help A B2B Writer in your topics.",
+    body: "Onboarding, plus a first read of what's currently moving through the journalist sources we monitor in your topics.",
   },
   {
     period: "First week",

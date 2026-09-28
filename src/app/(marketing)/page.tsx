@@ -1,15 +1,5 @@
 import Link from "next/link";
 
-const sources = [
-  "HARO",
-  "Featured.com",
-  "SOS",
-  "Help A B2B Writer",
-  "Anthropic Claude",
-  "Resend",
-  "DataForSEO",
-];
-
 const dispatch = [
   {
     time: "9:14 AM",
@@ -57,7 +47,7 @@ const workflow = [
   {
     eyebrow: "Step 2",
     title: "Match & score",
-    body: "Every query from HARO, Featured, SOS and Help A B2B Writer gets scored against your profile. Anything below your bar is dropped silently.",
+    body: "Every query from the journalist sources we monitor gets scored against your profile. Anything below your bar is dropped silently.",
     reverse: true,
     mock: (
       <div className="space-y-2">
@@ -203,7 +193,7 @@ export default function Home() {
 
         <div className="relative mx-auto max-w-5xl px-6 pt-20 pb-16 lg:pt-28">
           <p className="font-dispatch text-xs text-ink-soft">
-            Works with HARO, Featured, SOS &amp; Help A B2B Writer
+            Matched against trusted, vetted journalist sources
           </p>
           <div className="mt-6 grid gap-12 lg:grid-cols-[1.5fr_1fr] lg:gap-16">
             <div>
@@ -211,10 +201,10 @@ export default function Home() {
                 Get quoted before the deadline passes.
               </h1>
               <p className="mt-6 max-w-md text-lg leading-8 text-ink-soft">
-                Quotarly reads the journalist queries landing in HARO,
-                Featured, SOS and Help A B2B Writer, matches the ones that
-                fit your expertise, and drafts the quote in your voice. You
-                approve it before anything goes out.
+                Quotarly reads the journalist queries landing from trusted
+                media sources, matches the ones that fit your expertise, and
+                drafts the quote in your voice. You approve it before
+                anything goes out.
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
                 <Link
@@ -260,19 +250,6 @@ export default function Home() {
                 Illustrative — this is what happens after you onboard.
               </p>
             </div>
-          </div>
-        </div>
-
-        <div className="relative overflow-hidden border-y border-rule py-4">
-          <div className="marquee-track gap-10 text-sm text-ink-soft">
-            {[...sources, ...sources].map((s, i) => (
-              <span
-                key={`${s}-${i}`}
-                className="font-dispatch whitespace-nowrap"
-              >
-                {s}
-              </span>
-            ))}
           </div>
         </div>
       </section>
