@@ -162,26 +162,44 @@ export default async function DashboardPage({
                       {ep.job_title} {ep.company ? `@ ${ep.company}` : ""}
                     </p>
                   </div>
-                  <form action={toggleAutoApprove}>
-                    <input type="hidden" name="expert_profile_id" value={ep.id} />
-                    <input
-                      type="hidden"
-                      name="next_value"
-                      value={(!ep.auto_approve).toString()}
-                    />
-                    <button
-                      type="submit"
-                      className={`rounded-full px-3 py-1.5 text-xs font-medium ${
-                        ep.auto_approve
-                          ? "bg-press/15 text-press"
-                          : "bg-wire/15 text-wire"
-                      }`}
-                    >
-                      {ep.auto_approve
-                        ? "Auto-send is on (switch to manual)"
-                        : "Manual review is on (switch to auto)"}
-                    </button>
-                  </form>
+                  <div className="flex items-center gap-3">
+                    <div className="text-right">
+                      <p className="text-sm font-medium text-ink">Auto-send</p>
+                      <p className="text-xs text-ink-soft">
+                        {ep.auto_approve
+                          ? "Sends automatically"
+                          : "Waits for your review"}
+                      </p>
+                    </div>
+                    <form action={toggleAutoApprove}>
+                      <input
+                        type="hidden"
+                        name="expert_profile_id"
+                        value={ep.id}
+                      />
+                      <input
+                        type="hidden"
+                        name="next_value"
+                        value={(!ep.auto_approve).toString()}
+                      />
+                      <button
+                        type="submit"
+                        aria-pressed={ep.auto_approve}
+                        aria-label="Toggle auto-send"
+                        className={`relative h-7 w-12 shrink-0 rounded-full transition-colors ${
+                          ep.auto_approve ? "bg-press" : "bg-rule"
+                        }`}
+                      >
+                        <span
+                          className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-transform ${
+                            ep.auto_approve
+                              ? "translate-x-6"
+                              : "translate-x-1"
+                          }`}
+                        />
+                      </button>
+                    </form>
+                  </div>
                 </li>
               ))}
             </ul>
