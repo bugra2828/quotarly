@@ -191,6 +191,36 @@ a[class*="rounded-full"][class*="hover:"] {
   }
 }
 
+/* Raised buttons: a colored shadow gives them depth, which flattens and
+   the button sinks down on press for a real "pushed in" feel. */
+.btn-raised,
+.btn-raised-brand,
+.btn-raised-wire {
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.3), 0 8px 18px -6px rgba(0, 0, 0, 0.4);
+}
+.btn-raised-brand {
+  box-shadow: 0 3px 0 rgba(24, 43, 138, 0.55), 0 8px 20px -6px rgba(79, 125, 253, 0.5);
+}
+.btn-raised-wire {
+  box-shadow: 0 3px 0 rgba(130, 32, 22, 0.45), 0 8px 20px -6px rgba(255, 92, 77, 0.3);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .btn-raised:active,
+  .btn-raised-brand:active,
+  .btn-raised-wire:active {
+    transform: translateY(2px) scale(0.97) !important;
+  }
+  .btn-raised:active {
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 2px 6px -2px rgba(0, 0, 0, 0.4);
+  }
+  .btn-raised-brand:active {
+    box-shadow: 0 1px 0 rgba(24, 43, 138, 0.55), 0 3px 10px -4px rgba(79, 125, 253, 0.4);
+  }
+  .btn-raised-wire:active {
+    box-shadow: 0 1px 0 rgba(130, 32, 22, 0.45), 0 3px 10px -4px rgba(255, 92, 77, 0.25);
+  }
+}
+
 .tape-edge {
   position: relative;
 }

@@ -107,7 +107,7 @@ export default async function DashboardPage({
         </div>
       ) : (
         <>
-          <div className="grid gap-px overflow-hidden rounded-md border border-rule bg-rule sm:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-4">
             <StatTile
               label="Pitches sent"
               value={stats.pitchesSent}
@@ -333,7 +333,7 @@ function StatTile({
     return (
       <Link
         href={href}
-        className="block bg-brand p-5 transition-all duration-100 hover:bg-brand/90 active:scale-[0.97]"
+        className="btn-raised-brand block rounded-md bg-brand p-5 transition-colors duration-100 hover:bg-brand/90"
       >
         <p className="font-display text-2xl font-semibold text-white">
           {value}
@@ -356,7 +356,7 @@ function StatTile({
   }
 
   return (
-    <div className="bg-paper p-5">
+    <div className="rounded-md border border-rule bg-paper p-5">
       <p className="font-display text-2xl font-semibold">{value}</p>
       <div className="mt-1 flex items-center gap-1.5">
         <p className="text-sm font-semibold text-ink-soft">{label}</p>
