@@ -356,8 +356,11 @@ function StatTile({
     return (
       <Link
         href={href}
-        className="block bg-paper p-5 transition-colors hover:bg-surface"
+        className="group relative block bg-paper p-5 transition-all duration-100 hover:bg-surface active:scale-[0.97]"
       >
+        <span className="absolute right-4 top-5 text-ink-soft opacity-0 transition-opacity group-hover:opacity-100">
+          →
+        </span>
         {content}
       </Link>
     );

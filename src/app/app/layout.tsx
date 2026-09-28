@@ -29,13 +29,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               <Link
                 key={link.href}
                 href={link.href}
-                className="rounded-full border border-rule px-4 py-1.5 font-medium text-ink-soft transition-colors hover:border-ink/40 hover:bg-surface hover:text-ink"
+                className="rounded-full bg-brand px-4 py-1.5 font-medium text-white transition-colors hover:bg-brand/90"
               >
                 {link.label}
               </Link>
             ))}
             <form action={signOut}>
-              <button className="rounded-full border border-wire/30 px-4 py-1.5 font-medium text-wire transition-colors hover:bg-wire/10">
+              <button className="rounded-full bg-wire/15 px-4 py-1.5 font-medium text-wire transition-colors hover:bg-wire/25">
                 Sign out
               </button>
             </form>
