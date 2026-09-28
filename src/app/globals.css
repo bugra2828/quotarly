@@ -240,6 +240,19 @@ a[class*="rounded-full"][class*="hover:"] {
     @apply bg-background text-foreground;
   }
   html {
-    @apply font-sans;
+    @apply font-dispatch;
   }
+}
+
+/* Body copy (paragraphs, list text, labels) reads in the mono "dispatch"
+   face site-wide. Headings keep their explicit font-display class, and UI
+   chrome that needs a plain, non-mono face -- nav, buttons, pill links,
+   form controls -- is set back to font-sans here. */
+nav,
+button:not(:disabled),
+a[class*="rounded-full"],
+input,
+textarea,
+select {
+  font-family: var(--font-sans);
 }
