@@ -184,12 +184,15 @@ export default async function DashboardPage({
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2">
-            <div>
+            <div className="rounded-md border border-rule bg-surface p-5">
               <div className="flex items-center justify-between">
                 <h2 className="font-display text-lg font-semibold tracking-tight">
                   Pending approvals
                 </h2>
-                <Link href="/app/approvals" className="rounded-full border border-brand/40 px-3 py-1 text-xs font-medium text-brand transition-colors hover:bg-brand/10">
+                <Link
+                  href="/app/approvals"
+                  className="btn-raised-brand rounded-full bg-brand px-3 py-1 text-xs font-semibold text-white transition-colors hover:bg-brand/90"
+                >
                   View all →
                 </Link>
               </div>
@@ -210,7 +213,7 @@ export default async function DashboardPage({
                     return (
                       <li
                         key={p.id}
-                        className="rounded-md border border-rule bg-surface p-3 text-sm"
+                        className="rounded-md border border-rule bg-paper p-3 text-sm"
                       >
                         <p className="font-medium text-ink">{p.subject}</p>
                         <p className="text-xs text-ink-soft">
@@ -223,12 +226,15 @@ export default async function DashboardPage({
               )}
             </div>
 
-            <div>
+            <div className="rounded-md border border-rule bg-surface p-5">
               <div className="flex items-center justify-between">
                 <h2 className="font-display text-lg font-semibold tracking-tight">
                   Recently sent
                 </h2>
-                <Link href="/app/pitches" className="rounded-full border border-brand/40 px-3 py-1 text-xs font-medium text-brand transition-colors hover:bg-brand/10">
+                <Link
+                  href="/app/pitches"
+                  className="btn-raised-brand rounded-full bg-brand px-3 py-1 text-xs font-semibold text-white transition-colors hover:bg-brand/90"
+                >
                   View all →
                 </Link>
               </div>
@@ -248,7 +254,7 @@ export default async function DashboardPage({
                     return (
                       <li
                         key={p.id}
-                        className="rounded-md border border-rule bg-surface p-3 text-sm"
+                        className="rounded-md border border-rule bg-paper p-3 text-sm"
                       >
                         <p className="font-medium text-ink">{p.subject}</p>
                         <p className="text-xs text-ink-soft">
@@ -265,12 +271,15 @@ export default async function DashboardPage({
             </div>
           </div>
 
-          <div>
+          <div className="rounded-md border border-rule bg-surface p-5">
             <div className="flex items-center justify-between">
               <h2 className="font-display text-lg font-semibold tracking-tight">
                 Recent backlinks
               </h2>
-              <Link href="/app/backlinks" className="rounded-full border border-brand/40 px-3 py-1 text-xs font-medium text-brand transition-colors hover:bg-brand/10">
+              <Link
+                href="/app/backlinks"
+                className="btn-raised-brand rounded-full bg-brand px-3 py-1 text-xs font-semibold text-white transition-colors hover:bg-brand/90"
+              >
                 View all →
               </Link>
             </div>
@@ -283,7 +292,7 @@ export default async function DashboardPage({
                 {recentBacklinks.map((b) => (
                   <li
                     key={b.id}
-                    className="flex items-center justify-between rounded-md border border-rule bg-surface p-3 text-sm"
+                    className="flex items-center justify-between rounded-md border border-rule bg-paper p-3 text-sm"
                   >
                     <div>
                       <a
