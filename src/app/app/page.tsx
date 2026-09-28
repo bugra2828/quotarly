@@ -333,7 +333,7 @@ function StatTile({
     <>
       <p className="font-display text-2xl font-semibold">{value}</p>
       <div className="mt-1 flex items-center gap-1.5">
-        <p className="text-xs text-ink-soft">{label}</p>
+        <p className="text-sm font-semibold text-ink-soft">{label}</p>
         {trend && trend.percent !== null && (
           <span
             className={`text-xs font-medium ${
