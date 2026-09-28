@@ -210,6 +210,7 @@ export default async function DashboardPage({
                 </h2>
                 <Link
                   href="/app/approvals"
+                  prefetch={false}
                   className="btn-raised-brand rounded-full bg-brand-solid px-3 py-1 text-xs font-semibold text-white transition-colors hover:bg-brand-solid/90"
                 >
                   View all →
@@ -256,6 +257,7 @@ export default async function DashboardPage({
                 </h2>
                 <Link
                   href="/app/pitches"
+                  prefetch={false}
                   className="btn-raised-brand rounded-full bg-brand-solid px-3 py-1 text-xs font-semibold text-white transition-colors hover:bg-brand-solid/90"
                 >
                   View all →
@@ -305,6 +307,7 @@ export default async function DashboardPage({
               </h2>
               <Link
                 href="/app/backlinks"
+                prefetch={false}
                 className="btn-raised-brand rounded-full bg-brand-solid px-3 py-1 text-xs font-semibold text-white transition-colors hover:bg-brand-solid/90"
               >
                 View all →
@@ -373,6 +376,7 @@ function StatTile({
     return (
       <Link
         href={href}
+        prefetch={false}
         className="btn-raised-brand block rounded-md bg-brand-solid p-5 transition-colors duration-100 hover:bg-brand-solid/90"
       >
         <p className="font-display text-2xl font-semibold text-white">
