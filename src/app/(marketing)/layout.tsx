@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
+import { getSessionUser } from "@/lib/supabase/session";
 
 const navLinks = [
   { href: "/how-it-works", label: "How it works" },
@@ -12,10 +12,7 @@ export default async function MarketingLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getSessionUser();
 
   return (
     <div className="press-texture flex min-h-screen flex-col bg-paper text-ink">

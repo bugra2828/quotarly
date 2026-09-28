@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getSessionUser } from "@/lib/supabase/session";
 import { approvePitch, rejectPitch } from "@/app/actions/pitches";
 import { redirect } from "next/navigation";
 
@@ -11,9 +12,7 @@ export default async function ApprovalsPage({
   const { error } = await searchParams;
 
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
   const { data: pitches, error: queryError } = await supabase

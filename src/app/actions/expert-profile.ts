@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { getSessionUser } from "@/lib/supabase/session";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
@@ -13,9 +14,7 @@ function splitList(value: FormDataEntryValue | null): string[] {
 
 export async function createExpertProfile(formData: FormData) {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getSessionUser();
 
   if (!user) {
     redirect("/login");
@@ -50,9 +49,7 @@ export async function toggleAutoApprove(formData: FormData) {
   const nextValue = formData.get("next_value") === "true";
 
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
   await supabase

@@ -1,5 +1,5 @@
 import { createExpertProfile } from "@/app/actions/expert-profile";
-import { createClient } from "@/lib/supabase/server";
+import { getSessionUser } from "@/lib/supabase/session";
 import { redirect } from "next/navigation";
 
 export default async function OnboardingPage({
@@ -9,10 +9,7 @@ export default async function OnboardingPage({
 }) {
   const { error } = await searchParams;
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) {
     redirect("/login");
   }

@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { getSessionUser } from "@/lib/supabase/session";
 import { toggleAutoApprove } from "@/app/actions/expert-profile";
 import { getDashboardStats, type DateRange } from "@/lib/dashboard/stats";
 import { computeTrend } from "@/lib/dashboard/trend";
@@ -24,9 +25,7 @@ export default async function DashboardPage({
       : "week";
 
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getSessionUser();
 
   if (!user) {
     redirect("/login");

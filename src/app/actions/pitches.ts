@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getSessionUser } from "@/lib/supabase/session";
 import { attemptSendPitch } from "@/lib/pitches/send";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
@@ -20,9 +21,7 @@ export async function approvePitch(formData: FormData) {
   const editedBody = String(formData.get("body") ?? "").trim();
 
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
   const { data: pitch } = await supabase

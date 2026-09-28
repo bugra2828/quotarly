@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { getSessionUser } from "@/lib/supabase/session";
 import { getMonthlyStats } from "@/lib/reports/monthly";
 import { MonthlyReportDocument } from "@/lib/reports/pdf-document";
 import { renderToBuffer } from "@react-pdf/renderer";
@@ -12,9 +13,7 @@ function currentMonth() {
 
 export async function GET(request: NextRequest) {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }

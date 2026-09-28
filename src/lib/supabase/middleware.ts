@@ -1,8 +1,20 @@
-import { createServerClient } from "@supabase/ssr";
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request });
+  // Never trust a client-supplied value for these -- always strip them
+  // first, then only re-add them below once we've actually verified the
+  // session. Downstream pages/actions read them instead of calling
+  // supabase.auth.getUser() again for the same request.
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.delete("x-user-id");
+  requestHeaders.delete("x-user-email");
+
+  const cookiesToApply: {
+    name: string;
+    value: string;
+    options: CookieOptions;
+  }[] = [];
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -16,10 +28,7 @@ export async function updateSession(request: NextRequest) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           );
-          supabaseResponse = NextResponse.next({ request });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          );
+          cookiesToApply.push(...cookiesToSet);
         },
       },
     }
@@ -31,6 +40,11 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  if (user) {
+    requestHeaders.set("x-user-id", user.id);
+    requestHeaders.set("x-user-email", user.email ?? "");
+  }
+
   const isAuthRoute =
     request.nextUrl.pathname.startsWith("/login") ||
     request.nextUrl.pathname.startsWith("/register") ||
@@ -39,17 +53,23 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/app") ||
     request.nextUrl.pathname.startsWith("/admin");
 
+  let response: NextResponse;
+
   if (!user && isProtectedRoute) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
-    return NextResponse.redirect(url);
-  }
-
-  if (user && isAuthRoute) {
+    response = NextResponse.redirect(url);
+  } else if (user && isAuthRoute) {
     const url = request.nextUrl.clone();
     url.pathname = "/app";
-    return NextResponse.redirect(url);
+    response = NextResponse.redirect(url);
+  } else {
+    response = NextResponse.next({ request: { headers: requestHeaders } });
   }
 
-  return supabaseResponse;
+  cookiesToApply.forEach(({ name, value, options }) =>
+    response.cookies.set(name, value, options)
+  );
+
+  return response;
 }

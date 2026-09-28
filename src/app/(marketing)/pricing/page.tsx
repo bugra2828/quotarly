@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { getSessionUser } from "@/lib/supabase/session";
 import { buildCheckoutUrl, type PlanId } from "@/lib/lemonsqueezy/checkout";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -42,10 +42,7 @@ const PLANS: {
 ];
 
 export default async function PricingPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getSessionUser();
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-20">

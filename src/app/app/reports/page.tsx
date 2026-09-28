@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { getSessionUser } from "@/lib/supabase/session";
 import { getMonthlyStats } from "@/lib/reports/monthly";
 import { redirect } from "next/navigation";
 
@@ -17,9 +18,7 @@ function formatMonth(month: string) {
 
 export default async function ReportsPage() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
   const { data: expertProfiles } = await supabase
