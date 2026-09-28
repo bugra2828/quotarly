@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { getSessionUser } from "@/lib/supabase/session";
 import { toggleAutoApprove } from "@/app/actions/expert-profile";
 import { getDashboardStats, type DateRange } from "@/lib/dashboard/stats";
@@ -54,14 +55,14 @@ export default async function DashboardPage({
       ? await Promise.all([
           supabase
             .from("pitches")
-            .select("id, subject, created_at, matches(query_id, expert_profile_id, queries(title, outlet_name, deadline))")
+            .select("id, subject, created_at, matches(query_id)")
             .in("expert_profile_id", expertProfileIds)
             .eq("status", "pending_approval")
             .order("created_at", { ascending: false })
             .limit(5),
           supabase
             .from("pitches")
-            .select("id, subject, sent_at, matches(queries(outlet_name))")
+            .select("id, subject, sent_at, matches(query_id)")
             .in("expert_profile_id", expertProfileIds)
             .eq("status", "sent")
             .order("sent_at", { ascending: false })
@@ -74,6 +75,30 @@ export default async function DashboardPage({
             .limit(5),
         ])
       : [{ data: [], error: null }, { data: [], error: null }, { data: [], error: null }];
+
+  // "queries" is admin/service-only at the RLS layer, so outlet names for the
+  // two mini-lists above are fetched separately via the admin client. Safe
+  // here: every id came from a match on a pitch this user already owns.
+  const queryIds = [
+    ...new Set(
+      [...(pendingPitches ?? []), ...(recentSent ?? [])]
+        .map((p) => {
+          const m = Array.isArray(p.matches) ? p.matches[0] : p.matches;
+          return m?.query_id;
+        })
+        .filter(Boolean)
+    ),
+  ] as string[];
+
+  const admin = createAdminClient();
+  const { data: dashboardQueries } =
+    queryIds.length > 0
+      ? await admin.from("queries").select("id, outlet_name").in("id", queryIds)
+      : { data: [] };
+
+  const outletNameByQueryId = new Map(
+    (dashboardQueries ?? []).map((q) => [q.id, q.outlet_name])
+  );
 
   return (
     <div className="mx-auto max-w-5xl space-y-8 px-6 py-12">
@@ -229,10 +254,8 @@ export default async function DashboardPage({
                 <ul className="mt-3 space-y-2">
                   {pendingPitches.map((p) => {
                     const match = Array.isArray(p.matches) ? p.matches[0] : p.matches;
-                    const query = match?.queries
-                      ? Array.isArray(match.queries)
-                        ? match.queries[0]
-                        : match.queries
+                    const outletName = match?.query_id
+                      ? outletNameByQueryId.get(match.query_id)
                       : null;
                     return (
                       <li
@@ -241,7 +264,7 @@ export default async function DashboardPage({
                       >
                         <p className="font-medium text-ink">{p.subject}</p>
                         <p className="text-xs text-ink-soft">
-                          {query?.outlet_name ?? "Unknown outlet"}
+                          {outletName ?? "Unknown outlet"}
                         </p>
                       </li>
                     );
@@ -275,10 +298,8 @@ export default async function DashboardPage({
                 <ul className="mt-3 space-y-2">
                   {recentSent.map((p) => {
                     const match = Array.isArray(p.matches) ? p.matches[0] : p.matches;
-                    const query = match?.queries
-                      ? Array.isArray(match.queries)
-                        ? match.queries[0]
-                        : match.queries
+                    const outletName = match?.query_id
+                      ? outletNameByQueryId.get(match.query_id)
                       : null;
                     return (
                       <li
@@ -287,7 +308,7 @@ export default async function DashboardPage({
                       >
                         <p className="font-medium text-ink">{p.subject}</p>
                         <p className="text-xs text-ink-soft">
-                          {query?.outlet_name ?? "Unknown outlet"} ·{" "}
+                          {outletName ?? "Unknown outlet"} ·{" "}
                           {p.sent_at
                             ? new Date(p.sent_at).toLocaleDateString()
                             : ""}
