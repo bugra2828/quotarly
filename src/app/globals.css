@@ -221,25 +221,6 @@ a[class*="rounded-full"][class*="hover:"] {
   }
 }
 
-.tape-edge {
-  position: relative;
-}
-
-.tape-edge::before {
-  content: "";
-  position: absolute;
-  inset-block: 0;
-  left: 0;
-  width: 3px;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    var(--wire) 0,
-    var(--wire) 4px,
-    transparent 4px,
-    transparent 10px
-  );
-}
-
 @keyframes fade-in-up {
   from {
     opacity: 0;

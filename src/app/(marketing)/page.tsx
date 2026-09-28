@@ -5,18 +5,21 @@ const dispatch = [
     time: "9:14 AM",
     label: "Received",
     color: "text-ink-soft",
+    dot: "bg-ink-soft",
     body: "A retail-industry newsletter is looking for a founder who's scaled a support team past 50 people.",
   },
   {
     time: "9:16 AM",
     label: "Matched & drafted",
-    color: "text-press",
+    color: "text-brand",
+    dot: "bg-brand",
     body: "Scored against your profile, then written up in your voice from your bio and past quotes.",
   },
   {
     time: "9:20 AM",
     label: "Sent",
     color: "text-press",
+    dot: "bg-press",
     body: "Cleared your bar, so it went out automatically — fast enough to beat the deadline.",
   },
 ];
@@ -229,22 +232,37 @@ export default function Home() {
               <p className="text-sm text-ink-soft">
                 One query, start to finish
               </p>
-              <ol className="tape-edge relative mt-4 space-y-6 pl-6">
-                {dispatch.map((item, i) => (
-                  <li
-                    key={item.label}
-                    className="motion-safe:animate-[fade-in-up_0.5s_ease-out_backwards]"
-                    style={{ animationDelay: `${i * 200}ms` }}
-                  >
-                    <p className="font-dispatch text-xs text-ink-soft">
-                      {item.time}
-                    </p>
-                    <p className={`mt-1 text-sm font-medium ${item.color}`}>
-                      {item.label}
-                    </p>
-                    <p className="mt-1 text-sm text-ink-soft">{item.body}</p>
-                  </li>
-                ))}
+              <ol className="mt-5">
+                {dispatch.map((item, i) => {
+                  const isLast = i === dispatch.length - 1;
+                  return (
+                    <li
+                      key={item.label}
+                      className="flex gap-4 motion-safe:animate-[fade-in-up_0.5s_ease-out_backwards]"
+                      style={{ animationDelay: `${i * 200}ms` }}
+                    >
+                      <div className="flex flex-col items-center">
+                        <span
+                          className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ${item.dot}`}
+                        />
+                        {!isLast && (
+                          <span className="my-1 w-px flex-1 bg-rule" />
+                        )}
+                      </div>
+                      <div className={isLast ? "pb-0" : "pb-6"}>
+                        <p className="font-dispatch text-xs text-ink-soft">
+                          {item.time}
+                        </p>
+                        <p className={`mt-1 text-sm font-semibold ${item.color}`}>
+                          {item.label}
+                        </p>
+                        <p className="mt-1 text-sm text-ink-soft">
+                          {item.body}
+                        </p>
+                      </div>
+                    </li>
+                  );
+                })}
               </ol>
               <p className="mt-4 text-xs text-ink-soft">
                 Illustrative — this is what happens after you onboard.
