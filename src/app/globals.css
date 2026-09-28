@@ -196,7 +196,7 @@ a[class*="rounded-full"][class*="hover:"] {
 /* Elevated card: same colored-shadow depth as a raised button, but static
    (no press animation) -- for a featured/emphasized card, not a control. */
 .card-elevated-brand {
-  box-shadow: 0 10px 28px -8px rgba(79, 125, 253, 0.35);
+  box-shadow: 0 20px 60px -10px rgba(79, 125, 253, 0.35);
 }
 
 /* Raised buttons: a colored shadow gives them depth, which flattens and

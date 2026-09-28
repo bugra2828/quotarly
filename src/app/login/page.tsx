@@ -47,7 +47,7 @@ export default async function LoginPage({
           </span>
         </Link>
 
-        <div className="card-elevated-brand space-y-6 rounded-lg border border-rule bg-surface p-8">
+        <div className="card-elevated-brand min-h-[520px] space-y-6 rounded-lg border border-rule bg-surface p-8 transition-[height] duration-200">
         <div className="flex rounded-full border border-rule p-1 text-sm">
           <Link
             href="/login"
@@ -133,14 +133,23 @@ export default async function LoginPage({
 
         {confirm ? null : !isSignup ? (
           <form action={signInWithPassword} className="space-y-3">
-            <input
-              type="email"
-              name="email"
-              required
-              placeholder="you@example.com"
-              className="w-full rounded-full border border-rule bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/40"
-            />
-            <PasswordField name="password" placeholder="Password" />
+            <div>
+              <label
+                htmlFor="login-email"
+                className="mb-1.5 block text-xs font-semibold tracking-wide text-ink-soft"
+              >
+                Email
+              </label>
+              <input
+                id="login-email"
+                type="email"
+                name="email"
+                required
+                placeholder="you@example.com"
+                className="w-full rounded-full border border-rule bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/40"
+              />
+            </div>
+            <PasswordField name="password" label="Password" placeholder="Password" />
             <button
               type="submit"
               className="w-full rounded-full bg-brand-solid px-3 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-solid/90"
@@ -151,13 +160,22 @@ export default async function LoginPage({
         ) : signupStep === "email" ? (
           <form method="GET" action="/login" className="space-y-3">
             <input type="hidden" name="mode" value="signup" />
-            <input
-              type="email"
-              name="email"
-              required
-              placeholder="you@example.com"
-              className="w-full rounded-full border border-rule bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/40"
-            />
+            <div>
+              <label
+                htmlFor="signup-email"
+                className="mb-1.5 block text-xs font-semibold tracking-wide text-ink-soft"
+              >
+                Email
+              </label>
+              <input
+                id="signup-email"
+                type="email"
+                name="email"
+                required
+                placeholder="you@example.com"
+                className="w-full rounded-full border border-rule bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/40"
+              />
+            </div>
             <button
               type="submit"
               className="w-full rounded-full bg-brand-solid px-3 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-solid/90"
@@ -168,9 +186,10 @@ export default async function LoginPage({
         ) : (
           <form action={signUpWithPassword} className="space-y-3">
             <input type="hidden" name="email" value={email} />
-            <PasswordField name="password" placeholder="Password" />
+            <PasswordField name="password" label="Password" placeholder="Password" />
             <PasswordField
               name="confirm_password"
+              label="Confirm password"
               placeholder="Confirm password"
             />
             <p className="text-xs text-ink-soft">
