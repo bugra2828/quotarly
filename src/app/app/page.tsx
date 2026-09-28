@@ -1,9 +1,28 @@
 import { createClient } from "@/lib/supabase/server";
 import { toggleAutoApprove } from "@/app/actions/expert-profile";
+import { getDashboardStats, type DateRange } from "@/lib/dashboard/stats";
+import { computeTrend } from "@/lib/dashboard/trend";
+import { PitchesBarChart, BacklinksAreaChart } from "./DashboardCharts";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
-export default async function DashboardPage() {
+const RANGES: { value: DateRange; label: string }[] = [
+  { value: "week", label: "This week" },
+  { value: "month", label: "This month" },
+  { value: "all", label: "All time" },
+];
+
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ range?: string }>;
+}) {
+  const { range: rawRange } = await searchParams;
+  const range: DateRange =
+    rawRange === "week" || rawRange === "month" || rawRange === "all"
+      ? rawRange
+      : "week";
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -13,49 +32,65 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user.id)
-    .single();
-
   const { data: expertProfiles } = await supabase
     .from("expert_profiles")
     .select("*")
     .eq("owner_id", user.id);
 
-  const { data: subscription } = await supabase
-    .from("subscriptions")
-    .select("plan, status")
-    .eq("owner_id", user.id)
-    .eq("status", "active")
-    .maybeSingle();
+  const expertProfileIds = (expertProfiles ?? []).map((ep) => ep.id);
+
+  const stats = await getDashboardStats(supabase, expertProfileIds, range);
+  const pitchesTrend = computeTrend(stats.pitchesSent, stats.pitchesSentTrendBase);
+  const backlinksTrend = computeTrend(
+    stats.backlinksWon,
+    stats.backlinksWonTrendBase
+  );
+
+  const [{ data: pendingPitches }, { data: recentSent }, { data: recentBacklinks }] =
+    expertProfileIds.length > 0
+      ? await Promise.all([
+          supabase
+            .from("pitches")
+            .select("id, subject, created_at, matches(query_id, expert_profile_id, queries(title, outlet_name, deadline))")
+            .in("expert_profile_id", expertProfileIds)
+            .eq("status", "pending_approval")
+            .order("created_at", { ascending: false })
+            .limit(5),
+          supabase
+            .from("pitches")
+            .select("id, subject, sent_at, matches(queries(outlet_name))")
+            .in("expert_profile_id", expertProfileIds)
+            .eq("status", "sent")
+            .order("sent_at", { ascending: false })
+            .limit(5),
+          supabase
+            .from("backlinks")
+            .select("id, outlet_domain, article_url, authority_score, is_dofollow, status, first_seen_at")
+            .in("expert_profile_id", expertProfileIds)
+            .order("first_seen_at", { ascending: false })
+            .limit(5),
+        ])
+      : [{ data: [] }, { data: [] }, { data: [] }];
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6 px-6 py-12">
-      <h1 className="font-display text-2xl font-semibold tracking-tight">
-        Dashboard
-      </h1>
-
-      <div className="rounded-md border border-rule bg-surface p-5 text-sm">
-        <Row label="Signed in as" value={profile?.email ?? user.email ?? ""} />
-        <Row label="Role" value={profile?.role ?? "client"} />
-        <Row label="Expert profiles" value={String(expertProfiles?.length ?? 0)} />
-        <Row
-          label="Subscription"
-          value={
-            subscription ? (
-              `${subscription.plan} (active)`
-            ) : (
-              <>
-                None —{" "}
-                <Link href="/pricing" className="text-brand underline">
-                  view plans
-                </Link>
-              </>
-            )
-          }
-        />
+    <div className="mx-auto max-w-5xl space-y-8 px-6 py-12">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <h1 className="font-display text-2xl font-semibold tracking-tight">
+          Dashboard
+        </h1>
+        <div className="flex rounded-full border border-rule p-1 text-sm">
+          {RANGES.map((r) => (
+            <Link
+              key={r.value}
+              href={`/app?range=${r.value}`}
+              className={`rounded-full px-3 py-1.5 font-medium transition-colors hover:opacity-90 ${
+                range === r.value ? "bg-ink text-paper" : "text-ink-soft"
+              }`}
+            >
+              {r.label}
+            </Link>
+          ))}
+        </div>
       </div>
 
       {!expertProfiles?.length ? (
@@ -72,48 +107,201 @@ export default async function DashboardPage() {
         </div>
       ) : (
         <>
-          <ul className="space-y-2">
-            {expertProfiles.map((ep) => (
-              <li
-                key={ep.id}
-                className="flex items-center justify-between rounded-md border border-rule bg-surface p-4 text-sm"
-              >
-                <div>
-                  <p className="font-medium text-ink">{ep.display_name}</p>
-                  <p className="text-ink-soft">
-                    {ep.job_title} {ep.company ? `@ ${ep.company}` : ""}
-                  </p>
-                </div>
-                <form action={toggleAutoApprove}>
-                  <input type="hidden" name="expert_profile_id" value={ep.id} />
-                  <input
-                    type="hidden"
-                    name="next_value"
-                    value={(!ep.auto_approve).toString()}
-                  />
-                  <button
-                    type="submit"
-                    className={`rounded-full px-3 py-1.5 text-xs font-medium ${
-                      ep.auto_approve
-                        ? "bg-press/15 text-press"
-                        : "bg-wire/15 text-wire"
-                    }`}
+          <div className="grid gap-px overflow-hidden rounded-md border border-rule bg-rule sm:grid-cols-4">
+            <StatTile
+              label="Pitches sent"
+              value={stats.pitchesSent}
+              trend={range === "all" ? null : pitchesTrend}
+            />
+            <StatTile
+              label="Backlinks won"
+              value={stats.backlinksWon}
+              trend={range === "all" ? null : backlinksTrend}
+            />
+            <StatTile label="Pending approvals" value={stats.pendingApprovals} />
+            <StatTile
+              label="Avg. authority score"
+              value={stats.avgAuthority ?? "—"}
+            />
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-2">
+            <div className="rounded-md border border-rule bg-surface p-5">
+              <p className="text-sm font-medium text-ink">Pitches sent</p>
+              <PitchesBarChart data={stats.pitchesPerDay} />
+            </div>
+            <div className="rounded-md border border-rule bg-surface p-5">
+              <p className="text-sm font-medium text-ink">Backlinks won</p>
+              <BacklinksAreaChart data={stats.backlinksPerDay} />
+            </div>
+          </div>
+
+          <div>
+            <h2 className="font-display text-lg font-semibold tracking-tight">
+              Your profiles
+            </h2>
+            <ul className="mt-3 space-y-2">
+              {expertProfiles.map((ep) => (
+                <li
+                  key={ep.id}
+                  className="flex items-center justify-between rounded-md border border-rule bg-surface p-4 text-sm"
+                >
+                  <div>
+                    <p className="font-medium text-ink">{ep.display_name}</p>
+                    <p className="text-ink-soft">
+                      {ep.job_title} {ep.company ? `@ ${ep.company}` : ""}
+                    </p>
+                  </div>
+                  <form action={toggleAutoApprove}>
+                    <input type="hidden" name="expert_profile_id" value={ep.id} />
+                    <input
+                      type="hidden"
+                      name="next_value"
+                      value={(!ep.auto_approve).toString()}
+                    />
+                    <button
+                      type="submit"
+                      className={`rounded-full px-3 py-1.5 text-xs font-medium ${
+                        ep.auto_approve
+                          ? "bg-press/15 text-press"
+                          : "bg-wire/15 text-wire"
+                      }`}
+                    >
+                      {ep.auto_approve
+                        ? "Auto-send is on (switch to manual)"
+                        : "Manual review is on (switch to auto)"}
+                    </button>
+                  </form>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-2">
+            <div>
+              <div className="flex items-center justify-between">
+                <h2 className="font-display text-lg font-semibold tracking-tight">
+                  Pending approvals
+                </h2>
+                <Link href="/app/approvals" className="text-xs text-brand hover:underline">
+                  View all →
+                </Link>
+              </div>
+              {!pendingPitches?.length ? (
+                <p className="mt-3 text-sm text-ink-soft">
+                  Nothing waiting — everything clearing your bar sends on its
+                  own.
+                </p>
+              ) : (
+                <ul className="mt-3 space-y-2">
+                  {pendingPitches.map((p) => {
+                    const match = Array.isArray(p.matches) ? p.matches[0] : p.matches;
+                    const query = match?.queries
+                      ? Array.isArray(match.queries)
+                        ? match.queries[0]
+                        : match.queries
+                      : null;
+                    return (
+                      <li
+                        key={p.id}
+                        className="rounded-md border border-rule bg-surface p-3 text-sm"
+                      >
+                        <p className="font-medium text-ink">{p.subject}</p>
+                        <p className="text-xs text-ink-soft">
+                          {query?.outlet_name ?? "Unknown outlet"}
+                        </p>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between">
+                <h2 className="font-display text-lg font-semibold tracking-tight">
+                  Recently sent
+                </h2>
+              </div>
+              {!recentSent?.length ? (
+                <p className="mt-3 text-sm text-ink-soft">
+                  No pitches sent yet.
+                </p>
+              ) : (
+                <ul className="mt-3 space-y-2">
+                  {recentSent.map((p) => {
+                    const match = Array.isArray(p.matches) ? p.matches[0] : p.matches;
+                    const query = match?.queries
+                      ? Array.isArray(match.queries)
+                        ? match.queries[0]
+                        : match.queries
+                      : null;
+                    return (
+                      <li
+                        key={p.id}
+                        className="rounded-md border border-rule bg-surface p-3 text-sm"
+                      >
+                        <p className="font-medium text-ink">{p.subject}</p>
+                        <p className="text-xs text-ink-soft">
+                          {query?.outlet_name ?? "Unknown outlet"} ·{" "}
+                          {p.sent_at
+                            ? new Date(p.sent_at).toLocaleDateString()
+                            : ""}
+                        </p>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between">
+              <h2 className="font-display text-lg font-semibold tracking-tight">
+                Recent backlinks
+              </h2>
+              <Link href="/app/backlinks" className="text-xs text-brand hover:underline">
+                View all →
+              </Link>
+            </div>
+            {!recentBacklinks?.length ? (
+              <p className="mt-3 text-sm text-ink-soft">
+                No backlinks detected yet.
+              </p>
+            ) : (
+              <ul className="mt-3 space-y-2">
+                {recentBacklinks.map((b) => (
+                  <li
+                    key={b.id}
+                    className="flex items-center justify-between rounded-md border border-rule bg-surface p-3 text-sm"
                   >
-                    {ep.auto_approve
-                      ? "Auto-send is on (switch to manual)"
-                      : "Manual review is on (switch to auto)"}
-                  </button>
-                </form>
-              </li>
-            ))}
-          </ul>
-          <div className="flex gap-6">
-            <Link href="/app/approvals" className="text-sm text-brand underline">
-              View pending approvals →
-            </Link>
-            <Link href="/app/backlinks" className="text-sm text-brand underline">
-              View backlinks →
-            </Link>
+                    <div>
+                      <a
+                        href={b.article_url}
+                        target="_blank"
+                        className="font-medium text-ink underline"
+                      >
+                        {b.outlet_domain}
+                      </a>
+                      <p className="text-xs text-ink-soft">
+                        Authority {b.authority_score ?? "—"} ·{" "}
+                        {b.is_dofollow ? "dofollow" : "nofollow"}
+                      </p>
+                    </div>
+                    <span
+                      className={`font-dispatch rounded-full px-2.5 py-0.5 text-xs ${
+                        b.status === "live"
+                          ? "bg-press/15 text-press"
+                          : "bg-wire/15 text-wire"
+                      }`}
+                    >
+                      {b.status}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </>
       )}
@@ -121,11 +309,35 @@ export default async function DashboardPage() {
   );
 }
 
-function Row({ label, value }: { label: string; value: React.ReactNode }) {
+function StatTile({
+  label,
+  value,
+  trend,
+}: {
+  label: string;
+  value: number | string;
+  trend?: { percent: number | null; direction: "up" | "down" | "flat" } | null;
+}) {
   return (
-    <p className="flex justify-between border-b border-rule py-2 last:border-0">
-      <span className="text-ink-soft">{label}</span>
-      <span className="text-ink">{value}</span>
-    </p>
+    <div className="bg-paper p-5">
+      <p className="font-display text-2xl font-semibold">{value}</p>
+      <div className="mt-1 flex items-center gap-1.5">
+        <p className="text-xs text-ink-soft">{label}</p>
+        {trend && trend.percent !== null && (
+          <span
+            className={`text-xs font-medium ${
+              trend.direction === "up"
+                ? "text-press"
+                : trend.direction === "down"
+                  ? "text-ink-soft"
+                  : "text-ink-soft"
+            }`}
+          >
+            {trend.direction === "up" ? "↑" : trend.direction === "down" ? "↓" : ""}
+            {Math.abs(trend.percent)}%
+          </span>
+        )}
+      </div>
+    </div>
   );
 }
