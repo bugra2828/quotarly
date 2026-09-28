@@ -191,10 +191,8 @@ export default async function DashboardPage({
                         }`}
                       >
                         <span
-                          className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-transform ${
-                            ep.auto_approve
-                              ? "translate-x-6"
-                              : "translate-x-1"
+                          className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all ${
+                            ep.auto_approve ? "left-6" : "left-1"
                           }`}
                         />
                       </button>
