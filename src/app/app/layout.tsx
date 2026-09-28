@@ -24,18 +24,18 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               Quotarly
             </span>
           </Link>
-          <nav className="flex items-center gap-6 text-sm">
+          <nav className="flex items-center gap-2 text-sm">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-ink-soft transition-colors hover:text-ink"
+                className="rounded-full border border-rule px-4 py-1.5 font-medium text-ink-soft transition-colors hover:border-ink/40 hover:bg-surface hover:text-ink"
               >
                 {link.label}
               </Link>
             ))}
             <form action={signOut}>
-              <button className="text-sm text-ink-soft underline transition-colors hover:text-ink">
+              <button className="rounded-full border border-wire/30 px-4 py-1.5 font-medium text-wire transition-colors hover:bg-wire/10">
                 Sign out
               </button>
             </form>

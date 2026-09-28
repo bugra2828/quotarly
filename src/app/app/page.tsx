@@ -189,7 +189,7 @@ export default async function DashboardPage({
                 <h2 className="font-display text-lg font-semibold tracking-tight">
                   Pending approvals
                 </h2>
-                <Link href="/app/approvals" className="text-xs text-brand hover:underline">
+                <Link href="/app/approvals" className="rounded-full border border-brand/40 px-3 py-1 text-xs font-medium text-brand transition-colors hover:bg-brand/10">
                   View all →
                 </Link>
               </div>
@@ -228,7 +228,7 @@ export default async function DashboardPage({
                 <h2 className="font-display text-lg font-semibold tracking-tight">
                   Recently sent
                 </h2>
-                <Link href="/app/pitches" className="text-xs text-brand hover:underline">
+                <Link href="/app/pitches" className="rounded-full border border-brand/40 px-3 py-1 text-xs font-medium text-brand transition-colors hover:bg-brand/10">
                   View all →
                 </Link>
               </div>
@@ -270,7 +270,7 @@ export default async function DashboardPage({
               <h2 className="font-display text-lg font-semibold tracking-tight">
                 Recent backlinks
               </h2>
-              <Link href="/app/backlinks" className="text-xs text-brand hover:underline">
+              <Link href="/app/backlinks" className="rounded-full border border-brand/40 px-3 py-1 text-xs font-medium text-brand transition-colors hover:bg-brand/10">
                 View all →
               </Link>
             </div>
