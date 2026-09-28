@@ -358,7 +358,7 @@ function StatTile({
         href={href}
         className="group relative block bg-paper p-5 transition-all duration-100 hover:bg-surface active:scale-[0.97]"
       >
-        <span className="absolute right-4 top-5 text-ink-soft opacity-0 transition-opacity group-hover:opacity-100">
+        <span className="absolute right-4 top-5 text-xl font-bold text-brand">
           →
         </span>
         {content}
