@@ -27,7 +27,7 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL?.startsWith("http")
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Quotarly — Get quoted before the deadline passes",
+    default: "Quotarly — Turn expert quotes into backlinks that rank",
     template: "%s — Quotarly",
   },
   description:

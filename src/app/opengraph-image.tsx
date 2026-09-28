@@ -30,7 +30,7 @@ export default function Image() {
             display: "flex",
           }}
         >
-          Get quoted before the deadline passes.
+          Turn expert quotes into backlinks that rank.
         </div>
       </div>
     ),
