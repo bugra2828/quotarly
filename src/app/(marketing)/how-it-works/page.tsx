@@ -71,13 +71,16 @@ export default function HowItWorksPage() {
         <h2 className="font-display text-2xl font-semibold tracking-tight">
           What to expect, and when
         </h2>
-        <div className="mt-8 space-y-8">
+        <div className="mt-8 space-y-4">
           {timeline.map((row) => (
-            <div key={row.period} className="sm:flex sm:gap-8">
-              <p className="font-dispatch text-sm text-ink-soft sm:w-32 sm:flex-none">
+            <div
+              key={row.period}
+              className="rounded-md border border-rule bg-surface p-6 sm:flex sm:gap-8"
+            >
+              <p className="font-dispatch text-sm font-semibold text-press sm:w-32 sm:flex-none">
                 {row.period}
               </p>
-              <p className="mt-1 leading-7 text-ink-soft sm:mt-0">
+              <p className="mt-2 leading-7 text-ink-soft sm:mt-0">
                 {row.body}
               </p>
             </div>
