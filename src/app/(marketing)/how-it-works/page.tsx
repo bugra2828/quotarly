@@ -18,9 +18,9 @@ const stages = [
     body: "Quotarly watches the queries coming in from the journalist sources we monitor. Each one is scored against your profile. Anything below your bar is dropped silently — no noise in your inbox. Anything above it gets a quote drafted in your voice, built from your bio and past answers.",
   },
   {
-    title: "You approve, we send",
+    title: "We send, you're in control",
     swatch: "bg-wire",
-    body: "Every drafted quote lands in your approval queue with the journalist's deadline attached. Approve it as-is, edit the wording, or reject it. Nothing is sent to a journalist without that step.",
+    body: "By default, a quote that clears your bar goes out the moment it's drafted — fast enough to beat the deadline. Prefer to read every one first? Turn on manual review in your dashboard and nothing sends until you approve it.",
   },
   {
     title: "Track the link",
@@ -36,11 +36,11 @@ const timeline = [
   },
   {
     period: "First week",
-    body: "Matches start reaching your approval queue as relevant queries come in. How many depends entirely on how much journalists are asking about your specific expertise that week.",
+    body: "Matching quotes start going out as relevant queries come in. How many depends entirely on how much journalists are asking about your specific expertise that week.",
   },
   {
     period: "Ongoing",
-    body: "Approved quotes go out before their deadlines. Quotarly checks published articles daily and adds confirmed links to your dashboard as they appear.",
+    body: "Quotes go out before their deadlines. Quotarly checks published articles daily and adds confirmed links to your dashboard as they appear.",
   },
 ];
 
@@ -51,7 +51,7 @@ export default function HowItWorksPage() {
         How it works
       </h1>
       <p className="mt-4 text-ink-soft">
-        Four stages, and only one of them requires anything from you.
+        Four stages — review is optional, everything else runs on its own.
       </p>
 
       <div className="mt-14 space-y-12">

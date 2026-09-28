@@ -29,13 +29,15 @@ export default function TermsPage() {
 
         <section>
           <h2 className="font-display text-lg font-semibold text-ink">
-            Approval is on you
+            Accuracy is on you
           </h2>
           <p className="mt-2">
-            Quotarly drafts quotes from the profile and bio you give it, but
-            nothing is sent to a journalist until you approve it. You're
-            responsible for checking that an approved quote is accurate
-            before you approve it.
+            Quotarly drafts quotes from the profile and bio you give it. By
+            default, a quote sends automatically once it clears your match
+            bar; you can switch to manual review in your dashboard if you'd
+            rather approve each one yourself. Either way, you're responsible
+            for keeping your profile and bio accurate, since that's what
+            every quote is built from.
           </p>
         </section>
 

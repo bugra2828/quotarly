@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 function splitList(value: FormDataEntryValue | null): string[] {
   return String(value ?? "")
@@ -40,4 +41,25 @@ export async function createExpertProfile(formData: FormData) {
   }
 
   redirect("/app");
+}
+
+// Toggles between "send the moment a quote clears your bar" (the default)
+// and "hold every quote for my manual review" for one expert profile.
+export async function toggleAutoApprove(formData: FormData) {
+  const expertProfileId = String(formData.get("expert_profile_id"));
+  const nextValue = formData.get("next_value") === "true";
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+
+  await supabase
+    .from("expert_profiles")
+    .update({ auto_approve: nextValue })
+    .eq("id", expertProfileId)
+    .eq("owner_id", user.id);
+
+  revalidatePath("/app");
 }

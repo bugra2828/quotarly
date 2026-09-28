@@ -15,9 +15,9 @@ const dispatch = [
   },
   {
     time: "9:20 AM",
-    label: "Waiting on you",
-    color: "text-wire",
-    body: "The quote sits in your approval queue until you say send. Nothing goes out on its own.",
+    label: "Sent",
+    color: "text-press",
+    body: "Cleared your bar, so it went out automatically — fast enough to beat the deadline.",
   },
 ];
 
@@ -75,8 +75,8 @@ const workflow = [
   },
   {
     eyebrow: "Step 3",
-    title: "Draft & approve",
-    body: "Anything above your bar gets a quote drafted in your voice. It lands in your queue with the deadline attached — approve, edit, or reject.",
+    title: "Draft & send",
+    body: "Anything above your bar gets a quote drafted in your voice and sent automatically — fast enough to beat the deadline. Want to read every one first? Turn on manual review and nothing goes out until you approve it.",
     reverse: false,
     mock: (
       <div className="space-y-3">
@@ -118,7 +118,7 @@ const workflow = [
 const comparisonRows = [
   ["Matches queries to your exact expertise", true, false, "partial"],
   ["Drafts in your own voice", true, false, true],
-  ["You approve before anything sends", true, true, false],
+  ["You control whether it auto-sends", true, true, false],
   ["Tracks whether the link actually landed", true, false, false],
   ["Deadline-aware", true, "partial", false],
 ];
@@ -138,7 +138,7 @@ const useCases = [
     body: "Journalists asking for a licensed or experienced voice on markets, lending, or personal finance.",
     points: [
       "Excludes topics you're not credentialed for",
-      "Flags anything it can't verify before you approve",
+      "Flags anything it can't verify and holds it for your review",
       "Tracks links across finance-specific outlets",
     ],
   },
@@ -160,7 +160,7 @@ const faqs = [
   },
   {
     q: "Can I edit a quote before it's sent?",
-    a: "Yes. Every draft is editable in your approval queue. Nothing reaches a journalist until you approve it, edited or as-is.",
+    a: "By default, a quote sends automatically once it clears your match bar. Turn on manual review in your dashboard and every draft lands in your approval queue instead — editable, and nothing reaches a journalist until you approve it.",
   },
   {
     q: "Do you guarantee backlinks?",
@@ -203,8 +203,8 @@ export default function Home() {
               <p className="mt-6 max-w-md text-lg leading-8 text-ink-soft">
                 Quotarly reads the journalist queries landing from trusted
                 media sources, matches the ones that fit your expertise, and
-                drafts the quote in your voice. You approve it before
-                anything goes out.
+                drafts the quote in your voice. It sends the moment a quote
+                clears your bar — or waits for your review, your choice.
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
                 <Link
@@ -221,7 +221,7 @@ export default function Home() {
                 </Link>
               </div>
               <p className="mt-4 text-xs text-ink-soft">
-                No fake reviews · No autopilot · Cancel anytime
+                No fake reviews · Manual review optional · Cancel anytime
               </p>
             </div>
 
@@ -259,8 +259,10 @@ export default function Home() {
           What lands in your queue
         </h2>
         <p className="mt-3 max-w-lg text-sm leading-6 text-ink-soft">
-          A drafted quote, the journalist's question next to it, and a
-          deadline. You read it, edit if you want, and decide.
+          By default, a quote that clears your bar sends itself. Turn on
+          manual review and it waits here instead — the journalist's
+          question next to it, a deadline attached, ready for you to edit or
+          decide.
         </p>
 
         <div className="mt-10 overflow-hidden rounded-md border border-rule">
@@ -369,7 +371,10 @@ export default function Home() {
               </p>
               <ul className="mt-4 space-y-3 text-sm text-ink">
                 <li>› Queries scored against your profile automatically</li>
-                <li>› A drafted quote in your voice, ready to review</li>
+                <li>
+                  › A drafted quote in your voice, sent the moment it clears
+                  your bar — or held for your review, your call
+                </li>
                 <li>› Every link checked daily and reported to you</li>
               </ul>
             </div>

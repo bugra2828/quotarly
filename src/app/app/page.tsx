@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { toggleAutoApprove } from "@/app/actions/expert-profile";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
@@ -75,12 +76,34 @@ export default async function DashboardPage() {
             {expertProfiles.map((ep) => (
               <li
                 key={ep.id}
-                className="rounded-md border border-rule bg-surface p-4 text-sm"
+                className="flex items-center justify-between rounded-md border border-rule bg-surface p-4 text-sm"
               >
-                <p className="font-medium text-ink">{ep.display_name}</p>
-                <p className="text-ink-soft">
-                  {ep.job_title} {ep.company ? `@ ${ep.company}` : ""}
-                </p>
+                <div>
+                  <p className="font-medium text-ink">{ep.display_name}</p>
+                  <p className="text-ink-soft">
+                    {ep.job_title} {ep.company ? `@ ${ep.company}` : ""}
+                  </p>
+                </div>
+                <form action={toggleAutoApprove}>
+                  <input type="hidden" name="expert_profile_id" value={ep.id} />
+                  <input
+                    type="hidden"
+                    name="next_value"
+                    value={(!ep.auto_approve).toString()}
+                  />
+                  <button
+                    type="submit"
+                    className={`rounded-full px-3 py-1.5 text-xs font-medium ${
+                      ep.auto_approve
+                        ? "bg-press/15 text-press"
+                        : "bg-wire/15 text-wire"
+                    }`}
+                  >
+                    {ep.auto_approve
+                      ? "Auto-send is on (switch to manual)"
+                      : "Manual review is on (switch to auto)"}
+                  </button>
+                </form>
               </li>
             ))}
           </ul>

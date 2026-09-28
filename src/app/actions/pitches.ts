@@ -2,16 +2,9 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { sendPitchEmail } from "@/lib/email/send-pitch";
-import {
-  isPastDeadline,
-  hasUnresolvedVerifyTag,
-  hasReachedDailyLimit,
-} from "@/lib/pitches/rules";
+import { attemptSendPitch } from "@/lib/pitches/send";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-
-const DAILY_SEND_LIMIT_PER_PROFILE = 10;
 
 export async function rejectPitch(formData: FormData) {
   const pitchId = String(formData.get("pitch_id"));
@@ -47,32 +40,6 @@ export async function approvePitch(formData: FormData) {
 
   const finalBody = editedBody || pitch.body;
 
-  if (hasUnresolvedVerifyTag(finalBody)) {
-    redirect(
-      `/app/approvals?error=${encodeURIComponent(
-        "Remove all [VERIFY: ...] placeholders before sending."
-      )}`
-    );
-  }
-
-  // Rate limit: count today's already-sent pitches for this expert profile.
-  const startOfDay = new Date();
-  startOfDay.setUTCHours(0, 0, 0, 0);
-  const { count: sentToday } = await supabase
-    .from("pitches")
-    .select("*", { count: "exact", head: true })
-    .eq("expert_profile_id", match.expert_profile_id)
-    .eq("status", "sent")
-    .gte("sent_at", startOfDay.toISOString());
-
-  if (hasReachedDailyLimit(sentToday ?? 0, DAILY_SEND_LIMIT_PER_PROFILE)) {
-    redirect(
-      `/app/approvals?error=${encodeURIComponent(
-        `Daily send limit (${DAILY_SEND_LIMIT_PER_PROFILE}) reached for this profile. Try again tomorrow.`
-      )}`
-    );
-  }
-
   const [{ data: expertProfile }, { data: ownerProfile }] = await Promise.all([
     supabase
       .from("expert_profiles")
@@ -92,40 +59,21 @@ export async function approvePitch(formData: FormData) {
     .eq("id", match.query_id)
     .single();
 
-  if (!query?.reply_email) {
-    redirect("/app/approvals?error=missing_reply_email");
-  }
+  const result = await attemptSendPitch({
+    supabase: admin,
+    pitchId,
+    expertProfileId: match.expert_profile_id,
+    expertDisplayName: expertProfile?.display_name ?? "Quotarly expert",
+    subject: pitch.subject,
+    body: finalBody,
+    replyEmail: query?.reply_email ?? null,
+    deadline: query?.deadline ?? null,
+    ownerEmail: ownerProfile?.email ?? user.email!,
+    editedBody: editedBody || null,
+  });
 
-  if (isPastDeadline(query.deadline)) {
-    await supabase.from("pitches").update({ status: "expired" }).eq("id", pitchId);
-    redirect("/app/approvals?error=deadline_passed");
-  }
-
-  try {
-    const messageId = await sendPitchEmail({
-      toEmail: query.reply_email,
-      subject: pitch.subject,
-      body: finalBody,
-      senderDisplayName: expertProfile?.display_name ?? "Quotarly expert",
-      replyToEmail: ownerProfile?.email ?? user.email!,
-    });
-
-    await supabase
-      .from("pitches")
-      .update({
-        status: "sent",
-        edited_body: editedBody || null,
-        approved_at: new Date().toISOString(),
-        sent_at: new Date().toISOString(),
-        resend_message_id: messageId,
-      })
-      .eq("id", pitchId);
-  } catch (err) {
-    await supabase
-      .from("pitches")
-      .update({ status: "failed", error: String(err) })
-      .eq("id", pitchId);
-    redirect(`/app/approvals?error=${encodeURIComponent(String(err))}`);
+  if (!result.ok) {
+    redirect(`/app/approvals?error=${encodeURIComponent(result.message)}`);
   }
 
   revalidatePath("/app/approvals");

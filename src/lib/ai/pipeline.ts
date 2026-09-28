@@ -2,6 +2,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { matchQueryToProfile, quickKeywordOverlap } from "@/lib/ai/matcher";
 import { writePitch } from "@/lib/ai/writer";
 import { sendPendingApprovalNotification } from "@/lib/email/notify";
+import { attemptSendPitch } from "@/lib/pitches/send";
 
 // Runs the matcher + writer for a batch of newly-inserted queries against every
 // active expert profile. Called right after the inbound webhook parses a
@@ -64,13 +65,19 @@ export async function runMatchingForQueries(queryIds: string[]) {
           website_url: profile.website_url,
         });
 
-        await supabase.from("pitches").insert({
-          match_id: match.id,
-          expert_profile_id: profile.id,
-          subject: pitch.subject,
-          body: pitch.body,
-          status: "pending_approval",
-        });
+        const { data: newPitch } = await supabase
+          .from("pitches")
+          .insert({
+            match_id: match.id,
+            expert_profile_id: profile.id,
+            subject: pitch.subject,
+            body: pitch.body,
+            status: "pending_approval",
+          })
+          .select()
+          .single();
+
+        if (!newPitch) continue;
 
         let ownerEmail = ownerEmailByProfileId.get(profile.id);
         if (ownerEmail === undefined) {
@@ -83,7 +90,33 @@ export async function runMatchingForQueries(queryIds: string[]) {
           ownerEmailByProfileId.set(profile.id, ownerEmail);
         }
 
-        if (ownerEmail) {
+        let stillPending = true;
+
+        if (profile.auto_approve) {
+          const sendResult = await attemptSendPitch({
+            supabase,
+            pitchId: newPitch.id,
+            expertProfileId: profile.id,
+            expertDisplayName: profile.display_name,
+            subject: pitch.subject,
+            body: pitch.body,
+            replyEmail: query.reply_email,
+            deadline: query.deadline,
+            ownerEmail,
+          });
+
+          // Only the reasons below leave the pitch sitting in
+          // pending_approval — deadline_passed/send_failed already moved it
+          // to expired/failed inside attemptSendPitch, so there's nothing
+          // left to notify about.
+          stillPending =
+            !sendResult.ok &&
+            (sendResult.reason === "verify_tag" ||
+              sendResult.reason === "daily_limit" ||
+              sendResult.reason === "missing_reply_email");
+        }
+
+        if (stillPending && ownerEmail) {
           await sendPendingApprovalNotification({
             toEmail: ownerEmail,
             outletName: query.outlet_name,
