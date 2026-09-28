@@ -59,7 +59,7 @@ export default async function ReportsPage() {
               <p className="font-medium text-ink">{profile.display_name}</p>
               <a
                 href={`/api/reports/pdf?profile=${profile.id}&month=${month}`}
-                className="rounded-full bg-brand px-4 py-1.5 text-xs font-medium text-white transition-colors hover:bg-brand/90"
+                className="rounded-full bg-brand-solid px-4 py-1.5 text-xs font-medium text-white transition-colors hover:bg-brand-solid/90"
               >
                 Download PDF
               </a>

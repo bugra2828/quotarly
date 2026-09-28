@@ -4,6 +4,7 @@ import {
   signInWithGoogle,
 } from "@/app/actions/auth";
 import Link from "next/link";
+import { PasswordField } from "./PasswordField";
 
 export default async function LoginPage({
   searchParams,
@@ -20,8 +21,18 @@ export default async function LoginPage({
   const signupStep = email ? "password" : "email";
 
   return (
-    <div className="press-texture flex min-h-screen items-center justify-center bg-paper px-4 text-ink">
-      <div className="w-full max-w-sm space-y-6">
+    <div className="press-texture relative isolate flex min-h-screen items-center justify-center overflow-hidden bg-paper px-4 text-ink">
+      <div className="glow-field">
+        <div
+          className="glow-blob h-[380px] w-[380px] bg-brand"
+          style={{ top: "-140px", left: "-120px" }}
+        />
+        <div
+          className="glow-blob h-[320px] w-[320px] bg-press"
+          style={{ bottom: "-140px", right: "-120px", opacity: 0.16 }}
+        />
+      </div>
+      <div className="relative w-full max-w-sm space-y-6">
         <Link href="/" className="flex items-center justify-center gap-2.5">
           <svg width="26" height="26" viewBox="0 0 28 28" aria-hidden="true">
             <rect width="28" height="28" rx="5" fill="var(--ink)" />
@@ -126,18 +137,12 @@ export default async function LoginPage({
               name="email"
               required
               placeholder="you@example.com"
-              className="w-full rounded-full border border-rule bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none"
+              className="w-full rounded-full border border-rule bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/40"
             />
-            <input
-              type="password"
-              name="password"
-              required
-              placeholder="Password"
-              className="w-full rounded-full border border-rule bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none"
-            />
+            <PasswordField name="password" placeholder="Password" />
             <button
               type="submit"
-              className="w-full rounded-full bg-brand px-3 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand/90"
+              className="w-full rounded-full bg-brand-solid px-3 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-solid/90"
             >
               Log in
             </button>
@@ -150,11 +155,11 @@ export default async function LoginPage({
               name="email"
               required
               placeholder="you@example.com"
-              className="w-full rounded-full border border-rule bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none"
+              className="w-full rounded-full border border-rule bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/40"
             />
             <button
               type="submit"
-              className="w-full rounded-full bg-brand px-3 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand/90"
+              className="w-full rounded-full bg-brand-solid px-3 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-solid/90"
             >
               Continue
             </button>
@@ -162,26 +167,17 @@ export default async function LoginPage({
         ) : (
           <form action={signUpWithPassword} className="space-y-3">
             <input type="hidden" name="email" value={email} />
-            <input
-              type="password"
-              name="password"
-              required
-              placeholder="Password"
-              className="w-full rounded-full border border-rule bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none"
-            />
-            <input
-              type="password"
+            <PasswordField name="password" placeholder="Password" />
+            <PasswordField
               name="confirm_password"
-              required
               placeholder="Confirm password"
-              className="w-full rounded-full border border-rule bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none"
             />
             <p className="text-xs text-ink-soft">
               At least 10 characters, one uppercase letter, one number.
             </p>
             <button
               type="submit"
-              className="w-full rounded-full bg-brand px-3 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand/90"
+              className="w-full rounded-full bg-brand-solid px-3 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-solid/90"
             >
               Create account
             </button>

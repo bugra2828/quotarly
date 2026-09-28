@@ -46,7 +46,11 @@ export default async function DashboardPage({
     stats.backlinksWonTrendBase
   );
 
-  const [{ data: pendingPitches }, { data: recentSent }, { data: recentBacklinks }] =
+  const [
+    { data: pendingPitches, error: pendingError },
+    { data: recentSent, error: sentError },
+    { data: recentBacklinks, error: backlinksError },
+  ] =
     expertProfileIds.length > 0
       ? await Promise.all([
           supabase
@@ -70,7 +74,7 @@ export default async function DashboardPage({
             .order("first_seen_at", { ascending: false })
             .limit(5),
         ])
-      : [{ data: [] }, { data: [] }, { data: [] }];
+      : [{ data: [], error: null }, { data: [], error: null }, { data: [], error: null }];
 
   return (
     <div className="mx-auto max-w-5xl space-y-8 px-6 py-12">
@@ -100,7 +104,7 @@ export default async function DashboardPage({
           </p>
           <Link
             href="/app/onboarding"
-            className="inline-block rounded-full bg-brand px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand/90"
+            className="inline-block rounded-full bg-brand-solid px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-solid/90"
           >
             Create your profile
           </Link>
@@ -191,12 +195,16 @@ export default async function DashboardPage({
                 </h2>
                 <Link
                   href="/app/approvals"
-                  className="btn-raised-brand rounded-full bg-brand px-3 py-1 text-xs font-semibold text-white transition-colors hover:bg-brand/90"
+                  className="btn-raised-brand rounded-full bg-brand-solid px-3 py-1 text-xs font-semibold text-white transition-colors hover:bg-brand-solid/90"
                 >
                   View all →
                 </Link>
               </div>
-              {!pendingPitches?.length ? (
+              {pendingError ? (
+                <p className="mt-3 text-sm text-wire">
+                  Couldn&apos;t load — try refreshing.
+                </p>
+              ) : !pendingPitches?.length ? (
                 <p className="mt-3 text-sm text-ink-soft">
                   Nothing waiting — everything clearing your bar sends on its
                   own.
@@ -233,12 +241,16 @@ export default async function DashboardPage({
                 </h2>
                 <Link
                   href="/app/pitches"
-                  className="btn-raised-brand rounded-full bg-brand px-3 py-1 text-xs font-semibold text-white transition-colors hover:bg-brand/90"
+                  className="btn-raised-brand rounded-full bg-brand-solid px-3 py-1 text-xs font-semibold text-white transition-colors hover:bg-brand-solid/90"
                 >
                   View all →
                 </Link>
               </div>
-              {!recentSent?.length ? (
+              {sentError ? (
+                <p className="mt-3 text-sm text-wire">
+                  Couldn&apos;t load — try refreshing.
+                </p>
+              ) : !recentSent?.length ? (
                 <p className="mt-3 text-sm text-ink-soft">
                   No pitches sent yet.
                 </p>
@@ -278,12 +290,16 @@ export default async function DashboardPage({
               </h2>
               <Link
                 href="/app/backlinks"
-                className="btn-raised-brand rounded-full bg-brand px-3 py-1 text-xs font-semibold text-white transition-colors hover:bg-brand/90"
+                className="btn-raised-brand rounded-full bg-brand-solid px-3 py-1 text-xs font-semibold text-white transition-colors hover:bg-brand-solid/90"
               >
                 View all →
               </Link>
             </div>
-            {!recentBacklinks?.length ? (
+            {backlinksError ? (
+              <p className="mt-3 text-sm text-wire">
+                Couldn&apos;t load — try refreshing.
+              </p>
+            ) : !recentBacklinks?.length ? (
               <p className="mt-3 text-sm text-ink-soft">
                 No backlinks detected yet.
               </p>
@@ -342,7 +358,7 @@ function StatTile({
     return (
       <Link
         href={href}
-        className="btn-raised-brand block rounded-md bg-brand p-5 transition-colors duration-100 hover:bg-brand/90"
+        className="btn-raised-brand block rounded-md bg-brand-solid p-5 transition-colors duration-100 hover:bg-brand-solid/90"
       >
         <p className="font-display text-2xl font-semibold text-white">
           {value}

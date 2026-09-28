@@ -16,7 +16,7 @@ export default async function ApprovalsPage({
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: pitches } = await supabase
+  const { data: pitches, error: queryError } = await supabase
     .from("pitches")
     .select("*, matches(query_id, score, reasoning, expert_profiles(display_name))")
     .eq("status", "pending_approval")
@@ -59,10 +59,16 @@ export default async function ApprovalsPage({
         </p>
       )}
 
-      {!pitches?.length && (
-        <p className="text-sm text-ink-soft">
-          Nothing waiting for your approval right now.
+      {queryError ? (
+        <p className="text-sm text-wire">
+          Couldn&apos;t load your approvals — try refreshing.
         </p>
+      ) : (
+        !pitches?.length && (
+          <p className="text-sm text-ink-soft">
+            Nothing waiting for your approval right now.
+          </p>
+        )
       )}
 
       <ul className="space-y-3">
@@ -128,7 +134,7 @@ export default async function ApprovalsPage({
                         name="body"
                         defaultValue={p.body}
                         rows={8}
-                        className="w-full rounded-md border border-rule bg-paper px-3 py-2 text-sm text-ink focus:border-brand focus:outline-none"
+                        className="w-full rounded-md border border-rule bg-paper px-3 py-2 text-sm text-ink focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/40"
                       />
                       {hasVerify && (
                         <p className="text-xs text-wire">
@@ -140,7 +146,7 @@ export default async function ApprovalsPage({
                         <button
                           type="submit"
                           disabled={!!deadlinePassed}
-                          className="rounded-full bg-brand px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand/90 disabled:opacity-50"
+                          className="rounded-full bg-brand-solid px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-solid/90 disabled:opacity-50"
                         >
                           Approve & send
                         </button>

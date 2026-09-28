@@ -54,16 +54,18 @@ export default async function PricingPage() {
       </h1>
       <p className="mt-3 text-ink-soft">Cancel anytime. No setup fees.</p>
 
-      <div className="mt-12 grid gap-px overflow-hidden rounded-sm border border-rule bg-rule sm:grid-cols-3">
+      <div className="mt-12 grid gap-6 sm:grid-cols-3">
         {PLANS.map((plan) => (
           <div
             key={plan.id}
-            className={`flex flex-col bg-paper p-6 ${
-              plan.featured ? "border-t-4 border-brand" : "border-t-4 border-transparent"
+            className={`flex flex-col rounded-md p-6 ${
+              plan.featured
+                ? "card-elevated-brand border-2 border-brand bg-surface sm:-my-3 sm:py-9"
+                : "border border-rule bg-paper"
             }`}
           >
             <p
-              className={`text-sm ${plan.featured ? "text-brand" : "text-ink-soft"}`}
+              className={`text-sm font-semibold ${plan.featured ? "text-brand" : "text-ink-soft"}`}
             >
               {plan.featured ? "Most chosen" : " "}
             </p>
@@ -83,14 +85,14 @@ export default async function PricingPage() {
             {user ? (
               <a
                 href={buildCheckoutUrl(plan.id, user.id, user.email!)}
-                className="mt-6 rounded-full bg-brand px-4 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-brand/90"
+                className="mt-6 rounded-full bg-brand-solid px-4 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-brand-solid/90"
               >
                 Subscribe
               </a>
             ) : (
               <Link
                 href="/login"
-                className="mt-6 rounded-full bg-brand px-4 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-brand/90"
+                className="mt-6 rounded-full bg-brand-solid px-4 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-brand-solid/90"
               >
                 Log in to subscribe
               </Link>

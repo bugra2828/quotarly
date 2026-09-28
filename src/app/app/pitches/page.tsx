@@ -8,7 +8,7 @@ export default async function SentPitchesPage() {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: pitches } = await supabase
+  const { data: pitches, error } = await supabase
     .from("pitches")
     .select("id, subject, body, sent_at, matches(queries(outlet_name, title))")
     .eq("status", "sent")
@@ -23,11 +23,17 @@ export default async function SentPitchesPage() {
         {pitches?.length ?? 0} pitches sent
       </p>
 
-      {!pitches?.length && (
-        <p className="text-sm text-ink-soft">
-          No pitches sent yet — they&apos;ll show up here as soon as one
-          clears your bar.
+      {error ? (
+        <p className="text-sm text-wire">
+          Couldn&apos;t load your pitches — try refreshing.
         </p>
+      ) : (
+        !pitches?.length && (
+          <p className="text-sm text-ink-soft">
+            No pitches sent yet — they&apos;ll show up here as soon as one
+            clears your bar.
+          </p>
+        )
       )}
 
       <ul className="space-y-3">

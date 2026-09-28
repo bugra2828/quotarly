@@ -88,7 +88,7 @@ const workflow = [
           tickets sat untouched between shifts."
         </p>
         <div className="flex gap-2">
-          <span className="rounded-sm bg-brand px-3 py-1.5 text-xs font-medium text-white">
+          <span className="rounded-sm bg-brand-solid px-3 py-1.5 text-xs font-medium text-white">
             Approve &amp; send
           </span>
           <span className="rounded-sm border border-rule px-3 py-1.5 text-xs font-medium text-ink-soft">
@@ -212,7 +212,7 @@ export default function Home() {
               <div className="mt-8 flex flex-wrap gap-4">
                 <Link
                   href="/login"
-                  className="rounded-full bg-brand px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-brand/90"
+                  className="rounded-full bg-brand-solid px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-brand-solid/90"
                 >
                   Get started
                 </Link>
@@ -319,7 +319,7 @@ export default function Home() {
                 gave every queue a single owner."
               </p>
               <div className="mt-5 flex gap-3">
-                <span className="rounded-sm bg-brand px-4 py-2 text-xs font-medium text-white">
+                <span className="rounded-sm bg-brand-solid px-4 py-2 text-xs font-medium text-white">
                   Approve &amp; send
                 </span>
                 <span className="rounded-sm border border-rule px-4 py-2 text-xs font-medium text-ink-soft">

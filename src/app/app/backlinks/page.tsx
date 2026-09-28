@@ -8,7 +8,7 @@ export default async function BacklinksPage() {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: backlinks } = await supabase
+  const { data: backlinks, error } = await supabase
     .from("backlinks")
     .select("*, expert_profiles(owner_id)")
     .order("first_seen_at", { ascending: false });
@@ -22,11 +22,17 @@ export default async function BacklinksPage() {
         {backlinks?.length ?? 0} backlinks found
       </p>
 
-      {!backlinks?.length && (
-        <p className="text-sm text-ink-soft">
-          No backlinks detected yet — checked daily once your pitches start
-          getting picked up by journalists.
+      {error ? (
+        <p className="text-sm text-wire">
+          Couldn&apos;t load your backlinks — try refreshing.
         </p>
+      ) : (
+        !backlinks?.length && (
+          <p className="text-sm text-ink-soft">
+            No backlinks detected yet — checked daily once your pitches
+            start getting picked up by journalists.
+          </p>
+        )
       )}
 
       <ul className="space-y-3">

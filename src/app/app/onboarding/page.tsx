@@ -84,7 +84,7 @@ export default async function OnboardingPage({
 
         <button
           type="submit"
-          className="w-full rounded-full bg-brand px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand/90"
+          className="w-full rounded-full bg-brand-solid px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-solid/90"
         >
           Save profile
         </button>
@@ -114,7 +114,7 @@ function Field({
         name={name}
         placeholder={placeholder}
         required={required}
-        className="w-full rounded-md border border-rule bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none"
+        className="w-full rounded-md border border-rule bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/40"
       />
     </label>
   );
@@ -136,7 +136,7 @@ function TextArea({
         name={name}
         placeholder={placeholder}
         rows={3}
-        className="w-full rounded-md border border-rule bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none"
+        className="w-full rounded-md border border-rule bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/40"
       />
     </label>
   );

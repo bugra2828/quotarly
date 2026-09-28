@@ -1,10 +1,5 @@
 import Link from "next/link";
-import { signOut } from "@/app/actions/auth";
-
-const navLinks = [
-  { href: "/app", label: "Dashboard" },
-  { href: "/app/reports", label: "Reports" },
-];
+import { AppNav } from "./AppNav";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -24,22 +19,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               Quotarly
             </span>
           </Link>
-          <nav className="flex items-center gap-2 text-sm">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="btn-raised-brand rounded-full bg-brand px-4 py-1.5 font-medium text-white transition-colors hover:bg-brand/90"
-              >
-                {link.label}
-              </Link>
-            ))}
-            <form action={signOut}>
-              <button className="btn-raised-wire rounded-full bg-wire/90 px-4 py-1.5 font-medium text-white transition-colors hover:bg-wire">
-                Sign out
-              </button>
-            </form>
-          </nav>
+          <AppNav />
         </div>
       </header>
 
