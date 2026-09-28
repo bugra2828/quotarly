@@ -166,10 +166,6 @@ const faqs = [
     a: "By default, a quote sends automatically once it clears your match bar. Turn on manual review in your dashboard and every draft lands in your approval queue instead — editable, and nothing reaches a journalist until you approve it.",
   },
   {
-    q: "Do you guarantee backlinks?",
-    a: "No. How many queries fit your specific expertise in a given month isn't something anyone can guarantee. Quotarly shows you real numbers, not a promised count.",
-  },
-  {
     q: "Can I cancel anytime?",
     a: "Yes, from your account settings. Cancelling stops the next renewal; it doesn't refund the current period.",
   },
