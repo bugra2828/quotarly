@@ -112,13 +112,19 @@ export default async function DashboardPage({
               label="Pitches sent"
               value={stats.pitchesSent}
               trend={range === "all" ? null : pitchesTrend}
+              href="/app/pitches"
             />
             <StatTile
               label="Backlinks won"
               value={stats.backlinksWon}
               trend={range === "all" ? null : backlinksTrend}
+              href="/app/backlinks"
             />
-            <StatTile label="Pending approvals" value={stats.pendingApprovals} />
+            <StatTile
+              label="Pending approvals"
+              value={stats.pendingApprovals}
+              href="/app/approvals"
+            />
             <StatTile
               label="Avg. authority score"
               value={stats.avgAuthority ?? "—"}
@@ -222,6 +228,9 @@ export default async function DashboardPage({
                 <h2 className="font-display text-lg font-semibold tracking-tight">
                   Recently sent
                 </h2>
+                <Link href="/app/pitches" className="text-xs text-brand hover:underline">
+                  View all →
+                </Link>
               </div>
               {!recentSent?.length ? (
                 <p className="mt-3 text-sm text-ink-soft">
@@ -313,13 +322,15 @@ function StatTile({
   label,
   value,
   trend,
+  href,
 }: {
   label: string;
   value: number | string;
   trend?: { percent: number | null; direction: "up" | "down" | "flat" } | null;
+  href?: string;
 }) {
-  return (
-    <div className="bg-paper p-5">
+  const content = (
+    <>
       <p className="font-display text-2xl font-semibold">{value}</p>
       <div className="mt-1 flex items-center gap-1.5">
         <p className="text-xs text-ink-soft">{label}</p>
@@ -338,6 +349,19 @@ function StatTile({
           </span>
         )}
       </div>
-    </div>
+    </>
   );
+
+  if (href) {
+    return (
+      <Link
+        href={href}
+        className="block bg-paper p-5 transition-colors hover:bg-surface"
+      >
+        {content}
+      </Link>
+    );
+  }
+
+  return <div className="bg-paper p-5">{content}</div>;
 }
