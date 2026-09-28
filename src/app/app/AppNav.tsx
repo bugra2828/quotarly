@@ -32,7 +32,7 @@ export function AppNav() {
         );
       })}
       <form action={signOut}>
-        <button className="rounded-full border border-rule px-4 py-1.5 font-medium text-ink-soft transition-colors hover:bg-surface hover:text-ink">
+        <button className="btn-raised-wire rounded-full bg-wire/90 px-4 py-1.5 font-medium text-white transition-colors hover:bg-wire">
           Sign out
         </button>
       </form>
