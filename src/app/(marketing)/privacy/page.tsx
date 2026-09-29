@@ -44,9 +44,47 @@ export default function PrivacyPage() {
           </h2>
           <p className="mt-2">
             We use Supabase to store your data, Anthropic's Claude to draft
-            and score pitches, Resend to send them, DataForSEO to check
-            whether a link landed, and a payment processor to handle
-            billing. Each only sees what it needs to do its part.
+            and score pitches, DataForSEO to check whether a link landed, and
+            a payment processor to handle billing. Pitches send either
+            through Resend or, if you've connected it, through your own
+            Gmail account — see below. Each only sees what it needs to do
+            its part.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="font-display text-lg font-semibold text-ink">
+            Connecting your Gmail account
+          </h2>
+          <p className="mt-2">
+            If you connect Gmail from your dashboard settings, Quotarly asks
+            Google for a single, narrow permission:{" "}
+            <span className="text-ink">send email on your behalf</span> (the{" "}
+            <code className="text-ink">gmail.send</code> scope). We use this
+            for exactly one thing — sending the pitches you approve from your
+            own Gmail address instead of a shared one, so journalists see a
+            real, recognizable sender.
+          </p>
+          <p className="mt-2">
+            We never request access to read, search, or manage your inbox,
+            and Google doesn&apos;t grant it to us — the{" "}
+            <code className="text-ink">gmail.send</code> scope physically
+            cannot see any mail already in your account. We store only an
+            encrypted token that lets us send on your behalf; we never see
+            your password.
+          </p>
+          <p className="mt-2">
+            Disconnect at any time from your dashboard&apos;s Settings page,
+            or by removing Quotarly&apos;s access directly at{" "}
+            <a
+              href="https://myaccount.google.com/permissions"
+              className="text-ink underline"
+              target="_blank"
+            >
+              myaccount.google.com/permissions
+            </a>
+            . Either way, we delete the stored token immediately and future
+            pitches fall back to sending from quotarly.com.
           </p>
         </section>
 
