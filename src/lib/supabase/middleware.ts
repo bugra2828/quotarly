@@ -45,10 +45,14 @@ export async function updateSession(request: NextRequest) {
     requestHeaders.set("x-user-email", user.email ?? "");
   }
 
+  // /auth/gmail/* are OAuth handshake routes a signed-in user is meant to
+  // hit (connecting/reconnecting a Gmail account) -- excluded from the
+  // "signed-in users get bounced off auth pages" rule below.
   const isAuthRoute =
     request.nextUrl.pathname.startsWith("/login") ||
     request.nextUrl.pathname.startsWith("/register") ||
-    request.nextUrl.pathname.startsWith("/auth");
+    (request.nextUrl.pathname.startsWith("/auth") &&
+      !request.nextUrl.pathname.startsWith("/auth/gmail"));
   const isProtectedRoute =
     request.nextUrl.pathname.startsWith("/app") ||
     request.nextUrl.pathname.startsWith("/admin");
