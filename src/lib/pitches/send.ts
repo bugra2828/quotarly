@@ -1,4 +1,6 @@
 import { sendPitchEmail } from "@/lib/email/send-pitch";
+import { sendPitchEmailViaGmail } from "@/lib/email/send-pitch-gmail";
+import { getActiveGmailConnection } from "@/lib/gmail/connection";
 import {
   isPastDeadline,
   hasUnresolvedVerifyTag,
@@ -94,13 +96,30 @@ export async function attemptSendPitch(params: {
   }
 
   try {
-    const messageId = await sendPitchEmail({
-      toEmail: replyEmail,
-      subject,
-      body,
-      senderDisplayName: expertDisplayName,
-      replyToEmail: ownerEmail,
-    });
+    const gmailConnection = await getActiveGmailConnection(
+      supabase,
+      expertProfileId
+    );
+
+    const messageId = gmailConnection
+      ? await sendPitchEmailViaGmail({
+          admin: supabase,
+          expertProfileId,
+          toEmail: replyEmail,
+          subject,
+          body,
+          senderDisplayName: expertDisplayName,
+          replyToEmail: ownerEmail,
+          refreshToken: gmailConnection.refreshToken,
+          fromGmailEmail: gmailConnection.gmailEmail,
+        })
+      : await sendPitchEmail({
+          toEmail: replyEmail,
+          subject,
+          body,
+          senderDisplayName: expertDisplayName,
+          replyToEmail: ownerEmail,
+        });
 
     await supabase
       .from("pitches")
