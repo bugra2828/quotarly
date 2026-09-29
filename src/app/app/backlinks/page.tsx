@@ -44,7 +44,7 @@ export default async function BacklinksPage() {
                     {b.outlet_domain}
                   </p>
                   <p className="mt-0.5 font-dispatch text-xs text-ink-soft">
-                    {new Date(b.first_seen_at).toLocaleDateString()}
+                    {new Date(b.first_seen_at).toLocaleDateString("en-GB")}
                   </p>
                 </div>
                 <div className="flex shrink-0 items-center gap-3">
@@ -68,7 +68,7 @@ export default async function BacklinksPage() {
                 <p>{b.is_dofollow ? "Dofollow" : "Nofollow"} link</p>
                 <p>
                   First seen:{" "}
-                  {new Date(b.first_seen_at).toLocaleString()}
+                  {new Date(b.first_seen_at).toLocaleString("en-GB")}
                 </p>
                 <a
                   href={b.article_url}

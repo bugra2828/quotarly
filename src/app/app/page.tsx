@@ -310,7 +310,7 @@ export default async function DashboardPage({
                         <p className="text-xs text-ink-soft">
                           {outletName ?? "Unknown outlet"} ·{" "}
                           {p.sent_at
-                            ? new Date(p.sent_at).toLocaleDateString()
+                            ? new Date(p.sent_at).toLocaleDateString("en-GB")
                             : ""}
                         </p>
                       </li>

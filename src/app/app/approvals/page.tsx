@@ -88,7 +88,7 @@ export default async function ApprovalsPage({
                     </p>
                     <p className="mt-0.5 font-dispatch text-xs text-ink-soft">
                       {query?.outlet_name ? `${query.outlet_name} · ` : ""}
-                      Arrived {new Date(p.created_at).toLocaleDateString()}
+                      Arrived {new Date(p.created_at).toLocaleDateString("en-GB")}
                     </p>
                   </div>
                   <span className="shrink-0 text-ink-soft transition-transform group-open:rotate-180">
@@ -111,7 +111,7 @@ export default async function ApprovalsPage({
                           deadlinePassed ? "text-wire" : "text-ink-soft"
                         }`}
                       >
-                        Deadline: {new Date(query.deadline).toLocaleString()}
+                        Deadline: {new Date(query.deadline).toLocaleString("en-GB")}
                         {deadlinePassed ? " (passed)" : ""}
                       </p>
                     )}

@@ -90,7 +90,7 @@ export default async function SettingsPage({
                       <p className="mt-1 flex items-center gap-2 text-sm text-ink-soft">
                         <span className="h-2 w-2 rounded-full bg-press" />
                         Connected as {connection.gmail_email} · since{" "}
-                        {new Date(connection.connected_at).toLocaleDateString()}
+                        {new Date(connection.connected_at).toLocaleDateString("en-GB")}
                       </p>
                     ) : (
                       <p className="mt-1 text-sm text-ink-soft">

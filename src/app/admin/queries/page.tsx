@@ -42,7 +42,7 @@ export default async function AdminQueriesPage() {
             )}
             {q.deadline && (
               <p className="mt-1 font-dispatch text-xs text-ink-soft">
-                Deadline: {new Date(q.deadline).toLocaleString()}
+                Deadline: {new Date(q.deadline).toLocaleString("en-GB")}
               </p>
             )}
           </li>

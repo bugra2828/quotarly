@@ -56,7 +56,7 @@ export default async function SentPitchesPage() {
                       {query?.outlet_name ? `${query.outlet_name} · ` : ""}
                       Sent{" "}
                       {p.sent_at
-                        ? new Date(p.sent_at).toLocaleDateString()
+                        ? new Date(p.sent_at).toLocaleDateString("en-GB")
                         : "—"}
                     </p>
                   </div>
@@ -76,7 +76,7 @@ export default async function SentPitchesPage() {
                   </p>
                   {p.sent_at && (
                     <p className="font-dispatch text-xs text-ink-soft">
-                      Sent {new Date(p.sent_at).toLocaleString()}
+                      Sent {new Date(p.sent_at).toLocaleString("en-GB")}
                     </p>
                   )}
                 </div>
