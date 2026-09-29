@@ -7,6 +7,7 @@ import { signOut } from "@/app/actions/auth";
 const navLinks = [
   { href: "/app", label: "Dashboard" },
   { href: "/app/reports", label: "Reports" },
+  { href: "/app/settings", label: "Settings" },
 ];
 
 export function AppNav() {
