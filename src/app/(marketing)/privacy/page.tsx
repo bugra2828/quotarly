@@ -60,22 +60,75 @@ export default function PrivacyPage() {
             If you connect Gmail from your dashboard settings, Quotarly asks
             Google for a single, narrow permission:{" "}
             <span className="text-ink">send email on your behalf</span> (the{" "}
-            <code className="text-ink">gmail.send</code> scope). We use this
-            for exactly one thing — sending the pitches you approve from your
-            own Gmail address instead of a shared one, so journalists see a
-            real, recognizable sender.
+            <code className="text-ink">gmail.send</code> scope), plus your
+            Google account email address so we can show you which account is
+            connected.
+          </p>
+
+          <p className="mt-4 font-medium text-ink">
+            What Google user data we access
           </p>
           <p className="mt-2">
-            We never request access to read, search, or manage your inbox,
-            and Google doesn&apos;t grant it to us — the{" "}
-            <code className="text-ink">gmail.send</code> scope physically
-            cannot see any mail already in your account. We store only an
-            encrypted token that lets us send on your behalf; we never see
-            your password.
+            Only two things: (1) the ability to send an email through your
+            Gmail account via the <code className="text-ink">gmail.send</code>{" "}
+            scope, and (2) your Google account&apos;s email address (via the{" "}
+            <code className="text-ink">openid</code> and{" "}
+            <code className="text-ink">userinfo.email</code> scopes), used
+            only to label the connection in your Settings page (e.g. &quot;Connected
+            as you@gmail.com&quot;). We never request, and Google never grants us,
+            any ability to read, search, list, or modify messages already in
+            your mailbox — that data is physically outside what{" "}
+            <code className="text-ink">gmail.send</code> can access.
+          </p>
+
+          <p className="mt-4 font-medium text-ink">
+            How we use this data
           </p>
           <p className="mt-2">
-            Disconnect at any time from your dashboard&apos;s Settings page,
-            or by removing Quotarly&apos;s access directly at{" "}
+            We use it for exactly one purpose: sending the specific pitch
+            email you&apos;ve reviewed and approved (via the &quot;Approve &amp; send&quot;
+            button in your dashboard), from your own Gmail address instead of
+            a shared one, so journalists see a real, recognizable sender. We
+            never use this access for any other purpose — not analytics, not
+            advertising, not AI model training, not sending anything you
+            haven&apos;t approved.
+          </p>
+
+          <p className="mt-4 font-medium text-ink">
+            Who we share it with
+          </p>
+          <p className="mt-2">
+            We don&apos;t share, transfer, sell, or disclose your Google
+            account data, your Gmail connection, or any email sent through it
+            with any third party. It is used solely within Quotarly&apos;s own
+            systems to send your approved pitches. Our infrastructure
+            providers (Supabase for the database, Vercel for hosting) store or
+            process the encrypted token described below as part of running the
+            service, under their own confidentiality and security
+            obligations — they do not use it for any purpose of their own.
+          </p>
+
+          <p className="mt-4 font-medium text-ink">
+            How we protect this data
+          </p>
+          <p className="mt-2">
+            The OAuth refresh token that lets us send on your behalf is
+            encrypted at rest (AES-256-GCM) in our database before it&apos;s ever
+            stored, and is only decrypted in memory at the moment a pitch is
+            sent. Access to decrypt it is restricted to the server-side send
+            process — it&apos;s never exposed to the browser, to other users, or
+            to any Quotarly staff member&apos;s regular tooling. We never see or
+            store your Google account password.
+          </p>
+
+          <p className="mt-4 font-medium text-ink">
+            Retention and deletion
+          </p>
+          <p className="mt-2">
+            We keep the encrypted token only for as long as your Gmail
+            connection stays active. You can disconnect at any time from your
+            dashboard&apos;s Settings page, or by removing Quotarly&apos;s access
+            directly at{" "}
             <a
               href="https://myaccount.google.com/permissions"
               className="text-ink underline"
@@ -83,8 +136,10 @@ export default function PrivacyPage() {
             >
               myaccount.google.com/permissions
             </a>
-            . Either way, we delete the stored token immediately and future
-            pitches fall back to sending from quotarly.com.
+            . Either way, we delete the stored token immediately and
+            permanently, and future pitches fall back to sending from
+            quotarly.com. Deleting your Quotarly account (see below) also
+            deletes any connected Gmail token immediately.
           </p>
         </section>
 
