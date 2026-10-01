@@ -1,5 +1,6 @@
 import { getSessionUser } from "@/lib/supabase/session";
-import { buildCheckoutUrl, type PlanId } from "@/lib/lemonsqueezy/checkout";
+import { CheckoutButton } from "./CheckoutButton";
+import type { PlanId } from "@/lib/paddle/checkout";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -80,12 +81,14 @@ export default async function PricingPage() {
             </ul>
 
             {user ? (
-              <a
-                href={buildCheckoutUrl(plan.id, user.id, user.email!)}
+              <CheckoutButton
+                plan={plan.id}
+                userId={user.id}
+                email={user.email!}
                 className="mt-6 rounded-full bg-brand-solid px-4 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-brand-solid/90"
               >
                 Subscribe
-              </a>
+              </CheckoutButton>
             ) : (
               <Link
                 href="/login"
