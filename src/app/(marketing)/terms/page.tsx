@@ -41,16 +41,22 @@ export default function TermsPage() {
           </p>
         </section>
 
-        <section>
+        <section id="refunds">
           <h2 className="font-display text-lg font-semibold text-ink">
-            Billing and cancellation
+            Billing, cancellation, and refunds
           </h2>
           <p className="mt-2">
             Plans renew monthly and you can cancel at any time from your
             account settings; cancelling stops the next renewal but doesn't
-            refund the current billing period. Payments are handled by our
-            payment processor, and your card details never touch our
-            servers.
+            refund the current billing period. If you believe you were
+            charged in error, or a renewal happened after you intended to
+            cancel, contact us at{" "}
+            <a href="mailto:hello@quotarly.com" className="text-ink underline">
+              hello@quotarly.com
+            </a>{" "}
+            within 14 days of the charge and we'll review it. Payments are
+            handled by our payment processor, and your card details never
+            touch our servers.
           </p>
         </section>
 
