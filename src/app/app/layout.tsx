@@ -1,7 +1,28 @@
 import Link from "next/link";
 import { AppNav } from "./AppNav";
+import { createClient } from "@/lib/supabase/server";
+import { getSessionUser } from "@/lib/supabase/session";
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export default async function AppLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const user = await getSessionUser();
+
+  let profileId: string | null = null;
+  if (user) {
+    const supabase = await createClient();
+    const { data: profile } = await supabase
+      .from("expert_profiles")
+      .select("id")
+      .eq("owner_id", user.id)
+      .order("created_at", { ascending: true })
+      .limit(1)
+      .maybeSingle();
+    profileId = profile?.id ?? null;
+  }
+
   return (
     <div className="press-texture flex min-h-screen flex-col bg-paper text-ink">
       <header className="sticky top-0 z-50 border-b border-rule bg-paper/75 backdrop-blur">
@@ -19,7 +40,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               Quotarly
             </span>
           </Link>
-          <AppNav />
+          <AppNav profileId={profileId} />
         </div>
       </header>
 

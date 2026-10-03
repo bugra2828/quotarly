@@ -10,12 +10,19 @@ const navLinks = [
   { href: "/app/settings", label: "Settings" },
 ];
 
-export function AppNav() {
+export function AppNav({ profileId }: { profileId: string | null }) {
   const pathname = usePathname();
+
+  const links = profileId
+    ? [
+        ...navLinks,
+        { href: `/app/profile/${profileId}/edit`, label: "Edit Profile" },
+      ]
+    : navLinks;
 
   return (
     <nav className="flex items-center gap-2 text-sm">
-      {navLinks.map((link) => {
+      {links.map((link) => {
         const isActive = pathname === link.href;
         return (
           <Link

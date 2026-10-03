@@ -192,12 +192,6 @@ export default async function DashboardPage({
                     </p>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Link
-                      href={`/app/profile/${ep.id}/edit`}
-                      className="rounded-full border border-rule px-3 py-1.5 text-xs font-medium text-ink-soft transition-colors hover:border-ink/40 hover:text-ink"
-                    >
-                      Edit
-                    </Link>
                     <div className="text-right">
                       <p className="text-sm font-medium text-ink">Auto-send</p>
                       <p className="text-xs text-ink-soft">
