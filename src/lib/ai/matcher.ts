@@ -43,7 +43,16 @@ export function quickKeywordOverlap(
 ): boolean {
   if (topics.length === 0) return true; // no topics set yet — let the model decide
   const haystack = queryText.toLowerCase();
-  return topics.some((t) => haystack.includes(t.toLowerCase()));
+  // Topics can be multi-word labels ("SaaS & Software") that will rarely
+  // appear verbatim in a query — split into individual words so any one of
+  // them overlapping is enough to pass the pre-filter.
+  const keywords = topics.flatMap((t) =>
+    t
+      .toLowerCase()
+      .split(/[^a-z0-9]+/)
+      .filter((w) => w.length > 2)
+  );
+  return keywords.some((k) => haystack.includes(k));
 }
 
 export async function matchQueryToProfile(

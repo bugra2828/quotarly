@@ -1,5 +1,6 @@
 import { createExpertProfile } from "@/app/actions/expert-profile";
 import { getSessionUser } from "@/lib/supabase/session";
+import { TopicCheckboxes } from "@/components/TopicCheckboxes";
 import { redirect } from "next/navigation";
 
 export default async function OnboardingPage({
@@ -52,11 +53,7 @@ export default async function OnboardingPage({
           name="bio"
           placeholder="2-3 sentences about your background and expertise."
         />
-        <Field
-          label="Expertise topics (comma-separated)"
-          name="expertise_topics"
-          placeholder="SaaS pricing, B2B marketing, fundraising"
-        />
+        <TopicCheckboxes />
         <Field
           label="Excluded topics (comma-separated)"
           name="excluded_topics"

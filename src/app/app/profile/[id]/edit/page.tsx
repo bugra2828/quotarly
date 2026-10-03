@@ -1,6 +1,7 @@
 import { updateExpertProfile } from "@/app/actions/expert-profile";
 import { createClient } from "@/lib/supabase/server";
 import { getSessionUser } from "@/lib/supabase/session";
+import { TopicCheckboxes } from "@/components/TopicCheckboxes";
 import { redirect, notFound } from "next/navigation";
 
 export default async function EditProfilePage({
@@ -86,12 +87,7 @@ export default async function EditProfilePage({
           placeholder="2-3 sentences about your background and expertise."
           defaultValue={profile.bio ?? ""}
         />
-        <Field
-          label="Expertise topics (comma-separated)"
-          name="expertise_topics"
-          placeholder="SaaS pricing, B2B marketing, fundraising"
-          defaultValue={(profile.expertise_topics ?? []).join(", ")}
-        />
+        <TopicCheckboxes selected={profile.expertise_topics ?? []} />
         <Field
           label="Excluded topics (comma-separated)"
           name="excluded_topics"
