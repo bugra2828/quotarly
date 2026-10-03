@@ -82,10 +82,27 @@ export default async function EditProfilePage({
           defaultValue={profile.target_url ?? ""}
         />
         <TextArea
-          label="Bio"
+          label="Bio (at least 40 words)"
           name="bio"
           placeholder="2-3 sentences about your background and expertise."
           defaultValue={profile.bio ?? ""}
+        />
+        {profile.headshot_url && (
+          <img
+            src={profile.headshot_url}
+            alt="Current profile photo"
+            className="h-20 w-20 rounded-full object-cover"
+          />
+        )}
+        <Field
+          label={
+            profile.headshot_url
+              ? "Replace profile photo (optional)"
+              : "Profile photo (optional)"
+          }
+          name="headshot"
+          type="file"
+          accept="image/*"
         />
         <TopicCheckboxes selected={profile.expertise_topics ?? []} />
         <Field
@@ -132,6 +149,7 @@ function Field({
   placeholder,
   required,
   defaultValue,
+  accept,
 }: {
   label: string;
   name: string;
@@ -139,6 +157,7 @@ function Field({
   placeholder?: string;
   required?: boolean;
   defaultValue?: string;
+  accept?: string;
 }) {
   return (
     <label className="block space-y-1.5">
@@ -149,6 +168,7 @@ function Field({
         placeholder={placeholder}
         required={required}
         defaultValue={defaultValue}
+        accept={accept}
         className="w-full rounded-md border border-rule bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/40"
       />
     </label>

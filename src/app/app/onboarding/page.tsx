@@ -49,9 +49,15 @@ export default async function OnboardingPage({
           placeholder="https://yourcompany.com/pricing"
         />
         <TextArea
-          label="Bio"
+          label="Bio (at least 40 words)"
           name="bio"
           placeholder="2-3 sentences about your background and expertise."
+        />
+        <Field
+          label="Profile photo (optional)"
+          name="headshot"
+          type="file"
+          accept="image/*"
         />
         <TopicCheckboxes />
         <Field
@@ -93,12 +99,14 @@ function Field({
   type = "text",
   placeholder,
   required,
+  accept,
 }: {
   label: string;
   name: string;
   type?: string;
   placeholder?: string;
   required?: boolean;
+  accept?: string;
 }) {
   return (
     <label className="block space-y-1.5">
@@ -108,6 +116,7 @@ function Field({
         name={name}
         placeholder={placeholder}
         required={required}
+        accept={accept}
         className="w-full rounded-md border border-rule bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/40"
       />
     </label>
