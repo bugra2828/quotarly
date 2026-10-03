@@ -17,9 +17,9 @@ const RANGES: { value: DateRange; label: string }[] = [
 export default async function DashboardPage({
   searchParams,
 }: {
-  searchParams: Promise<{ range?: string }>;
+  searchParams: Promise<{ range?: string; updated?: string }>;
 }) {
-  const { range: rawRange } = await searchParams;
+  const { range: rawRange, updated } = await searchParams;
   const range: DateRange =
     rawRange === "week" || rawRange === "month" || rawRange === "all"
       ? rawRange
@@ -102,6 +102,11 @@ export default async function DashboardPage({
 
   return (
     <div className="mx-auto max-w-5xl space-y-8 px-6 py-12">
+      {updated && (
+        <p className="rounded-md border border-press/40 bg-press/10 p-3 text-sm text-press">
+          Profile updated.
+        </p>
+      )}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="font-display text-2xl font-semibold tracking-tight">
           Dashboard
@@ -187,6 +192,12 @@ export default async function DashboardPage({
                     </p>
                   </div>
                   <div className="flex items-center gap-3">
+                    <Link
+                      href={`/app/profile/${ep.id}/edit`}
+                      className="rounded-full border border-rule px-3 py-1.5 text-xs font-medium text-ink-soft transition-colors hover:border-ink/40 hover:text-ink"
+                    >
+                      Edit
+                    </Link>
                     <div className="text-right">
                       <p className="text-sm font-medium text-ink">Auto-send</p>
                       <p className="text-xs text-ink-soft">

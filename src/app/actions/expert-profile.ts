@@ -42,6 +42,44 @@ export async function createExpertProfile(formData: FormData) {
   redirect("/app");
 }
 
+export async function updateExpertProfile(formData: FormData) {
+  const expertProfileId = String(formData.get("expert_profile_id"));
+
+  const supabase = await createClient();
+  const user = await getSessionUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const { error } = await supabase
+    .from("expert_profiles")
+    .update({
+      display_name: String(formData.get("display_name") ?? ""),
+      job_title: String(formData.get("job_title") ?? ""),
+      company: String(formData.get("company") ?? ""),
+      website_url: String(formData.get("website_url") ?? ""),
+      target_url: String(formData.get("target_url") ?? ""),
+      bio: String(formData.get("bio") ?? ""),
+      expertise_topics: splitList(formData.get("expertise_topics")),
+      excluded_topics: splitList(formData.get("excluded_topics")),
+      tone: String(formData.get("tone") ?? ""),
+      sample_quotes: splitList(formData.get("sample_quotes")),
+      linkedin_url: String(formData.get("linkedin_url") ?? ""),
+    })
+    .eq("id", expertProfileId)
+    .eq("owner_id", user.id);
+
+  if (error) {
+    redirect(
+      `/app/profile/${expertProfileId}/edit?error=${encodeURIComponent(error.message)}`
+    );
+  }
+
+  revalidatePath("/app");
+  redirect("/app?updated=1");
+}
+
 // Toggles between "send the moment a quote clears your bar" (the default)
 // and "hold every quote for my manual review" for one expert profile.
 export async function toggleAutoApprove(formData: FormData) {
