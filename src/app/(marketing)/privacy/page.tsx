@@ -145,6 +145,32 @@ export default function PrivacyPage() {
 
         <section>
           <h2 className="font-display text-lg font-semibold text-ink">
+            AI use and Google Workspace data (Limited Use compliance)
+          </h2>
+          <p className="mt-2">
+            The use of information received from Google Workspace APIs by
+            Quotarly will adhere to the{" "}
+            <a
+              href="https://developers.google.com/workspace/workspace-api-user-data-developer-policy"
+              className="text-ink underline"
+              target="_blank"
+            >
+              Google API Services User Data Policy
+            </a>
+            , including the Limited Use requirements. Quotarly&apos;s AI drafts
+            pitches only from the expert profile, bio, and sample quotes you
+            enter directly into your Quotarly dashboard — it never reads,
+            processes, or has access to anything in your connected Gmail
+            account, since the <code className="text-ink">gmail.send</code>{" "}
+            scope only allows sending a message, not reading one. We do not
+            use any data received from Google Workspace APIs — raw, derived,
+            or aggregated — to train, improve, or develop any AI/ML models,
+            foundational or otherwise.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="font-display text-lg font-semibold text-ink">
             Deleting your account
           </h2>
           <p className="mt-2">
