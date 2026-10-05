@@ -75,11 +75,12 @@ export default async function EditProfilePage({
           defaultValue={profile.website_url ?? ""}
         />
         <Field
-          label="Target URL (link destination)"
+          label="Target URL (link destination — required so we can detect backlinks)"
           name="target_url"
           type="url"
           placeholder="https://yourcompany.com/pricing"
           defaultValue={profile.target_url ?? ""}
+          required
         />
         <TextArea
           label="Bio (at least 40 words)"

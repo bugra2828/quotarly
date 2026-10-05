@@ -35,13 +35,22 @@ export async function createExpertProfile(formData: FormData) {
     );
   }
 
+  const targetUrl = String(formData.get("target_url") ?? "").trim();
+  if (!targetUrl) {
+    redirect(
+      `/app/onboarding?error=${encodeURIComponent(
+        "Target URL is required — it's how we detect your backlinks."
+      )}`
+    );
+  }
+
   const { error } = await supabase.from("expert_profiles").insert({
     owner_id: user.id,
     display_name: String(formData.get("display_name") ?? ""),
     job_title: String(formData.get("job_title") ?? ""),
     company: String(formData.get("company") ?? ""),
     website_url: String(formData.get("website_url") ?? ""),
-    target_url: String(formData.get("target_url") ?? ""),
+    target_url: targetUrl,
     bio,
     expertise_topics: formData.getAll("expertise_topics").map(String),
     excluded_topics: splitList(formData.get("excluded_topics")),
@@ -76,6 +85,15 @@ export async function updateExpertProfile(formData: FormData) {
     );
   }
 
+  const targetUrl = String(formData.get("target_url") ?? "").trim();
+  if (!targetUrl) {
+    redirect(
+      `/app/profile/${expertProfileId}/edit?error=${encodeURIComponent(
+        "Target URL is required — it's how we detect your backlinks."
+      )}`
+    );
+  }
+
   const { error } = await supabase
     .from("expert_profiles")
     .update({
@@ -83,7 +101,7 @@ export async function updateExpertProfile(formData: FormData) {
       job_title: String(formData.get("job_title") ?? ""),
       company: String(formData.get("company") ?? ""),
       website_url: String(formData.get("website_url") ?? ""),
-      target_url: String(formData.get("target_url") ?? ""),
+      target_url: targetUrl,
       bio,
       expertise_topics: formData.getAll("expertise_topics").map(String),
       excluded_topics: splitList(formData.get("excluded_topics")),

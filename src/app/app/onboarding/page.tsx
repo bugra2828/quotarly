@@ -43,10 +43,11 @@ export default async function OnboardingPage({
           placeholder="https://yourcompany.com"
         />
         <Field
-          label="Target URL (link destination)"
+          label="Target URL (link destination — required so we can detect backlinks)"
           name="target_url"
           type="url"
           placeholder="https://yourcompany.com/pricing"
+          required
         />
         <TextArea
           label="Bio (at least 40 words)"
