@@ -53,12 +53,6 @@ export default async function OnboardingPage({
           name="bio"
           placeholder="2-3 sentences about your background and expertise."
         />
-        <Field
-          label="Profile photo (optional)"
-          name="headshot"
-          type="file"
-          accept="image/*"
-        />
         <TopicCheckboxes />
         <Field
           label="Excluded topics (comma-separated)"

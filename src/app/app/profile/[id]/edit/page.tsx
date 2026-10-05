@@ -87,23 +87,6 @@ export default async function EditProfilePage({
           placeholder="2-3 sentences about your background and expertise."
           defaultValue={profile.bio ?? ""}
         />
-        {profile.headshot_url && (
-          <img
-            src={profile.headshot_url}
-            alt="Current profile photo"
-            className="h-20 w-20 rounded-full object-cover"
-          />
-        )}
-        <Field
-          label={
-            profile.headshot_url
-              ? "Replace profile photo (optional)"
-              : "Profile photo (optional)"
-          }
-          name="headshot"
-          type="file"
-          accept="image/*"
-        />
         <TopicCheckboxes selected={profile.expertise_topics ?? []} />
         <Field
           label="Excluded topics (comma-separated)"
