@@ -2,6 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getSessionUser } from "@/lib/supabase/session";
 import { disconnectGmail } from "@/app/actions/gmail";
+import { cancelSubscription } from "@/app/actions/billing";
+import { DeleteAccountSection } from "./DeleteAccountSection";
 import { redirect } from "next/navigation";
 
 const ERROR_MESSAGES: Record<string, string> = {
@@ -18,12 +20,29 @@ const ERROR_MESSAGES: Record<string, string> = {
   exchange_failed: "Couldn't complete the connection with Google. Try again.",
 };
 
+const BILLING_ERROR_MESSAGES: Record<string, string> = {
+  no_active_subscription: "There's no active subscription to cancel.",
+  unsupported_provider: "This subscription can't be canceled from here — contact support.",
+  cancel_failed: "Couldn't cancel the subscription. Try again or contact support.",
+};
+
+const PLAN_LABELS: Record<string, string> = {
+  starter: "Starter",
+  pro: "Pro",
+  agency: "Agency",
+};
+
 export default async function SettingsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ connected?: string; gmail_error?: string }>;
+  searchParams: Promise<{
+    connected?: string;
+    gmail_error?: string;
+    billing_canceled?: string;
+    billing_error?: string;
+  }>;
 }) {
-  const { connected, gmail_error } = await searchParams;
+  const { connected, gmail_error, billing_canceled, billing_error } = await searchParams;
 
   const user = await getSessionUser();
   if (!user) redirect("/login");
@@ -37,13 +56,21 @@ export default async function SettingsPage({
   const profileIds = (expertProfiles ?? []).map((ep) => ep.id);
 
   const admin = createAdminClient();
-  const { data: connections } =
+  const [{ data: connections }, { data: subscription }] = await Promise.all([
     profileIds.length > 0
-      ? await admin
+      ? admin
           .from("gmail_connections")
           .select("expert_profile_id, gmail_email, connected_at")
           .in("expert_profile_id", profileIds)
-      : { data: [] };
+      : Promise.resolve({ data: [] }),
+    admin
+      .from("subscriptions")
+      .select("plan, status, current_period_end")
+      .eq("owner_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+  ]);
 
   const connectionByProfileId = new Map(
     (connections ?? []).map((c) => [c.expert_profile_id, c])
@@ -65,6 +92,61 @@ export default async function SettingsPage({
           {ERROR_MESSAGES[gmail_error] ?? "Something went wrong."}
         </p>
       )}
+      {billing_canceled && (
+        <p className="rounded-md border border-press/40 bg-press/10 p-3 text-sm text-press">
+          Subscription canceled.
+        </p>
+      )}
+      {billing_error && (
+        <p className="rounded-md border border-wire/40 bg-wire/10 p-3 text-sm text-wire">
+          {BILLING_ERROR_MESSAGES[billing_error] ?? "Something went wrong."}
+        </p>
+      )}
+
+      <div>
+        <h2 className="font-display text-lg font-semibold tracking-tight">
+          Billing
+        </h2>
+
+        {subscription ? (
+          <div className="card-elevated-brand mt-4 rounded-md border border-rule bg-surface p-5">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <p className="font-medium text-ink">
+                  {PLAN_LABELS[subscription.plan ?? ""] ?? subscription.plan ?? "Unknown plan"}
+                  {" · "}
+                  <span className="capitalize text-ink-soft">{subscription.status}</span>
+                </p>
+                {subscription.status === "past_due" && (
+                  <p className="mt-1 text-sm text-wire">
+                    Your last payment failed. Update your card or contact
+                    support before access is paused.
+                  </p>
+                )}
+                {subscription.current_period_end &&
+                  subscription.status !== "canceled" && (
+                    <p className="mt-1 text-sm text-ink-soft">
+                      Next payment{" "}
+                      {new Date(subscription.current_period_end).toLocaleDateString("en-GB")}
+                    </p>
+                  )}
+              </div>
+
+              {subscription.status !== "canceled" && (
+                <form action={cancelSubscription}>
+                  <button className="btn-raised-wire rounded-full bg-wire/90 px-4 py-1.5 text-sm font-medium text-white transition-colors hover:bg-wire">
+                    Cancel subscription
+                  </button>
+                </form>
+              )}
+            </div>
+          </div>
+        ) : (
+          <p className="mt-4 text-sm text-ink-soft">
+            No active subscription. <a href="/pricing" className="underline">See pricing</a>.
+          </p>
+        )}
+      </div>
 
       <div>
         <h2 className="font-display text-lg font-semibold tracking-tight">
@@ -124,6 +206,8 @@ export default async function SettingsPage({
           })}
         </ul>
       </div>
+
+      <DeleteAccountSection />
     </div>
   );
 }

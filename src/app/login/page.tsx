@@ -156,6 +156,12 @@ export default async function LoginPage({
             >
               Log in
             </button>
+            <Link
+              href="/forgot-password"
+              className="block text-center text-xs text-ink-soft underline"
+            >
+              Forgot password?
+            </Link>
           </form>
         ) : signupStep === "email" ? (
           <form method="GET" action="/login" className="space-y-3">

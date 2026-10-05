@@ -1,6 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { parseNewsletter } from "@/lib/ai/parser";
 import { runMatchingForQueries } from "@/lib/ai/pipeline";
+import { sendOpsAlert } from "@/lib/email/notify";
 import { type NextRequest, NextResponse } from "next/server";
 
 function isAuthorized(request: NextRequest): boolean {
@@ -102,6 +103,10 @@ export async function POST(request: NextRequest) {
         .select("id");
 
       if (queriesError) {
+        await sendOpsAlert(
+          "Inbound pipeline: failed to save parsed queries",
+          `source=${source} subject="${subject}" inbound_email_id=${inboundEmail.id}\n\n${queriesError.message}`
+        ).catch(() => {});
         return NextResponse.json(
           { ok: false, queries_found: queries.length, error: queriesError.message },
           { status: 500 }
@@ -125,6 +130,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true, queries_found: queries.length });
   } catch (err) {
     // Raw email is already stored; parsing can be retried later.
+    await sendOpsAlert(
+      "Inbound pipeline: newsletter parse failed",
+      `source=${source} subject="${subject}" inbound_email_id=${inboundEmail.id}\n\n${String(err)}`
+    ).catch(() => {});
     return NextResponse.json(
       { ok: true, parse_error: String(err) },
       { status: 200 }

@@ -1,5 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isValidSignature, mapPlan } from "@/lib/paddle/webhook";
+import { sendPaymentFailedNotification } from "@/lib/email/notify";
 import { type NextRequest, NextResponse } from "next/server";
 
 type PaddleWebhookPayload = {
@@ -50,6 +51,18 @@ export async function POST(request: NextRequest) {
         },
         { onConflict: "provider_subscription_id" }
       );
+
+      if (sub.status === "past_due") {
+        const { data: ownerProfile } = await supabase
+          .from("profiles")
+          .select("email")
+          .eq("id", userId)
+          .single();
+
+        if (ownerProfile?.email) {
+          await sendPaymentFailedNotification({ toEmail: ownerProfile.email }).catch(() => {});
+        }
+      }
       break;
     }
     case "subscription.canceled":

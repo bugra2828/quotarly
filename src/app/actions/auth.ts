@@ -78,3 +78,43 @@ export async function signOut() {
   await supabase.auth.signOut();
   redirect("/login");
 }
+
+export async function requestPasswordReset(formData: FormData) {
+  const email = String(formData.get("email") ?? "").trim();
+
+  if (!email) {
+    redirect("/forgot-password?error=missing_email");
+  }
+
+  const supabase = await createClient();
+  // Don't leak whether the email exists either way — always show the same
+  // "check your email" screen regardless of the result.
+  await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/confirm?next=/reset-password`,
+  });
+
+  redirect("/forgot-password?sent=1");
+}
+
+export async function updatePassword(formData: FormData) {
+  const password = String(formData.get("password") ?? "");
+  const confirmPassword = String(formData.get("confirm_password") ?? "");
+
+  const passwordError = validatePassword(password);
+  if (passwordError) {
+    redirect(`/reset-password?error=${encodeURIComponent(passwordError)}`);
+  }
+
+  if (password !== confirmPassword) {
+    redirect(`/reset-password?error=${encodeURIComponent("Passwords don't match.")}`);
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.updateUser({ password });
+
+  if (error) {
+    redirect(`/reset-password?error=${encodeURIComponent(error.message)}`);
+  }
+
+  redirect("/app?password_updated=1");
+}
