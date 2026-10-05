@@ -32,6 +32,8 @@ function detectSource(fromEmail: string, subject: string): string {
     return "sos";
   if (from.includes("helpb2bwriter") || subj.includes("help a b2b writer"))
     return "hab2bw";
+  if (from.includes("qwoted"))
+    return "qwoted";
   return "other";
 }
 
