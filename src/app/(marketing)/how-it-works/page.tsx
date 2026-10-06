@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "How it works",
   description:
-    "How Quotarly turns journalist queries into quotes you approve, and quotes into backlinks it tracks for you.",
+    "How Quotarly's AI PR pitch tool turns live journalist requests into quotes you approve, and quotes into backlinks it tracks for you.",
   alternates: { canonical: "/how-it-works" },
 };
 

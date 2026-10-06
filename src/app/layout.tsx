@@ -28,11 +28,11 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL?.startsWith("http")
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Quotarly — Turn expert quotes into backlinks that rank",
+    default: "Quotarly — Get Quoted by Journalists, Earn Backlinks",
     template: "%s — Quotarly",
   },
   description:
-    "Quotarly matches your expertise to live journalist queries, drafts the quote in your voice, and waits for your approval before it ever gets sent.",
+    "Quotarly matches your expertise to live journalist requests, drafts the pitch in your voice, and helps you earn backlinks from press — no guest posting, no manual outreach.",
   alternates: { canonical: "/" },
   verification: {
     google: "kCBfVrNldfyy5pRZslgroY1gBm0e74J-kzFs41cf9rs",

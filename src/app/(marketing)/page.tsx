@@ -197,7 +197,7 @@ export default function Home() {
           <div className="mt-6 grid gap-12 lg:grid-cols-[1.5fr_1fr] lg:gap-16">
             <div>
               <h1 className="font-display text-4xl leading-[1.1] font-semibold tracking-tight sm:text-5xl">
-                Turn expert quotes into backlinks that rank.
+                Get quoted by journalists. Earn backlinks that rank.
               </h1>
               <p className="mt-6 max-w-md text-lg leading-8 text-ink-soft">
                 Quotarly reads the journalist queries landing from trusted
