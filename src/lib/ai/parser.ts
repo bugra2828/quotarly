@@ -65,7 +65,10 @@ export async function parseNewsletter(rawText: string): Promise<ParsedQuery[]> {
   const today = new Date().toISOString().slice(0, 10);
   const message = await anthropic.messages.create({
     model: "claude-haiku-4-5",
-    max_tokens: 4096,
+    // A busy digest can hold a dozen+ requests; 4096 ran close enough to the
+    // cap on a real newsletter (3446 used) that a slightly longer one would
+    // get silently truncated mid-JSON and come back as zero queries.
+    max_tokens: 16384,
     system: buildSystemPrompt(today),
     tools: [EXTRACT_QUERIES_TOOL],
     tool_choice: { type: "tool", name: "extract_queries" },
@@ -76,6 +79,12 @@ export async function parseNewsletter(rawText: string): Promise<ParsedQuery[]> {
       },
     ],
   });
+
+  if (message.stop_reason === "max_tokens") {
+    throw new Error(
+      `parseNewsletter output truncated at max_tokens (used ${message.usage.output_tokens})`
+    );
+  }
 
   const toolUse = message.content.find(
     (block): block is Anthropic.ToolUseBlock => block.type === "tool_use"
