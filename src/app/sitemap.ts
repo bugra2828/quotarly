@@ -11,6 +11,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/how-it-works",
     "/blog",
     "/blog/getting-your-first-quote-approved",
+    "/blog/how-to-get-quoted-in-an-article",
+    "/blog/backlinks-without-guest-posting",
     "/terms",
     "/privacy",
   ];

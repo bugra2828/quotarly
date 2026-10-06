@@ -9,6 +9,20 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    slug: "backlinks-without-guest-posting",
+    title: "How to build backlinks without guest posting",
+    date: "October 2026",
+    excerpt:
+      "Guest posting is slow, expensive, and increasingly penalized. Here's how earned press mentions produce better backlinks with less work.",
+  },
+  {
+    slug: "how-to-get-quoted-in-an-article",
+    title: "How to get quoted in an article, from zero",
+    date: "October 2026",
+    excerpt:
+      "The mechanics of getting quoted by a journalist for the first time — where requests come from, what to send, and what beginners get wrong.",
+  },
+  {
     slug: "getting-your-first-quote-approved",
     title: "What makes a journalist actually use your quote",
     date: "September 2026",
