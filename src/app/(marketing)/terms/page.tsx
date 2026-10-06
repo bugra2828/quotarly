@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Terms",
   description: "The terms that govern using Quotarly.",
+  alternates: { canonical: "/terms" },
 };
 
 export default function TermsPage() {

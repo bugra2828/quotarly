@@ -7,6 +7,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Pricing",
   description: "One plan: an expert profile pitched into up to 200 journalist queries a month.",
+  alternates: { canonical: "/pricing" },
 };
 
 const PLAN: {

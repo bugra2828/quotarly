@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Privacy",
   description: "What Quotarly stores about you and why.",
+  alternates: { canonical: "/privacy" },
 };
 
 export default function PrivacyPage() {

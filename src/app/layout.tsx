@@ -33,6 +33,7 @@ export const metadata: Metadata = {
   },
   description:
     "Quotarly matches your expertise to live journalist queries, drafts the quote in your voice, and waits for your approval before it ever gets sent.",
+  alternates: { canonical: "/" },
   verification: {
     google: "kCBfVrNldfyy5pRZslgroY1gBm0e74J-kzFs41cf9rs",
   },

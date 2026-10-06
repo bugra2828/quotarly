@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Blog",
   description: "Notes on getting quoted, earning backlinks, and pitching journalists well.",
+  alternates: { canonical: "/blog" },
 };
 
 const posts = [
