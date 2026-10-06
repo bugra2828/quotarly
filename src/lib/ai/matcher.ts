@@ -44,6 +44,16 @@ without matching some unstated enterprise pedigree.
 Err toward a higher score when the topic matches and there's no explicit disqualifying
 requirement — skipping a usable expert is worse than scoring one too generously.`;
 
+// Common abbreviations journalists actually type, which never literally
+// appear in the spelled-out topic label ("Artificial Intelligence") so the
+// word-split below would otherwise never catch them.
+const TOPIC_ABBREVIATIONS: Record<string, string[]> = {
+  "Artificial Intelligence": ["ai", "genai", "llm", "ml"],
+  "PR & Communications": ["pr"],
+  "Venture Capital & Fundraising": ["vc"],
+  "SaaS & Software": ["saas"],
+};
+
 // Cheap keyword pre-filter before spending a model call: skip queries that share
 // no words at all with the expert's topics, to save on API costs at scale.
 export function quickKeywordOverlap(
@@ -61,7 +71,12 @@ export function quickKeywordOverlap(
       .split(/[^a-z0-9]+/)
       .filter((w) => w.length > 2)
   );
-  return keywords.some((k) => haystack.includes(k));
+  if (keywords.some((k) => haystack.includes(k))) return true;
+
+  // Short abbreviations need a word-boundary match — a plain substring check
+  // on "ai" or "pr" would false-positive on "said" or "prize".
+  const abbreviations = topics.flatMap((t) => TOPIC_ABBREVIATIONS[t] ?? []);
+  return abbreviations.some((a) => new RegExp(`\\b${a}\\b`, "i").test(haystack));
 }
 
 export async function matchQueryToProfile(
