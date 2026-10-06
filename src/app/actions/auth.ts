@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { validatePassword } from "@/lib/auth/password";
+import { track } from "@vercel/analytics/server";
 import { redirect } from "next/navigation";
 
 export async function signUpWithPassword(formData: FormData) {
@@ -36,6 +37,7 @@ export async function signUpWithPassword(formData: FormData) {
     redirect(`${backTo}&error=${encodeURIComponent(error.message)}`);
   }
 
+  await track("Signup completed");
   redirect("/login?confirm=1");
 }
 

@@ -1,6 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isValidSignature, mapPlan } from "@/lib/paddle/webhook";
 import { sendPaymentFailedNotification } from "@/lib/email/notify";
+import { track } from "@vercel/analytics/server";
 import { type NextRequest, NextResponse } from "next/server";
 
 type PaddleWebhookPayload = {
@@ -40,6 +41,10 @@ export async function POST(request: NextRequest) {
   switch (eventType) {
     case "subscription.created":
     case "subscription.updated": {
+      if (eventType === "subscription.created" && sub.status === "active") {
+        await track("Subscription started", { plan: plan ?? "unknown" });
+      }
+
       await supabase.from("subscriptions").upsert(
         {
           owner_id: userId,

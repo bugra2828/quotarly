@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { initializePaddle, type Paddle } from "@paddle/paddle-js";
+import { track } from "@vercel/analytics";
 import { PADDLE_PRICE_IDS, type PlanId } from "@/lib/paddle/checkout";
 
 let paddleInstance: Paddle | undefined;
@@ -35,6 +36,7 @@ export function CheckoutButton({
 
   async function handleClick() {
     setLoading(true);
+    track("Checkout started", { plan });
     const paddle = await getPaddle();
     paddle?.Checkout.open({
       items: [{ priceId: PADDLE_PRICE_IDS[plan], quantity: 1 }],

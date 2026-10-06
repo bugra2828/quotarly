@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-screen flex-col bg-paper text-ink">
         {children}
+        <Analytics />
       </body>
     </html>
   );
