@@ -18,4 +18,5 @@ export const EXPERTISE_TOPICS = [
   "Travel",
   "Lifestyle & Fitness",
   "Beauty & Wellness",
+  "Cybersecurity",
 ] as const;
