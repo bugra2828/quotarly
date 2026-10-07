@@ -17,7 +17,7 @@ const PLAN: {
   features: string[];
 } = {
   id: "starter",
-  name: "Starter",
+  name: "Quotarly Pro",
   price: 149,
   features: [
     "1 expert profile",

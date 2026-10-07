@@ -27,7 +27,7 @@ const BILLING_ERROR_MESSAGES: Record<string, string> = {
 };
 
 const PLAN_LABELS: Record<string, string> = {
-  starter: "Starter",
+  starter: "Quotarly Pro",
   pro: "Pro",
   agency: "Agency",
 };
