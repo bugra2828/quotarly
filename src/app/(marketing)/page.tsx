@@ -1,4 +1,10 @@
 import Link from "next/link";
+import { Check, Clock, Link2 } from "lucide-react";
+
+// Score ring geometry for the hero's "Matched & drafted" step.
+const RING_RADIUS = 18;
+const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
+const HERO_SCORE = 92;
 
 const dispatch = [
   {
@@ -6,21 +12,110 @@ const dispatch = [
     label: "Received",
     color: "text-ink-soft",
     dot: "bg-ink-soft",
-    body: "A retail-industry newsletter is looking for a founder who's scaled a support team past 50 people.",
+    body: (
+      <div className="rounded-md border border-rule bg-paper/60 p-3">
+        <div className="flex items-center justify-between gap-3">
+          <span className="font-dispatch text-xs text-ink-soft">
+            Retail Pulse
+          </span>
+          <span className="inline-flex items-center gap-1 rounded-full bg-wire/10 px-2 py-0.5 font-dispatch text-[11px] text-wire">
+            <Clock className="h-3 w-3" aria-hidden="true" />
+            Due in 2h
+          </span>
+        </div>
+        <p className="mt-2 font-sans text-sm leading-6 text-ink">
+          Looking for a founder who&apos;s scaled a support team past 50
+          people.
+        </p>
+      </div>
+    ),
   },
   {
     time: "9:16 AM",
     label: "Matched & drafted",
     color: "text-brand",
     dot: "bg-brand",
-    body: "Scored against your profile, then written up in your voice from your bio and past quotes.",
+    body: (
+      <div className="rounded-md border border-rule bg-paper/60 p-3">
+        <div className="flex items-center gap-3">
+          <div className="relative h-11 w-11 shrink-0">
+            <svg viewBox="0 0 44 44" className="h-11 w-11 -rotate-90" aria-hidden="true">
+              <circle
+                cx="22"
+                cy="22"
+                r={RING_RADIUS}
+                fill="none"
+                stroke="var(--rule)"
+                strokeWidth="4"
+              />
+              <circle
+                cx="22"
+                cy="22"
+                r={RING_RADIUS}
+                fill="none"
+                stroke="var(--brand)"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeDasharray={RING_CIRCUMFERENCE}
+                strokeDashoffset={RING_CIRCUMFERENCE * (1 - HERO_SCORE / 100)}
+                className="motion-safe:animate-[score-fill_1s_ease-out_0.7s_backwards]"
+                style={{ "--ring-c": RING_CIRCUMFERENCE } as React.CSSProperties}
+              />
+            </svg>
+            <span className="absolute inset-0 flex items-center justify-center font-dispatch text-xs font-semibold text-ink">
+              {HERO_SCORE}
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {["Support ops", "Team scaling"].map((t) => (
+              <span
+                key={t}
+                className="rounded-full border border-rule px-2 py-0.5 font-sans text-[11px] text-ink-soft"
+              >
+                {t}
+              </span>
+            ))}
+          </div>
+        </div>
+        <p className="mt-3 border-l-2 border-brand pl-3 font-sans text-sm leading-6 text-ink">
+          &ldquo;The first thing that broke wasn&apos;t headcount, it was
+          handoffs
+          <span
+            className="ml-0.5 inline-block h-4 w-[2px] translate-y-0.5 bg-brand motion-safe:animate-[caret-blink_1s_steps(1)_infinite]"
+            aria-hidden="true"
+          />
+        </p>
+      </div>
+    ),
   },
   {
     time: "9:20 AM",
     label: "Sent",
+    color: "text-ink",
+    dot: "bg-ink",
+    body: (
+      <p className="flex items-center gap-2 font-sans text-sm text-ink-soft">
+        <Check className="h-4 w-4 shrink-0 text-press" aria-hidden="true" />
+        Cleared your bar, sent with 1h 54m to spare.
+      </p>
+    ),
+  },
+  {
+    time: "3 days later",
+    label: "Link live",
     color: "text-press",
     dot: "bg-press",
-    body: "Cleared your bar, so it went out automatically — fast enough to beat the deadline.",
+    body: (
+      <div className="flex items-center justify-between gap-3 rounded-md border border-press/30 bg-press/[0.07] px-3 py-2">
+        <span className="flex items-center gap-2 font-dispatch text-xs text-ink">
+          <Link2 className="h-3.5 w-3.5 text-press" aria-hidden="true" />
+          retailpulse.com
+        </span>
+        <span className="font-dispatch text-[11px] text-press">
+          dofollow · DR 78
+        </span>
+      </div>
+    ),
   },
 ];
 
@@ -199,7 +294,7 @@ export default function Home() {
               <h1 className="font-display text-4xl leading-[1.1] font-semibold tracking-tight sm:text-5xl">
                 Get quoted by journalists. Earn backlinks that rank.
               </h1>
-              <p className="mt-6 max-w-md text-lg leading-8 text-ink-soft">
+              <p className="mt-6 max-w-md font-sans text-lg leading-8 text-ink-soft">
                 Quotarly reads the journalist queries landing from trusted
                 media sources, matches the ones that fit your expertise, and
                 drafts the quote in your voice. It sends the moment a quote
@@ -224,8 +319,8 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="rounded-md border border-rule bg-surface p-6">
-              <p className="text-sm text-ink-soft">
+            <div className="card-elevated-brand rounded-md border border-rule bg-surface p-5 sm:p-6">
+              <p className="font-sans text-sm font-medium text-ink-soft">
                 One query, start to finish
               </p>
               <ol className="mt-5">
@@ -235,7 +330,7 @@ export default function Home() {
                     <li
                       key={item.label}
                       className="flex gap-4 motion-safe:animate-[fade-in-up_0.5s_ease-out_backwards]"
-                      style={{ animationDelay: `${i * 200}ms` }}
+                      style={{ animationDelay: `${i * 250}ms` }}
                     >
                       <div className="flex flex-col items-center">
                         <span
@@ -245,16 +340,16 @@ export default function Home() {
                           <span className="my-1 w-px flex-1 bg-rule" />
                         )}
                       </div>
-                      <div className={isLast ? "pb-0" : "pb-6"}>
-                        <p className="font-dispatch text-xs text-ink-soft">
-                          {item.time}
+                      <div className={`min-w-0 flex-1 ${isLast ? "pb-0" : "pb-5"}`}>
+                        <p className="flex items-baseline gap-2">
+                          <span className={`font-sans text-sm font-semibold ${item.color}`}>
+                            {item.label}
+                          </span>
+                          <span className="font-dispatch text-[11px] text-ink-soft">
+                            {item.time}
+                          </span>
                         </p>
-                        <p className={`mt-1 text-sm font-semibold ${item.color}`}>
-                          {item.label}
-                        </p>
-                        <p className="mt-1 text-base text-ink">
-                          {item.body}
-                        </p>
+                        <div className="mt-2">{item.body}</div>
                       </div>
                     </li>
                   );

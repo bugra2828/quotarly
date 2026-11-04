@@ -240,6 +240,20 @@ a[class*="rounded-full"][class*="hover:"] {
   }
 }
 
+/* Hero score ring fills from empty to its set dashoffset. */
+@keyframes score-fill {
+  from {
+    stroke-dashoffset: var(--ring-c);
+  }
+}
+
+/* Blinking text caret on the hero's drafted quote. */
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
