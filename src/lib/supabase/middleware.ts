@@ -5,7 +5,7 @@ export async function updateSession(request: NextRequest) {
   // Never trust a client-supplied value for these -- always strip them
   // first, then only re-add them below once we've actually verified the
   // session. Downstream pages/actions read them instead of calling
-  // supabase.auth.getUser() again for the same request.
+  // the session again for the same request.
   const requestHeaders = new Headers(request.headers);
   requestHeaders.delete("x-user-id");
   requestHeaders.delete("x-user-email");
@@ -34,14 +34,18 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  // IMPORTANT: avoid writing logic between createServerClient and getUser().
+  // IMPORTANT: avoid writing logic between createServerClient and getClaims().
   // A simple mistake could make it very hard to debug session refresh issues.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  //
+  // getClaims() verifies the JWT signature locally against the cached JWKS and
+  // refreshes an expired session, so a normal request makes no call to Supabase
+  // Auth. The tradeoff is that a revoked session stays valid here until its
+  // access token expires.
+  const { data } = await supabase.auth.getClaims();
+  const user = data?.claims;
 
   if (user) {
-    requestHeaders.set("x-user-id", user.id);
+    requestHeaders.set("x-user-id", user.sub);
     requestHeaders.set("x-user-email", user.email ?? "");
   }
 
