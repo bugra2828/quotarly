@@ -2,23 +2,86 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getSessionUser } from "@/lib/supabase/session";
 import { approvePitch, rejectPitch } from "@/app/actions/pitches";
+import { groupByMonth, parseMonthKey } from "@/lib/pitches/months";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function ApprovalsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; month?: string }>;
 }) {
-  const { error } = await searchParams;
+  const { error, month: monthParam } = await searchParams;
 
   const supabase = await createClient();
   const user = await getSessionUser();
   if (!user) redirect("/login");
 
+  const month = parseMonthKey(monthParam);
+
+  if (!month) {
+    const { data: pending, error: monthsError } = await supabase
+      .from("pitches")
+      .select("created_at")
+      .eq("status", "pending_approval");
+
+    const months = groupByMonth((pending ?? []).map((p) => p.created_at));
+
+    return (
+      <div className="mx-auto max-w-3xl space-y-6 px-6 py-12">
+        <h1 className="font-display text-2xl font-semibold tracking-tight">
+          Pending approvals
+        </h1>
+
+        {error && (
+          <p className="rounded-md border border-wire/40 bg-wire/10 p-3 text-sm text-wire">
+            {error}
+          </p>
+        )}
+
+        {monthsError ? (
+          <p className="text-sm text-wire">
+            Couldn&apos;t load your approvals — try refreshing.
+          </p>
+        ) : (
+          !months.length && (
+            <p className="text-sm text-ink-soft">
+              Nothing waiting for your approval right now.
+            </p>
+          )
+        )}
+
+        <ul className="grid gap-3 sm:grid-cols-2">
+          {months.map((m) => (
+            <li key={m.key}>
+              <Link
+                href={`/app/approvals?month=${m.key}`}
+                prefetch={false}
+                className="flex items-center justify-between gap-4 rounded-md border border-rule bg-surface p-5 transition-colors hover:border-ink/40"
+              >
+                <div className="min-w-0">
+                  <p className="font-medium text-ink">{m.label}</p>
+                  <p className="mt-0.5 font-dispatch text-xs text-ink-soft">
+                    {m.count} waiting
+                  </p>
+                </div>
+                <span className="shrink-0 text-ink-soft" aria-hidden="true">
+                  →
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
   const { data: pitches, error: queryError } = await supabase
     .from("pitches")
     .select("*, matches(query_id, score, reasoning, expert_profiles(display_name))")
     .eq("status", "pending_approval")
+    .gte("created_at", month.start.toISOString())
+    .lt("created_at", month.end.toISOString())
     .order("created_at", { ascending: false });
 
   const queryIds = [
@@ -48,9 +111,17 @@ export default async function ApprovalsPage({
 
   return (
     <div className="mx-auto max-w-3xl space-y-6 px-6 py-12">
-      <h1 className="font-display text-2xl font-semibold tracking-tight">
-        Pending approvals
-      </h1>
+      <div>
+        <Link
+          href="/app/approvals"
+          className="text-sm text-ink-soft underline hover:text-ink"
+        >
+          ← All months
+        </Link>
+        <h1 className="mt-3 font-display text-2xl font-semibold tracking-tight">
+          Pending approvals · {month.label}
+        </h1>
+      </div>
 
       {error && (
         <p className="rounded-md border border-wire/40 bg-wire/10 p-3 text-sm text-wire">
@@ -65,7 +136,7 @@ export default async function ApprovalsPage({
       ) : (
         !pitches?.length && (
           <p className="text-sm text-ink-soft">
-            Nothing waiting for your approval right now.
+            Nothing waiting for your approval in {month.label}.
           </p>
         )
       )}
@@ -123,6 +194,7 @@ export default async function ApprovalsPage({
                     </p>
                     <form action={approvePitch} className="mt-2 space-y-2">
                       <input type="hidden" name="pitch_id" value={p.id} />
+                      <input type="hidden" name="month" value={month.key} />
                       <input
                         type="text"
                         defaultValue={p.subject}

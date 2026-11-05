@@ -3,9 +3,18 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getSessionUser } from "@/lib/supabase/session";
+import { parseMonthKey } from "@/lib/pitches/months";
 import { attemptSendPitch } from "@/lib/pitches/send";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+
+// Keeps the user in the month they were viewing when an action fails.
+function approvalsErrorUrl(formData: FormData, error: string): string {
+  const params = new URLSearchParams({ error });
+  const month = parseMonthKey(String(formData.get("month") ?? ""));
+  if (month) params.set("month", month.key);
+  return `/app/approvals?${params}`;
+}
 
 export async function rejectPitch(formData: FormData) {
   const pitchId = String(formData.get("pitch_id"));
@@ -31,11 +40,11 @@ export async function approvePitch(formData: FormData) {
     .single();
 
   if (!pitch) {
-    redirect("/app/approvals?error=pitch_not_found");
+    redirect(approvalsErrorUrl(formData, "pitch_not_found"));
   }
 
   const match = Array.isArray(pitch.matches) ? pitch.matches[0] : pitch.matches;
-  if (!match) redirect("/app/approvals?error=match_not_found");
+  if (!match) redirect(approvalsErrorUrl(formData, "match_not_found"));
 
   const finalBody = editedBody || pitch.body;
 
@@ -72,7 +81,7 @@ export async function approvePitch(formData: FormData) {
   });
 
   if (!result.ok) {
-    redirect(`/app/approvals?error=${encodeURIComponent(result.message)}`);
+    redirect(approvalsErrorUrl(formData, result.message));
   }
 
   revalidatePath("/app/approvals");
