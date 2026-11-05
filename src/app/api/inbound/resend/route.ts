@@ -1,6 +1,9 @@
-import { processInboundEmail } from "@/lib/inbound/process";
-import { type NextRequest, NextResponse } from "next/server";
+import { parseStoredEmail, storeInboundEmail } from "@/lib/inbound/process";
+import { after, type NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+
+// Bounds the parse/match work in after(), which outlasts the response.
+export const maxDuration = 300;
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -51,12 +54,26 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const result = await processInboundEmail({
-    fromEmail: extractAddress(email.from ?? ""),
-    subject: email.subject ?? "",
-    textBody: email.text ?? "",
-    htmlBody: email.html ?? "",
-  });
+  const stored = await storeInboundEmail(
+    {
+      fromEmail: extractAddress(email.from ?? ""),
+      subject: email.subject ?? "",
+      textBody: email.text ?? "",
+      htmlBody: email.html ?? "",
+    },
+    event.data.email_id
+  );
 
-  return NextResponse.json(result.body, { status: result.status });
+  if (stored.status === "error") {
+    return NextResponse.json({ error: stored.message }, { status: 500 });
+  }
+  if (stored.status === "duplicate") {
+    return NextResponse.json({ ok: true, duplicate: true });
+  }
+
+  // Resend retries a webhook that takes too long to answer, and parsing can
+  // take longer than that limit, so acknowledge first and do the work after.
+  after(() => parseStoredEmail(stored.email));
+
+  return NextResponse.json({ ok: true });
 }

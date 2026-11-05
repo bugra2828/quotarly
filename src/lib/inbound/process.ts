@@ -40,18 +40,27 @@ function detectSource(fromEmail: string, subject: string): string {
   return "other";
 }
 
+export type StoredInboundEmail = InboundEmail & { id: string; source: string };
+
+export type StoreResult =
+  | { status: "stored"; email: StoredInboundEmail }
+  | { status: "duplicate" }
+  | { status: "error"; message: string };
+
+const UNIQUE_VIOLATION = "23505";
+
 /**
- * Provider-agnostic inbound pipeline: store the raw email, parse it into
- * queries, save them, and run matching. Shared by the Postmark and Resend
- * webhook routes.
+ * Saves the raw email. Passing the provider's message id makes this idempotent:
+ * a redelivery of the same message comes back as "duplicate".
  */
-export async function processInboundEmail(email: InboundEmail): Promise<ProcessResult> {
+export async function storeInboundEmail(
+  email: InboundEmail,
+  providerMessageId?: string
+): Promise<StoreResult> {
   const { fromEmail, subject, textBody, htmlBody } = email;
   const source = detectSource(fromEmail, subject);
 
-  const supabase = createAdminClient();
-
-  const { data: inboundEmail, error: insertError } = await supabase
+  const { data, error } = await createAdminClient()
     .from("inbound_emails")
     .insert({
       source,
@@ -60,13 +69,38 @@ export async function processInboundEmail(email: InboundEmail): Promise<ProcessR
       raw_text: textBody,
       raw_html: htmlBody,
       parsed: false,
+      provider_message_id: providerMessageId ?? null,
     })
-    .select()
+    .select("id")
     .single();
 
-  if (insertError || !inboundEmail) {
-    return { status: 500, body: { error: insertError?.message } };
+  if (error?.code === UNIQUE_VIOLATION) return { status: "duplicate" };
+  if (error || !data) {
+    return { status: "error", message: error?.message ?? "insert returned no row" };
   }
+
+  return { status: "stored", email: { ...email, id: data.id, source } };
+}
+
+/** Provider-agnostic pipeline: store the raw email, then parse and match it. */
+export async function processInboundEmail(email: InboundEmail): Promise<ProcessResult> {
+  const stored = await storeInboundEmail(email);
+  if (stored.status === "error") {
+    return { status: 500, body: { error: stored.message } };
+  }
+  if (stored.status === "duplicate") {
+    return { status: 200, body: { ok: true, duplicate: true } };
+  }
+  return parseStoredEmail(stored.email);
+}
+
+/**
+ * Parses a stored email into queries, saves them, and runs matching. A failure
+ * leaves the row with parsed=false and sends an ops alert.
+ */
+export async function parseStoredEmail(email: StoredInboundEmail): Promise<ProcessResult> {
+  const { id: inboundEmailId, source, subject, textBody, htmlBody } = email;
+  const supabase = createAdminClient();
 
   try {
     const queries = await parseNewsletter(textBody || htmlBody);
@@ -78,7 +112,7 @@ export async function processInboundEmail(email: InboundEmail): Promise<ProcessR
         .from("queries")
         .insert(
           queries.map((q) => ({
-            inbound_email_id: inboundEmail.id,
+            inbound_email_id: inboundEmailId,
             source,
             title: q.title,
             body: q.body,
@@ -96,7 +130,7 @@ export async function processInboundEmail(email: InboundEmail): Promise<ProcessR
       if (queriesError) {
         await sendOpsAlert(
           "Inbound pipeline: failed to save parsed queries",
-          `source=${source} subject="${subject}" inbound_email_id=${inboundEmail.id}\n\n${queriesError.message}`
+          `source=${source} subject="${subject}" inbound_email_id=${inboundEmailId}\n\n${queriesError.message}`
         ).catch(() => {});
         return {
           status: 500,
@@ -110,7 +144,7 @@ export async function processInboundEmail(email: InboundEmail): Promise<ProcessR
     await supabase
       .from("inbound_emails")
       .update({ parsed: true })
-      .eq("id", inboundEmail.id);
+      .eq("id", inboundEmailId);
 
     // Awaited so it actually finishes before the serverless function exits
     // (a fire-and-forget promise can get killed once the response is sent).
@@ -123,7 +157,7 @@ export async function processInboundEmail(email: InboundEmail): Promise<ProcessR
     // Raw email is already stored; parsing can be retried later.
     await sendOpsAlert(
       "Inbound pipeline: newsletter parse failed",
-      `source=${source} subject="${subject}" inbound_email_id=${inboundEmail.id}\n\n${String(err)}`
+      `source=${source} subject="${subject}" inbound_email_id=${inboundEmailId}\n\n${String(err)}`
     ).catch(() => {});
     return { status: 200, body: { ok: true, parse_error: String(err) } };
   }
