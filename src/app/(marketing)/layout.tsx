@@ -17,7 +17,7 @@ export default async function MarketingLayout({
   return (
     <div className="press-texture flex min-h-screen flex-col bg-paper text-ink">
       <header className="sticky top-0 z-50 border-b border-rule bg-paper/75 backdrop-blur">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
+        <div className="mx-auto flex max-w-[88rem] items-center justify-between px-6 py-5 lg:px-10">
           <Link href="/" className="flex items-center gap-2.5">
             <svg width="26" height="26" viewBox="0 0 28 28" aria-hidden="true">
               <rect width="28" height="28" rx="5" fill="var(--ink)" />
@@ -54,7 +54,7 @@ export default async function MarketingLayout({
       <main className="flex-1">{children}</main>
 
       <footer className="border-t border-rule">
-        <div className="mx-auto flex max-w-5xl flex-col gap-4 px-6 py-10 text-sm text-ink-soft sm:flex-row sm:items-center sm:justify-between">
+        <div className="mx-auto flex max-w-[88rem] flex-col gap-4 px-6 py-10 lg:px-10 text-sm text-ink-soft sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} Quotarly.</p>
           <div className="flex gap-6">
             <Link href="/terms" className="hover:text-ink">

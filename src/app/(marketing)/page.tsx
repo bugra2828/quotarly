@@ -337,21 +337,13 @@ export default function Home() {
           />
         </div>
 
-        <div className="relative mx-auto max-w-6xl px-6 pt-16 pb-20 lg:pt-24 lg:pb-28">
-          <div className="grid items-center gap-14 lg:grid-cols-[1.25fr_1fr] lg:gap-16">
+        <div className="relative mx-auto max-w-[88rem] px-6 lg:px-10 pt-16 pb-20 lg:pt-24 lg:pb-28">
+          <div className="grid items-center gap-14 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
             <div>
               <Eyebrow>Journalist queries → quotes → backlinks</Eyebrow>
               <h1 className="mt-5 font-display text-[2.6rem] leading-[1.05] font-semibold tracking-tight sm:text-6xl lg:text-7xl">
                 Get{" "}
-                <span
-                  className="text-brand [box-decoration-break:clone]"
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(transparent 68%, color-mix(in srgb, var(--brand) 22%, transparent) 68%)",
-                  }}
-                >
-                  quoted by journalists
-                </span>{" "}
+<span className="text-brand">quoted by journalists</span>{" "}
                 without reading a single query
               </h1>
               <p className="mt-7 max-w-xl font-sans text-lg leading-8 text-ink-soft">
@@ -386,43 +378,18 @@ export default function Home() {
               </ul>
             </div>
 
-            <div className="card-elevated-brand rounded-xl border border-rule bg-surface p-5 sm:p-6">
-              <p className="font-sans text-sm font-medium text-ink-soft">
-                One query, start to finish
-              </p>
-              <ol className="mt-5">
-                {dispatch.map((item, i) => {
-                  const isLast = i === dispatch.length - 1;
-                  return (
-                    <li
-                      key={item.label}
-                      className="flex gap-4 motion-safe:animate-[fade-in-up_0.5s_ease-out_backwards]"
-                      style={{ animationDelay: `${i * 250}ms` }}
-                    >
-                      <div className="flex flex-col items-center">
-                        <span
-                          className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ${item.dot}`}
-                        />
-                        {!isLast && <span className="my-1 w-px flex-1 bg-rule" />}
-                      </div>
-                      <div className={`min-w-0 flex-1 ${isLast ? "pb-0" : "pb-5"}`}>
-                        <p className="flex items-baseline gap-2">
-                          <span className={`font-sans text-sm font-semibold ${item.color}`}>
-                            {item.label}
-                          </span>
-                          <span className="font-dispatch text-[11px] text-ink-soft">
-                            {item.time}
-                          </span>
-                        </p>
-                        <div className="mt-2">{item.body}</div>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ol>
-              <p className="mt-4 text-xs text-ink-soft">
-                Illustrative — this is what happens after you onboard.
-              </p>
+            <div>
+              <RoutingNetwork />
+              <div className="mt-2 flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm">
+                <span className="flex items-center gap-2 text-ink">
+                  <span className="h-0.5 w-6 rounded bg-brand" aria-hidden="true" />
+                  Matched and pitched
+                </span>
+                <span className="flex items-center gap-2 text-ink-soft">
+                  <span className="h-0 w-6 border-t border-dashed border-ink-soft/50" aria-hidden="true" />
+                  Filtered out
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -430,7 +397,7 @@ export default function Home() {
 
       {/* Value strip */}
       <section className="border-y border-rule bg-surface/60">
-        <div className="mx-auto grid max-w-6xl divide-y divide-rule sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+        <div className="mx-auto grid max-w-[88rem] divide-y divide-rule sm:grid-cols-3 sm:divide-x sm:divide-y-0">
           {valueProps.map((v) => (
             <div key={v.eyebrow} className="px-6 py-10">
               <Eyebrow>{v.eyebrow}</Eyebrow>
@@ -445,7 +412,7 @@ export default function Home() {
       </section>
 
       {/* Before / after */}
-      <section className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
+      <section className="mx-auto max-w-[88rem] px-6 lg:px-10 py-24 lg:py-32">
         <Eyebrow>Why Quotarly</Eyebrow>
         <SectionTitle strong="Getting press" soft="without us," tail="and with us" />
 
@@ -557,7 +524,7 @@ export default function Home() {
 
       {/* How it works */}
       <section className="border-t border-rule">
-        <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
+        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-24 lg:py-32">
           <Eyebrow>How it works</Eyebrow>
           <SectionTitle strong="Four steps" soft="to your first live backlink" />
 
@@ -604,40 +571,33 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Routing network */}
+      {/* One query, start to finish */}
       <section className="border-y border-rule bg-surface/60">
-        <div className="mx-auto grid max-w-6xl items-center gap-14 px-6 py-24 lg:grid-cols-[1fr_1.15fr] lg:py-32">
+        <div className="mx-auto grid max-w-[88rem] items-center gap-14 px-6 lg:px-10 py-24 lg:grid-cols-[1fr_1fr] lg:py-32">
           <div>
-            <Eyebrow>Query routing</Eyebrow>
-            <SectionTitle strong="Every newsroom query," soft="routed to the right expert" />
+            <Eyebrow>One query, start to finish</Eyebrow>
+            <SectionTitle strong="From a newsroom request" soft="to a live backlink" />
             <p className="mt-6 max-w-md text-lg leading-8 text-ink-soft">
               Quotarly watches journalist requests from trusted sources around
-              the clock. The ones that fit{" "}
-              <strong className="font-semibold text-ink">your expertise</strong>{" "}
-              get routed to you. The rest never reach your inbox.
+              the clock. When one fits{" "}
+              <strong className="font-semibold text-ink">your expertise</strong>,
+              it drafts a quote in your voice, sends it before the deadline and
+              tracks the link until it goes live.
             </p>
-            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm">
-              <span className="flex items-center gap-2 text-ink">
-                <span className="h-0.5 w-6 rounded bg-brand" aria-hidden="true" />
-                Matched and pitched
-              </span>
-              <span className="flex items-center gap-2 text-ink-soft">
-                <span className="h-0 w-6 border-t border-dashed border-ink-soft/50" aria-hidden="true" />
-                Filtered out
-              </span>
-            </div>
           </div>
-          <RoutingNetwork />
+          <QueryTimeline />
         </div>
       </section>
 
       {/* Filtering + tracking */}
       <section>
-        <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
-          <div className="max-w-3xl">
-            <Eyebrow>Built to be picky</Eyebrow>
-            <SectionTitle strong="Only the queries you'd win" soft="ever get a pitch" />
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-ink-soft">
+        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-24 lg:py-32">
+          <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr] lg:items-end lg:gap-16">
+            <div>
+              <Eyebrow>Built to be picky</Eyebrow>
+              <SectionTitle strong="Only the queries you'd win" soft="ever get a pitch" />
+            </div>
+            <p className="max-w-xl text-lg leading-8 text-ink-soft">
               Spraying generic pitches burns your name with journalists.
               Quotarly drops everything outside your expertise or below your
               bar — so the pitches that do go out are ones worth reading.
@@ -736,7 +696,7 @@ export default function Home() {
 
       {/* Anatomy of a placement */}
       <section className="border-y border-rule bg-surface/60">
-        <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
+        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-24 lg:py-32">
           <Eyebrow>The result</Eyebrow>
           <SectionTitle strong="What a placement" soft="actually looks like" />
 
@@ -800,7 +760,7 @@ export default function Home() {
       </section>
 
       {/* Cost comparison */}
-      <section className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
+      <section className="mx-auto max-w-[88rem] px-6 lg:px-10 py-24 lg:py-32">
         <Eyebrow>Cost comparison</Eyebrow>
         <SectionTitle
           strong="How we compare"
@@ -847,7 +807,7 @@ export default function Home() {
 
       {/* Platform features */}
       <section className="border-t border-rule bg-surface/60">
-        <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
+        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-24 lg:py-32">
           <Eyebrow>Under the hood</Eyebrow>
           <SectionTitle strong="More than a pitch bot" soft="— built so nothing embarrassing goes out" />
           <div className="mt-14 grid gap-4 md:grid-cols-2">
@@ -956,7 +916,7 @@ export default function Home() {
 
       {/* Who it's for */}
       <section className="border-t border-rule">
-        <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
+        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-24 lg:py-32">
           <Eyebrow>Who it&apos;s for</Eyebrow>
           <SectionTitle strong="Built for experts" soft="journalists want to hear from" />
           <div className="mt-14 grid gap-4 lg:grid-cols-3">
@@ -980,7 +940,7 @@ export default function Home() {
 
       {/* Pricing */}
       <section className="border-t border-rule bg-surface/60">
-        <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
+        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-24 lg:py-32">
           <Eyebrow>Pricing</Eyebrow>
           <SectionTitle strong="One plan," soft="cheaper than one agency week" />
           <div className="card-elevated-brand mt-14 grid overflow-hidden rounded-2xl border border-brand/40 bg-paper lg:grid-cols-[1fr_1.5fr]">
@@ -1032,7 +992,7 @@ export default function Home() {
 
       {/* FAQ */}
       <section className="border-t border-rule">
-        <div className="mx-auto grid max-w-6xl gap-12 px-6 py-24 lg:grid-cols-[1fr_1.6fr] lg:py-32">
+        <div className="mx-auto grid max-w-[88rem] gap-12 px-6 lg:px-10 py-24 lg:grid-cols-[1fr_1.6fr] lg:py-32">
           <div>
             <SectionTitle strong="FAQs" />
             <p className="mt-5 text-sm leading-6 text-ink-soft">
@@ -1149,7 +1109,7 @@ const netNodes = [
 
 function RoutingNetwork() {
   return (
-    <div className="relative mx-auto aspect-[6/5] w-full max-w-xl" aria-hidden="true">
+    <div className="relative mx-auto aspect-[6/5] w-full max-w-2xl" aria-hidden="true">
       <svg viewBox="0 0 600 500" className="absolute inset-0 h-full w-full">
         {netNodes.map((n) => (
           <line
@@ -1298,6 +1258,49 @@ function FeatureCard({
       <div className="mt-8 flex flex-1 items-center justify-center rounded-lg bg-surface/60 px-4 py-8">
         {children}
       </div>
+    </div>
+  );
+}
+
+function QueryTimeline() {
+  return (
+    <div className="card-elevated-brand rounded-xl border border-rule bg-surface p-5 sm:p-6">
+      <p className="font-sans text-sm font-medium text-ink-soft">
+        One query, start to finish
+      </p>
+      <ol className="mt-5">
+        {dispatch.map((item, i) => {
+          const isLast = i === dispatch.length - 1;
+          return (
+            <li
+              key={item.label}
+              className="flex gap-4 motion-safe:animate-[fade-in-up_0.5s_ease-out_backwards]"
+              style={{ animationDelay: `${i * 250}ms` }}
+            >
+              <div className="flex flex-col items-center">
+                <span
+                  className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ${item.dot}`}
+                />
+                {!isLast && <span className="my-1 w-px flex-1 bg-rule" />}
+              </div>
+              <div className={`min-w-0 flex-1 ${isLast ? "pb-0" : "pb-5"}`}>
+                <p className="flex items-baseline gap-2">
+                  <span className={`font-sans text-sm font-semibold ${item.color}`}>
+                    {item.label}
+                  </span>
+                  <span className="font-dispatch text-[11px] text-ink-soft">
+                    {item.time}
+                  </span>
+                </p>
+                <div className="mt-2">{item.body}</div>
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+      <p className="mt-4 text-xs text-ink-soft">
+        Illustrative — this is what happens after you onboard.
+      </p>
     </div>
   );
 }
