@@ -412,21 +412,21 @@ export default function Home() {
       </section>
 
       {/* Before / after */}
-      <section className="mx-auto max-w-[88rem] px-6 lg:px-10 py-24 lg:py-32">
+      <section className="mx-auto max-w-[88rem] px-6 lg:px-10 py-16 lg:py-20">
         <Eyebrow>Why Quotarly</Eyebrow>
         <SectionTitle strong="Getting press" soft="without us," tail="and with us" />
 
-        <div className="mt-14 grid gap-3 rounded-2xl border border-rule bg-rule/40 p-3 lg:grid-cols-2">
+        <div className="mt-10 grid gap-3 rounded-2xl border border-rule bg-rule/40 p-3 lg:grid-cols-2">
           {/* Before */}
-          <div className="flex flex-col rounded-xl bg-paper p-6 sm:p-8">
+          <div className="flex flex-col rounded-xl bg-paper p-5 sm:p-6">
             <span className="w-fit rounded-full bg-white/10 px-3 py-1 font-dispatch text-xs tracking-widest text-ink-soft uppercase">
               Before
             </span>
-            <h3 className="mt-4 font-display text-2xl font-semibold">
+            <h3 className="mt-3 font-display text-xl font-semibold">
               Chasing queries on your own
             </h3>
 
-            <div className="relative mt-8 mb-16 rounded-lg border border-rule bg-surface">
+            <div className="relative mt-5 mb-12 rounded-lg border border-rule bg-surface">
               <div className="flex items-center justify-between border-b border-rule px-4 py-3">
                 <span className="flex items-center gap-2 text-sm font-medium text-ink">
                   <Mail className="h-4 w-4 text-ink-soft" aria-hidden="true" />
@@ -466,15 +466,15 @@ export default function Home() {
           </div>
 
           {/* After */}
-          <div className="flex flex-col rounded-xl border border-brand/30 bg-brand/[0.07] p-6 sm:p-8">
+          <div className="flex flex-col rounded-xl border border-brand/30 bg-brand/[0.07] p-5 sm:p-6">
             <span className="w-fit rounded-full bg-brand-solid px-3 py-1 font-dispatch text-xs tracking-widest text-white uppercase">
               After
             </span>
-            <h3 className="mt-4 font-display text-2xl font-semibold">
+            <h3 className="mt-3 font-display text-xl font-semibold">
               Getting quoted with Quotarly
             </h3>
 
-            <div className="relative mt-8 mb-16 rounded-lg border border-rule bg-surface">
+            <div className="relative mt-5 mb-12 rounded-lg border border-rule bg-surface">
               <div className="flex items-center justify-between border-b border-rule px-4 py-3">
                 <span className="text-sm font-medium text-ink">Matched queries</span>
                 <span className="font-dispatch text-[11px] text-ink-soft">match score</span>
@@ -524,11 +524,11 @@ export default function Home() {
 
       {/* How it works */}
       <section className="border-t border-rule">
-        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-24 lg:py-32">
+        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-16 lg:py-20">
           <Eyebrow>How it works</Eyebrow>
           <SectionTitle strong="Four steps" soft="to your first live backlink" />
 
-          <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
             {steps.map((s, i) => (
               <div
                 key={s.n}
@@ -573,7 +573,7 @@ export default function Home() {
 
       {/* One query, start to finish */}
       <section className="border-y border-rule bg-surface/60">
-        <div className="mx-auto grid max-w-[88rem] items-center gap-14 px-6 lg:px-10 py-24 lg:grid-cols-[1fr_1fr] lg:py-32">
+        <div className="mx-auto grid max-w-[88rem] items-center gap-14 px-6 lg:px-10 py-16 lg:grid-cols-[1fr_1fr] lg:py-20">
           <div>
             <Eyebrow>One query, start to finish</Eyebrow>
             <SectionTitle strong="From a newsroom request" soft="to a live backlink" />
@@ -591,7 +591,7 @@ export default function Home() {
 
       {/* Filtering + tracking */}
       <section>
-        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-24 lg:py-32">
+        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-16 lg:py-20">
           <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr] lg:items-end lg:gap-16">
             <div>
               <Eyebrow>Built to be picky</Eyebrow>
@@ -604,7 +604,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mt-14 grid gap-3 rounded-2xl border border-rule bg-rule/40 p-3 lg:grid-cols-2">
+          <div className="mt-10 grid gap-3 rounded-2xl border border-rule bg-rule/40 p-3 lg:grid-cols-2">
             <div className="rounded-xl bg-paper p-6 sm:p-8">
               <h3 className="font-display text-2xl font-semibold">
                 Most queries never reach you
@@ -696,11 +696,11 @@ export default function Home() {
 
       {/* Anatomy of a placement */}
       <section className="border-y border-rule bg-surface/60">
-        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-24 lg:py-32">
+        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-16 lg:py-20">
           <Eyebrow>The result</Eyebrow>
           <SectionTitle strong="What a placement" soft="actually looks like" />
 
-          <div className="mt-14 grid gap-4 lg:grid-cols-[1.6fr_1fr]">
+          <div className="mt-10 grid gap-4 lg:grid-cols-[1.6fr_1fr]">
             <ArticleMock />
 
             <div className="flex flex-col gap-4">
@@ -760,13 +760,13 @@ export default function Home() {
       </section>
 
       {/* Cost comparison */}
-      <section className="mx-auto max-w-[88rem] px-6 lg:px-10 py-24 lg:py-32">
+      <section className="mx-auto max-w-[88rem] px-6 lg:px-10 py-16 lg:py-20">
         <Eyebrow>Cost comparison</Eyebrow>
         <SectionTitle
           strong="How we compare"
           soft="to doing it yourself or hiring a PR agency"
         />
-        <div className="mt-14 overflow-x-auto">
+        <div className="mt-10 overflow-x-auto">
           <div className="grid min-w-[720px] grid-cols-[160px_1fr_1fr_1fr] overflow-hidden rounded-2xl border border-rule">
             <div className="border-b border-rule bg-surface/60" />
             <div className="border-b border-l border-rule bg-surface/60 px-6 py-5 font-dispatch text-xs tracking-widest text-ink-soft uppercase">
@@ -807,10 +807,10 @@ export default function Home() {
 
       {/* Platform features */}
       <section className="border-t border-rule bg-surface/60">
-        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-24 lg:py-32">
+        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-16 lg:py-20">
           <Eyebrow>Under the hood</Eyebrow>
           <SectionTitle strong="More than a pitch bot" soft="— built so nothing embarrassing goes out" />
-          <div className="mt-14 grid gap-4 md:grid-cols-2">
+          <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <FeatureCard
               icon={Target}
               title="Expertise profile"
@@ -916,10 +916,10 @@ export default function Home() {
 
       {/* Who it's for */}
       <section className="border-t border-rule">
-        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-24 lg:py-32">
+        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-16 lg:py-20">
           <Eyebrow>Who it&apos;s for</Eyebrow>
           <SectionTitle strong="Built for experts" soft="journalists want to hear from" />
-          <div className="mt-14 grid gap-4 lg:grid-cols-3">
+          <div className="mt-10 grid gap-4 lg:grid-cols-3">
             {useCases.map((uc) => (
               <div key={uc.title} className="rounded-xl border border-rule bg-surface/40 p-7">
                 <h3 className="font-display text-xl font-semibold">{uc.title}</h3>
@@ -940,10 +940,10 @@ export default function Home() {
 
       {/* Pricing */}
       <section className="border-t border-rule bg-surface/60">
-        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-24 lg:py-32">
+        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-16 lg:py-20">
           <Eyebrow>Pricing</Eyebrow>
           <SectionTitle strong="One plan," soft="cheaper than one agency week" />
-          <div className="card-elevated-brand mt-14 grid overflow-hidden rounded-2xl border border-brand/40 bg-paper lg:grid-cols-[1fr_1.5fr]">
+          <div className="card-elevated-brand mt-10 grid overflow-hidden rounded-2xl border border-brand/40 bg-paper lg:grid-cols-[1fr_1.5fr]">
             <div className="flex flex-col border-b border-rule bg-gradient-to-b from-brand/[0.14] to-transparent p-7 sm:p-9 lg:border-r lg:border-b-0">
               <h3 className="font-display text-2xl font-semibold">{plan.name}</h3>
               <p className="mt-2 text-sm leading-6 text-ink-soft">
@@ -992,7 +992,7 @@ export default function Home() {
 
       {/* FAQ */}
       <section className="border-t border-rule">
-        <div className="mx-auto grid max-w-[88rem] gap-12 px-6 lg:px-10 py-24 lg:grid-cols-[1fr_1.6fr] lg:py-32">
+        <div className="mx-auto grid max-w-[88rem] gap-12 px-6 lg:px-10 py-16 lg:grid-cols-[1fr_1.6fr] lg:py-20">
           <div>
             <SectionTitle strong="FAQs" />
             <p className="mt-5 text-sm leading-6 text-ink-soft">
@@ -1026,7 +1026,7 @@ export default function Home() {
             style={{ top: "-120px", left: "10%", opacity: 0.15 }}
           />
         </div>
-        <div className="relative mx-auto max-w-4xl px-6 py-24 text-center text-white lg:py-32">
+        <div className="relative mx-auto max-w-4xl px-6 py-16 text-center text-white lg:py-20">
           <h2 className="font-display text-4xl leading-tight font-semibold tracking-tight sm:text-5xl lg:text-6xl">
             Your next press mention is already in someone&apos;s inbox
           </h2>
@@ -1062,7 +1062,7 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 /** Two-tone heading: the key phrase in full ink, the rest dimmed. */
 function SectionTitle({ strong, soft, tail }: { strong: string; soft?: string; tail?: string }) {
   return (
-    <h2 className="mt-4 font-display text-4xl leading-[1.08] font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+    <h2 className="mt-3 font-display text-3xl leading-[1.1] font-semibold tracking-tight sm:text-4xl lg:text-5xl">
       {strong}
       {soft && <span className="text-ink-soft/60"> {soft}</span>}
       {tail && <> {tail}</>}
@@ -1078,11 +1078,11 @@ function IconList({
   tone: "soft" | "brand";
 }) {
   return (
-    <ul className="mt-auto space-y-4">
+    <ul className="mt-auto grid gap-x-6 gap-y-2.5 xl:grid-cols-2">
       {items.map(({ icon: Icon, text }) => (
-        <li key={text} className="flex items-start gap-3 text-base">
+        <li key={text} className="flex items-start gap-2.5 text-sm leading-6">
           <Icon
-            className={`mt-0.5 h-5 w-5 shrink-0 ${tone === "brand" ? "text-brand" : "text-ink-soft"}`}
+            className={`mt-0.5 h-4 w-4 shrink-0 ${tone === "brand" ? "text-brand" : "text-ink-soft"}`}
             aria-hidden="true"
           />
           <span className={tone === "brand" ? "text-ink" : "text-ink-soft"}>{text}</span>
@@ -1249,13 +1249,13 @@ function FeatureCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col rounded-xl border border-rule bg-paper p-6 sm:p-7">
+    <div className="flex flex-col rounded-xl border border-rule bg-paper p-5 sm:p-6">
       <div className="flex items-start justify-between gap-4">
         <h3 className="font-display text-xl font-semibold">{title}</h3>
         <Icon className="h-5 w-5 shrink-0 text-ink-soft" />
       </div>
       <p className="mt-3 text-sm leading-6 text-ink-soft">{body}</p>
-      <div className="mt-8 flex flex-1 items-center justify-center rounded-lg bg-surface/60 px-4 py-8">
+      <div className="mt-6 flex flex-1 items-center justify-center rounded-lg bg-surface/60 px-3 py-6">
         {children}
       </div>
     </div>
