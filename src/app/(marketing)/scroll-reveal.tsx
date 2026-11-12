@@ -51,7 +51,7 @@ export function ScrollReveal() {
           else el.classList.add("is-visible");
         }
       },
-      { rootMargin: "0px 0px -10% 0px", threshold: 0.12 },
+      { rootMargin: "0px 0px -18% 0px", threshold: 0.15 },
     );
     for (const el of [...pendingReveals, ...pendingCounters]) io.observe(el);
 

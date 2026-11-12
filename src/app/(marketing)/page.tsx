@@ -424,7 +424,7 @@ export default function Home() {
 
         <div className="mt-8 grid gap-3 rounded-2xl border border-rule bg-rule/40 p-3 lg:grid-cols-2">
           {/* Before */}
-          <div data-reveal="" style={delay(150)} className="flex flex-col rounded-xl bg-paper p-5 sm:p-6">
+          <div data-reveal="left" style={delay(100)} className="flex flex-col rounded-xl bg-paper p-5 sm:p-6">
             <span className="w-fit rounded-full bg-white/10 px-3 py-1 font-dispatch text-xs tracking-widest text-ink-soft uppercase">
               Before
             </span>
@@ -449,6 +449,8 @@ export default function Home() {
               ].map(([subject, preview], i) => (
                 <div
                   key={subject}
+                  data-reveal=""
+                  style={{ ...delay(500 + i * 140), ...(i === 2 ? { "--reveal-opacity": 0.6 } : {}) } as CSSProperties}
                   className={`flex items-center justify-between gap-4 border-b border-rule px-4 py-3 last:border-0 ${
                     i === 2 ? "opacity-60" : ""
                   }`}
@@ -457,7 +459,7 @@ export default function Home() {
                   <span className="shrink-0 truncate text-xs text-ink-soft">{preview}</span>
                 </div>
               ))}
-              <div className="absolute -right-2 -bottom-12 w-56 rounded-lg border border-wire/40 bg-paper p-3 shadow-2xl sm:-right-4">
+              <div data-reveal="pop" style={delay(1000)} className="absolute -right-2 -bottom-12 w-56 rounded-lg border border-wire/40 bg-paper p-3 shadow-2xl sm:-right-4">
                 <p className="flex items-center gap-1.5 font-dispatch text-[11px] text-wire">
                   <Clock className="h-3 w-3" aria-hidden="true" />
                   Deadline passed 3h ago
@@ -472,7 +474,7 @@ export default function Home() {
           </div>
 
           {/* After */}
-          <div data-reveal="" style={delay(300)} className="flex flex-col rounded-xl border border-brand/30 bg-brand/[0.07] p-5 sm:p-6">
+          <div data-reveal="right" style={delay(250)} className="flex flex-col rounded-xl border border-brand/30 bg-brand/[0.07] p-5 sm:p-6">
             <span className="w-fit rounded-full bg-brand-solid px-3 py-1 font-dispatch text-xs tracking-widest text-white uppercase">
               After
             </span>
@@ -489,9 +491,11 @@ export default function Home() {
                 { outlet: "The Growth Brief", q: "Scaling a support team past 50", score: 92, state: "Sent" },
                 { outlet: "Founder Weekly", q: "First ops hire mistakes", score: 81, state: "Sent" },
                 { outlet: "Retail Pulse", q: "Holiday returns policy", score: 31, state: "Skipped" },
-              ].map((r) => (
+              ].map((r, i) => (
                 <div
                   key={r.outlet}
+                  data-reveal=""
+                  style={delay(650 + i * 140)}
                   className="flex items-center justify-between gap-4 border-b border-rule px-4 py-3 last:border-0"
                 >
                   <div className="min-w-0">
@@ -514,7 +518,7 @@ export default function Home() {
                   </div>
                 </div>
               ))}
-              <div className="absolute -right-2 -bottom-12 flex w-56 items-center gap-2 rounded-lg border border-press/40 bg-paper p-3 shadow-2xl sm:-right-4">
+              <div data-reveal="pop" style={delay(1150)} className="absolute -right-2 -bottom-12 flex w-56 items-center gap-2 rounded-lg border border-press/40 bg-paper p-3 shadow-2xl sm:-right-4">
                 <Link2 className="h-4 w-4 shrink-0 text-press" aria-hidden="true" />
                 <div>
                   <p className="font-dispatch text-[11px] text-press">Link live · DR 71</p>
@@ -539,7 +543,7 @@ export default function Home() {
               <div
                 key={s.n}
                 data-reveal=""
-                style={delay(150 + i * 110)}
+                style={delay(100 + i * 170)}
                 className={`relative flex flex-col rounded-xl border p-6 ${
                   s.highlight
                     ? "border-brand/40 bg-gradient-to-b from-brand/[0.12] to-transparent"
@@ -553,6 +557,8 @@ export default function Home() {
                   />
                 )}
                 <span
+                  data-reveal="pop"
+                  style={delay(350 + i * 170)}
                   className={`flex h-9 w-9 items-center justify-center rounded-md font-dispatch text-sm font-semibold ${
                     s.highlight ? "bg-brand-solid text-white" : "bg-brand/15 text-brand"
                   }`}
@@ -585,7 +591,7 @@ export default function Home() {
           <div>
             <Eyebrow>One query, start to finish</Eyebrow>
             <SectionTitle strong="From a newsroom request" soft="to a live backlink" />
-            <p data-reveal="" style={delay(160)} className="mt-6 max-w-md text-lg leading-8 text-ink-soft">
+            <p data-reveal="left" style={delay(160)} className="mt-6 max-w-md text-lg leading-8 text-ink-soft">
               Quotarly watches journalist requests from trusted sources around
               the clock. When one fits{" "}
               <strong className="font-semibold text-ink">your expertise</strong>,
@@ -613,7 +619,7 @@ export default function Home() {
           </div>
 
           <div className="mt-8 grid gap-3 rounded-2xl border border-rule bg-rule/40 p-3 lg:grid-cols-2">
-            <div data-reveal="" style={delay(150)} className="rounded-xl bg-paper p-5 sm:p-6">
+            <div data-reveal="left" style={delay(100)} className="rounded-xl bg-paper p-5 sm:p-6">
               <h3 className="font-display text-xl font-semibold">
                 Most queries never reach you
               </h3>
@@ -654,7 +660,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div data-reveal="" style={delay(300)} className="flex flex-col rounded-xl bg-paper p-5 sm:p-6">
+            <div data-reveal="right" style={delay(250)} className="flex flex-col rounded-xl bg-paper p-5 sm:p-6">
               <h3 className="font-display text-xl font-semibold">
                 You see every link you earn
               </h3>
@@ -1287,7 +1293,7 @@ function FeatureCard({
 
 function QueryTimeline() {
   return (
-    <div data-reveal="" data-reveal-play="" className="card-elevated-brand rounded-xl border border-rule bg-surface p-5 sm:p-6">
+    <div data-reveal="right" data-reveal-play="" style={delay(150)} className="card-elevated-brand rounded-xl border border-rule bg-surface p-5 sm:p-6">
       <p className="font-sans text-sm font-medium text-ink-soft">
         One query, start to finish
       </p>
