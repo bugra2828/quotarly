@@ -278,3 +278,30 @@ textarea,
 select {
   font-family: var(--font-sans);
 }
+/* Scroll animations for the marketing pages; see (marketing)/scroll-reveal.tsx.
+   The hidden start state only applies once JS has added .reveal-ready. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-ready [data-reveal] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.6s ease-out,
+      transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .reveal-ready [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+  .reveal-ready [data-reveal-play]:not(.is-visible) * {
+    animation-play-state: paused !important;
+  }
+  .reveal-ready [data-reveal-bar] {
+    clip-path: inset(0 100% 0 0 round 6px);
+    transition: clip-path 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .reveal-ready .is-visible [data-reveal-bar] {
+    clip-path: inset(0 0 0 0 round 6px);
+  }
+}

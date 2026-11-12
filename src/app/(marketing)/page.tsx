@@ -1,5 +1,7 @@
 import { Fragment } from "react";
+import type { CSSProperties } from "react";
 import Link from "next/link";
+import { ScrollReveal } from "./scroll-reveal";
 import {
   ArrowRight,
   Check,
@@ -15,6 +17,9 @@ import {
   Timer,
   TriangleAlert,
 } from "lucide-react";
+
+/** Stagger delay for a `data-reveal` element. */
+const delay = (ms: number) => ({ "--reveal-delay": `${ms}ms` }) as CSSProperties;
 
 // Score ring geometry for the hero's "Matched & drafted" step.
 const RING_RADIUS = 18;
@@ -202,11 +207,11 @@ const steps = [
 // Illustrative filter: what happens to 1,000 incoming queries for a typical
 // single-topic expert. Widths are relative to the first row.
 const funnel = [
-  { label: "Journalist queries received", value: "1,000", width: 100 },
-  { label: "Outside your expertise", value: "−640 out", width: 78 },
-  { label: "Below your match bar", value: "−230 out", width: 64 },
-  { label: "Deadline too close", value: "−40 out", width: 52 },
-  { label: "Pitched for you", value: "90", width: 40, final: true },
+  { label: "Journalist queries received", n: 1000, width: 100 },
+  { label: "Outside your expertise", sign: "−", n: 640, suffix: " out", width: 78 },
+  { label: "Below your match bar", sign: "−", n: 230, suffix: " out", width: 64 },
+  { label: "Deadline too close", sign: "−", n: 40, suffix: " out", width: 52 },
+  { label: "Pitched for you", n: 90, width: 40, final: true },
 ];
 
 const trackedLinks = [
@@ -324,6 +329,7 @@ const faqs = [
 export default function Home() {
   return (
     <div className="font-sans">
+      <ScrollReveal />
       {/* Hero */}
       <section className="relative isolate overflow-hidden">
         <div className="glow-field">
@@ -418,7 +424,7 @@ export default function Home() {
 
         <div className="mt-8 grid gap-3 rounded-2xl border border-rule bg-rule/40 p-3 lg:grid-cols-2">
           {/* Before */}
-          <div className="flex flex-col rounded-xl bg-paper p-5 sm:p-6">
+          <div data-reveal="" style={delay(150)} className="flex flex-col rounded-xl bg-paper p-5 sm:p-6">
             <span className="w-fit rounded-full bg-white/10 px-3 py-1 font-dispatch text-xs tracking-widest text-ink-soft uppercase">
               Before
             </span>
@@ -466,7 +472,7 @@ export default function Home() {
           </div>
 
           {/* After */}
-          <div className="flex flex-col rounded-xl border border-brand/30 bg-brand/[0.07] p-5 sm:p-6">
+          <div data-reveal="" style={delay(300)} className="flex flex-col rounded-xl border border-brand/30 bg-brand/[0.07] p-5 sm:p-6">
             <span className="w-fit rounded-full bg-brand-solid px-3 py-1 font-dispatch text-xs tracking-widest text-white uppercase">
               After
             </span>
@@ -532,6 +538,8 @@ export default function Home() {
             {steps.map((s, i) => (
               <div
                 key={s.n}
+                data-reveal=""
+                style={delay(150 + i * 110)}
                 className={`relative flex flex-col rounded-xl border p-6 ${
                   s.highlight
                     ? "border-brand/40 bg-gradient-to-b from-brand/[0.12] to-transparent"
@@ -577,7 +585,7 @@ export default function Home() {
           <div>
             <Eyebrow>One query, start to finish</Eyebrow>
             <SectionTitle strong="From a newsroom request" soft="to a live backlink" />
-            <p className="mt-6 max-w-md text-lg leading-8 text-ink-soft">
+            <p data-reveal="" style={delay(160)} className="mt-6 max-w-md text-lg leading-8 text-ink-soft">
               Quotarly watches journalist requests from trusted sources around
               the clock. When one fits{" "}
               <strong className="font-semibold text-ink">your expertise</strong>,
@@ -605,7 +613,7 @@ export default function Home() {
           </div>
 
           <div className="mt-8 grid gap-3 rounded-2xl border border-rule bg-rule/40 p-3 lg:grid-cols-2">
-            <div className="rounded-xl bg-paper p-5 sm:p-6">
+            <div data-reveal="" style={delay(150)} className="rounded-xl bg-paper p-5 sm:p-6">
               <h3 className="font-display text-xl font-semibold">
                 Most queries never reach you
               </h3>
@@ -614,14 +622,15 @@ export default function Home() {
                 time left. You only hear about the ones that clear all three.
               </p>
               <div className="mt-6 space-y-2">
-                {funnel.map((row) => (
+                {funnel.map((row, i) => (
                   <div key={row.label} className="flex items-center gap-4">
                     <div className="min-w-0 flex-1">
                       <div
                         className={`min-w-[8.5rem] rounded-md px-3 py-2 text-sm font-medium ${
                           row.final ? "bg-brand-solid text-white" : "bg-brand/[0.12] text-ink"
                         }`}
-                        style={{ width: `${row.width}%` }}
+                        data-reveal-bar=""
+                        style={{ width: `${row.width}%`, "--reveal-delay": `${200 + i * 140}ms` } as CSSProperties}
                       >
                         {row.label}
                       </div>
@@ -631,7 +640,11 @@ export default function Home() {
                         row.final ? "text-ink" : "text-ink-soft"
                       }`}
                     >
-                      {row.value}
+                      {row.sign}
+                      <span data-count={row.n} data-count-delay={200 + i * 140}>
+                        {row.n.toLocaleString("en-US")}
+                      </span>
+                      {row.suffix}
                     </span>
                   </div>
                 ))}
@@ -641,7 +654,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="flex flex-col rounded-xl bg-paper p-5 sm:p-6">
+            <div data-reveal="" style={delay(300)} className="flex flex-col rounded-xl bg-paper p-5 sm:p-6">
               <h3 className="font-display text-xl font-semibold">
                 You see every link you earn
               </h3>
@@ -652,13 +665,15 @@ export default function Home() {
 
               <div className="mt-8 grid grid-cols-3 gap-3">
                 {[
-                  { k: "Quotes sent", v: "38" },
-                  { k: "Published", v: "9" },
-                  { k: "Live links", v: "7" },
+                  { k: "Quotes sent", v: 38 },
+                  { k: "Published", v: 9 },
+                  { k: "Live links", v: 7 },
                 ].map((s) => (
                   <div key={s.k} className="rounded-lg border border-rule bg-surface p-4">
                     <p className="text-xs text-ink-soft">{s.k}</p>
-                    <p className="mt-1 font-display text-2xl font-semibold">{s.v}</p>
+                    <p className="mt-1 font-display text-2xl font-semibold">
+                      <span data-count={s.v} data-count-delay={300}>{s.v}</span>
+                    </p>
                   </div>
                 ))}
               </div>
@@ -701,9 +716,11 @@ export default function Home() {
           <SectionTitle strong="What a placement" soft="actually looks like" />
 
           <div className="mt-8 grid gap-4 lg:grid-cols-[1.6fr_1fr]">
-            <ArticleMock />
+            <div data-reveal="" style={delay(150)}>
+              <ArticleMock />
+            </div>
 
-            <div className="flex flex-col gap-4">
+            <div data-reveal="" style={delay(300)} className="flex flex-col gap-4">
               <div className="overflow-hidden rounded-xl border border-rule bg-paper">
                 <p className="border-b border-rule px-5 py-3 font-dispatch text-[11px] tracking-widest text-ink-soft uppercase">
                   The placement
@@ -766,7 +783,7 @@ export default function Home() {
           strong="How we compare"
           soft="to doing it yourself or hiring a PR agency"
         />
-        <div className="mt-8 overflow-x-auto">
+        <div data-reveal="" style={delay(150)} className="mt-8 overflow-x-auto">
           <div className="grid min-w-[720px] grid-cols-[160px_1fr_1fr_1fr] overflow-hidden rounded-2xl border border-rule">
             <div className="border-b border-rule bg-surface/60" />
             <div className="border-b border-l border-rule bg-surface/60 px-6 py-5 font-dispatch text-xs tracking-widest text-ink-soft uppercase">
@@ -812,6 +829,7 @@ export default function Home() {
           <SectionTitle strong="More than a pitch bot" soft="— built so nothing embarrassing goes out" />
           <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <FeatureCard
+              index={0}
               icon={Target}
               title="Expertise profile"
               body="Your topics, credentials and the subjects you never want to be quoted on. Every query is scored against it."
@@ -840,6 +858,7 @@ export default function Home() {
             </FeatureCard>
 
             <FeatureCard
+              index={1}
               icon={ListChecks}
               title="Approval queue"
               body="Prefer to read every quote first? Turn on manual review and drafts wait for you — editable, nothing sent until you approve."
@@ -865,6 +884,7 @@ export default function Home() {
             </FeatureCard>
 
             <FeatureCard
+              index={2}
               icon={ShieldCheck}
               title="Fact guard"
               body="Anything the AI isn't sure about gets a [VERIFY] tag. A draft with an open tag can't be approved until you fix it."
@@ -887,6 +907,7 @@ export default function Home() {
             </FeatureCard>
 
             <FeatureCard
+              index={3}
               icon={Link2}
               title="Link monitor"
               body="Once an article runs, Quotarly checks daily that your link is there, still dofollow, and hasn't been quietly removed."
@@ -920,8 +941,8 @@ export default function Home() {
           <Eyebrow>Who it&apos;s for</Eyebrow>
           <SectionTitle strong="Built for experts" soft="journalists want to hear from" />
           <div className="mt-8 grid gap-4 lg:grid-cols-3">
-            {useCases.map((uc) => (
-              <div key={uc.title} className="rounded-xl border border-rule bg-surface/40 p-7">
+            {useCases.map((uc, i) => (
+              <div key={uc.title} data-reveal="" style={delay(150 + i * 110)} className="rounded-xl border border-rule bg-surface/40 p-7">
                 <h3 className="font-display text-xl font-semibold">{uc.title}</h3>
                 <p className="mt-3 text-sm leading-6 text-ink-soft">{uc.body}</p>
                 <ul className="mt-4 space-y-2 border-t border-rule pt-4 text-sm text-ink">
@@ -943,7 +964,7 @@ export default function Home() {
         <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-12 lg:py-16">
           <Eyebrow>Pricing</Eyebrow>
           <SectionTitle strong="One plan," soft="cheaper than one agency week" />
-          <div className="card-elevated-brand mt-8 grid overflow-hidden rounded-2xl border border-brand/40 bg-paper lg:grid-cols-[1fr_1.5fr]">
+          <div data-reveal="" style={delay(150)} className="card-elevated-brand mt-8 grid overflow-hidden rounded-2xl border border-brand/40 bg-paper lg:grid-cols-[1fr_1.5fr]">
             <div className="flex flex-col border-b border-rule bg-gradient-to-b from-brand/[0.14] to-transparent p-7 sm:p-9 lg:border-r lg:border-b-0">
               <h3 className="font-display text-2xl font-semibold">{plan.name}</h3>
               <p className="mt-2 text-sm leading-6 text-ink-soft">
@@ -1053,7 +1074,7 @@ export default function Home() {
 
 function Eyebrow({ children }: { children: React.ReactNode }) {
   return (
-    <p className="font-dispatch text-xs font-medium tracking-[0.18em] text-brand uppercase">
+    <p data-reveal="" className="font-dispatch text-xs font-medium tracking-[0.18em] text-brand uppercase">
       {children}
     </p>
   );
@@ -1062,7 +1083,7 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 /** Two-tone heading: the key phrase in full ink, the rest dimmed. */
 function SectionTitle({ strong, soft, tail }: { strong: string; soft?: string; tail?: string }) {
   return (
-    <h2 className="mt-2 font-display text-3xl leading-[1.1] font-semibold tracking-tight lg:text-4xl">
+    <h2 data-reveal="" style={delay(80)} className="mt-2 font-display text-3xl leading-[1.1] font-semibold tracking-tight lg:text-4xl">
       {strong}
       {soft && <span className="text-ink-soft/60"> {soft}</span>}
       {tail && <> {tail}</>}
@@ -1238,18 +1259,20 @@ function ArticleMock() {
 }
 
 function FeatureCard({
+  index,
   icon: Icon,
   title,
   body,
   children,
 }: {
+  index: number;
   icon: React.ComponentType<{ className?: string }>;
   title: string;
   body: string;
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col rounded-xl border border-rule bg-paper p-5 sm:p-6">
+    <div data-reveal="" style={delay(150 + index * 110)} className="flex flex-col rounded-xl border border-rule bg-paper p-5 sm:p-6">
       <div className="flex items-start justify-between gap-4">
         <h3 className="font-display text-xl font-semibold">{title}</h3>
         <Icon className="h-5 w-5 shrink-0 text-ink-soft" />
@@ -1264,7 +1287,7 @@ function FeatureCard({
 
 function QueryTimeline() {
   return (
-    <div className="card-elevated-brand rounded-xl border border-rule bg-surface p-5 sm:p-6">
+    <div data-reveal="" data-reveal-play="" className="card-elevated-brand rounded-xl border border-rule bg-surface p-5 sm:p-6">
       <p className="font-sans text-sm font-medium text-ink-soft">
         One query, start to finish
       </p>
@@ -1275,7 +1298,7 @@ function QueryTimeline() {
             <li
               key={item.label}
               className="flex gap-4 motion-safe:animate-[fade-in-up_0.5s_ease-out_backwards]"
-              style={{ animationDelay: `${i * 250}ms` }}
+              style={{ animationDelay: `${300 + i * 450}ms` }}
             >
               <div className="flex flex-col items-center">
                 <span
