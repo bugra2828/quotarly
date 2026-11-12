@@ -36,7 +36,7 @@ export default async function MarketingLayout({
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-ink-soft transition-colors hover:text-ink"
+                className="hidden text-ink-soft transition-colors hover:text-ink sm:inline"
               >
                 {link.label}
               </Link>

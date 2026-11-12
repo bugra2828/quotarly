@@ -1,5 +1,20 @@
+import { Fragment } from "react";
 import Link from "next/link";
-import { Check, Clock, Link2 } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  Clock,
+  Inbox,
+  Link2,
+  ListChecks,
+  Mail,
+  PenLine,
+  Quote,
+  ShieldCheck,
+  Target,
+  Timer,
+  TriangleAlert,
+} from "lucide-react";
 
 // Score ring geometry for the hero's "Matched & drafted" step.
 const RING_RADIUS = 18;
@@ -119,106 +134,112 @@ const dispatch = [
   },
 ];
 
-const workflow = [
+// --- Section data ------------------------------------------------------
+
+const valueProps = [
   {
-    eyebrow: "Step 1",
-    title: "Onboarding",
-    body: "Tell Quotarly your expertise, your tone, and the page you want linked. It reads your site and drafts a first pass at your profile — you fix what's wrong.",
-    reverse: false,
-    mock: (
-      <div className="space-y-3">
-        <p className="font-dispatch text-xs text-ink-soft">Your profile</p>
-        <p className="text-sm text-ink">Founder, B2B support software</p>
-        <div className="flex flex-wrap gap-2">
-          {["Customer support", "SaaS ops", "Team scaling"].map((t) => (
-            <span
-              key={t}
-              className="rounded-full border border-rule px-3 py-1 text-xs text-ink-soft"
-            >
-              {t}
-            </span>
-          ))}
-        </div>
-      </div>
-    ),
+    eyebrow: "What you get",
+    lead: "Quotes placed in ",
+    strong: "real articles from real journalists",
+    tail: " — not paid directories.",
   },
   {
-    eyebrow: "Step 2",
-    title: "Match & score",
-    body: "Every query from the journalist sources we monitor gets scored against your profile. Anything below your bar is dropped silently.",
-    reverse: true,
-    mock: (
-      <div className="space-y-2">
-        {[
-          { name: "The Growth Brief", score: 92 },
-          { name: "Founder Weekly", score: 74 },
-          { name: "Retail Pulse", score: 31 },
-        ].map((q) => (
-          <div
-            key={q.name}
-            className="flex items-center justify-between border-b border-rule py-2 text-sm last:border-0"
-          >
-            <span className="text-ink-soft">{q.name}</span>
-            <span
-              className={`font-dispatch text-xs ${
-                q.score >= 70 ? "text-press" : "text-ink-soft"
-              }`}
-            >
-              {q.score}
-            </span>
-          </div>
-        ))}
-      </div>
-    ),
+    eyebrow: "Where they come from",
+    lead: "Queries from ",
+    strong: "trusted, vetted journalist sources",
+    tail: ", scored against your expertise.",
   },
   {
-    eyebrow: "Step 3",
-    title: "Draft & send",
-    body: "Anything above your bar gets a quote drafted in your voice and sent automatically — fast enough to beat the deadline. Want to read every one first? Turn on manual review and nothing goes out until you approve it.",
-    reverse: false,
-    mock: (
-      <div className="space-y-3">
-        <p className="text-sm leading-6 text-ink-soft">
-          "The first thing that broke wasn't headcount, it was handoffs —
-          tickets sat untouched between shifts."
-        </p>
-        <div className="flex gap-2">
-          <span className="rounded-sm bg-brand-solid px-3 py-1.5 text-xs font-medium text-white">
-            Approve &amp; send
-          </span>
-          <span className="rounded-sm border border-rule px-3 py-1.5 text-xs font-medium text-ink-soft">
-            Reject
-          </span>
-        </div>
-      </div>
-    ),
-  },
-  {
-    eyebrow: "Step 4",
-    title: "Track the link",
-    body: "Once a journalist publishes, Quotarly checks daily whether your link showed up, whether it's still there, and reports it straight to your dashboard.",
-    reverse: true,
-    mock: (
-      <div className="space-y-2 text-sm">
-        <div className="flex items-center justify-between border-b border-rule pb-2">
-          <span className="text-ink-soft">thegrowthbrief.com</span>
-          <span className="text-press">live · dofollow</span>
-        </div>
-        <div className="flex items-center justify-between">
-          <span className="text-ink-soft">founderweekly.co</span>
-          <span className="text-ink-soft">checking…</span>
-        </div>
-      </div>
-    ),
+    eyebrow: "You stay in control",
+    lead: "Auto-send what clears your bar, or ",
+    strong: "approve every quote yourself",
+    tail: ".",
   },
 ];
 
-const comparisonRows = [
-  ["Matches queries to your exact expertise", true, false, "partial"],
-  ["Drafts in your own voice", true, false, true],
-  ["You control whether it auto-sends", true, true, false],
-  ["Tracks whether the link actually landed", true, false, false],
-  ["Deadline-aware", true, "partial", false],
+const before = [
+  { icon: Inbox, text: "Hundreds of query emails a week to read by hand" },
+  { icon: Timer, text: "Good fits spotted after the deadline already passed" },
+  { icon: PenLine, text: "Every pitch written from scratch, on the clock" },
+  { icon: TriangleAlert, text: "No idea which pitches actually turned into links" },
+];
+
+const after = [
+  { icon: Target, text: "Every query scored against your exact expertise" },
+  { icon: Timer, text: "Drafted and sent within minutes, deadline-aware" },
+  { icon: PenLine, text: "Quotes written in your voice, from your own facts" },
+  { icon: ShieldCheck, text: "Every published link checked daily and reported" },
+];
+
+const steps = [
+  {
+    n: "01",
+    title: "Tell us your expertise",
+    body: "Add your bio, topics and the page you want linked. Quotarly reads your site and drafts your profile — you fix what's off.",
+    chips: ["5-min setup"],
+  },
+  {
+    n: "02",
+    title: "Queries get scored",
+    body: "Every journalist query is scored against your profile. Anything below your bar is dropped silently.",
+    chips: ["Expertise matched", "Noise filtered"],
+  },
+  {
+    n: "03",
+    title: "Quotes go out",
+    body: "Matches get a quote drafted in your voice and sent before the deadline — or held for your approval.",
+    chips: ["Your voice", "Deadline-aware"],
+  },
+  {
+    n: "04",
+    title: "Links get tracked",
+    body: "Once the article publishes, Quotarly checks daily that your link is live and reports it to your dashboard.",
+    chips: ["Live status", "Dofollow check"],
+    highlight: true,
+  },
+];
+
+// Illustrative filter: what happens to 1,000 incoming queries for a typical
+// single-topic expert. Widths are relative to the first row.
+const funnel = [
+  { label: "Journalist queries received", value: "1,000", width: 100 },
+  { label: "Outside your expertise", value: "−640 out", width: 78 },
+  { label: "Below your match bar", value: "−230 out", width: 64 },
+  { label: "Deadline too close", value: "−40 out", width: 52 },
+  { label: "Pitched for you", value: "90", width: 40, final: true },
+];
+
+const trackedLinks = [
+  { site: "thegrowthbrief.com", title: "What actually breaks when support scales", dr: 71, status: "live" },
+  { site: "founderweekly.co", title: "12 founders on their first ops hire", dr: 64, status: "live" },
+  { site: "retailpulse.com", title: "The handoff problem in CX teams", dr: 78, status: "checking" },
+];
+
+const compareRows: { label: string; diy: string; agency: string; us: string }[] = [
+  {
+    label: "Price",
+    diy: "Free, but hours of your week",
+    agency: "$3,000+/mo retainer",
+    us: "$149/mo, one plan",
+  },
+  {
+    label: "Effort",
+    diy: "Read every query, write every pitch",
+    agency: "Briefings, calls, approvals",
+    us: "5-min setup, optional review",
+  },
+  {
+    label: "Speed",
+    diy: "Whenever you get to the inbox",
+    agency: "Business hours",
+    us: "Minutes after a query lands",
+  },
+  {
+    label: "Link tracking",
+    diy: "Google yourself and hope",
+    agency: "Monthly PDF report",
+    us: "Checked daily, live on your dashboard",
+  },
 ];
 
 const useCases = [
@@ -236,7 +257,7 @@ const useCases = [
     body: "Journalists asking for a licensed or experienced voice on markets, lending, or personal finance.",
     points: [
       "Excludes topics you're not credentialed for",
-      "Flags anything it can't verify and holds it for your review",
+      "Flags anything it can't verify and holds it for review",
       "Tracks links across finance-specific outlets",
     ],
   },
@@ -244,12 +265,36 @@ const useCases = [
     title: "Marketing & real estate consultants",
     body: "High query volume, fast-moving deadlines, and a lot of overlap between consultants.",
     points: [
-      "Scores you against competing angles, not just topic match",
+      "Scores you against competing angles, not just topic",
       "Keeps a running log of what you've already pitched",
       "Surfaces the outlets that actually publish quickly",
     ],
   },
 ];
+
+// Mirrors the single plan sold on /pricing — keep the two in sync.
+const plan = {
+  name: "Quotarly Pro",
+  price: 149,
+  groups: [
+    {
+      title: "Matching",
+      items: ["1 expert profile", "Every query scored against it", "Deadline-aware"],
+    },
+    {
+      title: "Pitching",
+      items: [
+        "Up to 200 personalized pitches a month",
+        "Written in your voice",
+        "Auto-send or manual review",
+      ],
+    },
+    {
+      title: "Tracking",
+      items: ["Live tracking dashboard", "Every link checked daily", "Dofollow status"],
+    },
+  ],
+};
 
 const faqs = [
   {
@@ -261,65 +306,87 @@ const faqs = [
     a: "By default, a quote sends automatically once it clears your match bar. Turn on manual review in your dashboard and every draft lands in your approval queue instead — editable, and nothing reaches a journalist until you approve it.",
   },
   {
-    q: "Can I cancel anytime?",
-    a: "Yes, from your account settings. Cancelling stops the next renewal; it doesn't refund the current period.",
-  },
-  {
     q: "What if the AI gets a fact wrong?",
     a: "Any claim it isn't confident about gets a [VERIFY] tag, and a draft with an unresolved tag can't be approved until you fix it.",
   },
+  {
+    q: "Is every quote guaranteed to get published?",
+    a: "No — the journalist decides what runs. Quotarly's job is to get a strong, on-time answer in front of them for every query you actually fit, and to tell you the moment one turns into a live link.",
+  },
+  {
+    q: "Can I cancel anytime?",
+    a: "Yes, from your account settings. Cancelling stops the next renewal; it doesn't refund the current period.",
+  },
 ];
+
+// --- Page ----------------------------------------------------------------
 
 export default function Home() {
   return (
-    <div>
+    <div className="font-sans">
+      {/* Hero */}
       <section className="relative isolate overflow-hidden">
         <div className="glow-field">
           <div
-            className="glow-blob h-[420px] w-[420px] bg-brand"
-            style={{ top: "-120px", left: "-80px" }}
+            className="glow-blob h-[520px] w-[520px] bg-brand"
+            style={{ top: "-160px", left: "-120px" }}
           />
           <div
-            className="glow-blob h-[360px] w-[360px] bg-press"
-            style={{ top: "80px", right: "-100px", opacity: 0.18 }}
+            className="glow-blob h-[420px] w-[420px] bg-press"
+            style={{ top: "120px", right: "-120px", opacity: 0.16 }}
           />
         </div>
 
-        <div className="relative mx-auto max-w-5xl px-6 pt-20 pb-16 lg:pt-28">
-          <p className="font-dispatch text-xs text-ink-soft">
-            Matched against trusted, vetted journalist sources
-          </p>
-          <div className="mt-6 grid gap-12 lg:grid-cols-[1.5fr_1fr] lg:gap-16">
+        <div className="relative mx-auto max-w-6xl px-6 pt-16 pb-20 lg:pt-24 lg:pb-28">
+          <div className="grid items-center gap-14 lg:grid-cols-[1.25fr_1fr] lg:gap-16">
             <div>
-              <h1 className="font-display text-4xl leading-[1.1] font-semibold tracking-tight sm:text-5xl">
-                Get quoted by journalists. Earn backlinks that rank.
+              <Eyebrow>Journalist queries → quotes → backlinks</Eyebrow>
+              <h1 className="mt-5 font-display text-[2.6rem] leading-[1.05] font-semibold tracking-tight sm:text-6xl lg:text-7xl">
+                Get{" "}
+                <span
+                  className="text-brand [box-decoration-break:clone]"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(transparent 68%, color-mix(in srgb, var(--brand) 22%, transparent) 68%)",
+                  }}
+                >
+                  quoted by journalists
+                </span>{" "}
+                without reading a single query
               </h1>
-              <p className="mt-6 max-w-md font-sans text-lg leading-8 text-ink-soft">
-                Quotarly reads the journalist queries landing from trusted
-                media sources, matches the ones that fit your expertise, and
-                drafts the quote in your voice. It sends the moment a quote
-                clears your bar — or waits for your review, your choice.
+              <p className="mt-7 max-w-xl font-sans text-lg leading-8 text-ink-soft">
+                Quotarly reads every journalist request from trusted sources,
+                picks the ones that fit your expertise, and sends a quote in
+                your voice before the deadline. You collect the backlinks.
               </p>
-              <div className="mt-8 flex flex-wrap gap-4">
+              <div className="mt-9 flex flex-wrap items-center gap-4">
                 <Link
                   href="/login"
-                  className="rounded-full bg-brand-solid px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-brand-solid/90"
+                  className="inline-flex items-center gap-2 rounded-full bg-brand-solid px-7 py-3.5 text-base font-medium text-white transition-colors hover:bg-brand-solid/90"
                 >
-                  Get started
+                  Start getting quoted
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
                 <Link
                   href="/how-it-works"
-                  className="rounded-full border border-rule px-6 py-3 text-sm font-medium text-ink transition-colors hover:border-ink"
+                  className="rounded-full border border-rule px-7 py-3.5 text-base font-medium text-ink transition-colors hover:border-ink"
                 >
                   See how it works
                 </Link>
               </div>
-              <p className="mt-4 text-xs text-ink-soft">
-                No fake reviews · Manual review optional · Cancel anytime
-              </p>
+              <ul className="mt-10 flex flex-wrap gap-x-6 gap-y-2 border-t border-rule pt-6 text-sm text-ink-soft">
+                {["Manual review optional", "Every link tracked daily", "Cancel anytime"].map(
+                  (t) => (
+                    <li key={t} className="flex items-center gap-2">
+                      <Check className="h-4 w-4 text-press" aria-hidden="true" />
+                      {t}
+                    </li>
+                  ),
+                )}
+              </ul>
             </div>
 
-            <div className="card-elevated-brand rounded-md border border-rule bg-surface p-5 sm:p-6">
+            <div className="card-elevated-brand rounded-xl border border-rule bg-surface p-5 sm:p-6">
               <p className="font-sans text-sm font-medium text-ink-soft">
                 One query, start to finish
               </p>
@@ -336,9 +403,7 @@ export default function Home() {
                         <span
                           className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ${item.dot}`}
                         />
-                        {!isLast && (
-                          <span className="my-1 w-px flex-1 bg-rule" />
-                        )}
+                        {!isLast && <span className="my-1 w-px flex-1 bg-rule" />}
                       </div>
                       <div className={`min-w-0 flex-1 ${isLast ? "pb-0" : "pb-5"}`}>
                         <p className="flex items-baseline gap-2">
@@ -363,94 +428,175 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-5xl px-6 py-20">
-        <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
-          What lands in your queue
-        </h2>
-        <p className="mt-3 max-w-lg text-sm leading-6 text-ink-soft">
-          By default, a quote that clears your bar sends itself. Turn on
-          manual review and it waits here instead — the journalist's
-          question next to it, a deadline attached, ready for you to edit or
-          decide.
-        </p>
-
-        <div className="mt-10 overflow-hidden rounded-md border border-rule">
-          <div className="flex items-center gap-6 border-b border-rule bg-surface px-4 py-3 text-sm">
-            <span className="border-b-2 border-brand pb-1 font-medium text-ink">
-              Approvals
-            </span>
-            <span className="pb-1 text-ink-soft">Backlinks</span>
-            <span className="pb-1 text-ink-soft">Reports</span>
-            <span className="ml-auto font-dispatch text-xs text-ink-soft">
-              quotarly.com/app/approvals
-            </span>
-          </div>
-
-          <div className="grid gap-0 sm:grid-cols-2">
-            <div className="border-b border-rule p-6 sm:border-r sm:border-b-0">
-              <div className="flex items-center justify-between">
-                <p className="font-dispatch text-xs text-ink-soft">
-                  The Growth Brief
-                </p>
-                <p className="font-dispatch text-xs text-wire">4h left</p>
-              </div>
-              <p className="mt-3 text-sm leading-6 text-ink">
-                "Looking for a founder who's scaled a support team past 50
-                people — what actually broke first?"
+      {/* Value strip */}
+      <section className="border-y border-rule bg-surface/60">
+        <div className="mx-auto grid max-w-6xl divide-y divide-rule sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+          {valueProps.map((v) => (
+            <div key={v.eyebrow} className="px-6 py-10">
+              <Eyebrow>{v.eyebrow}</Eyebrow>
+              <p className="mt-4 text-lg leading-7 text-ink-soft">
+                {v.lead}
+                <strong className="font-semibold text-ink">{v.strong}</strong>
+                {v.tail}
               </p>
             </div>
-
-            <div className="p-6">
-              <p className="font-dispatch text-xs text-ink-soft">
-                Your drafted quote
-              </p>
-              <p className="mt-3 text-sm leading-6 text-ink-soft">
-                "The first thing that broke wasn't headcount, it was
-                handoffs — tickets sat untouched between shifts until we
-                gave every queue a single owner."
-              </p>
-              <div className="mt-5 flex gap-3">
-                <span className="rounded-sm bg-brand-solid px-4 py-2 text-xs font-medium text-white">
-                  Approve &amp; send
-                </span>
-                <span className="rounded-sm border border-rule px-4 py-2 text-xs font-medium text-ink-soft">
-                  Reject
-                </span>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
-        <p className="mt-4 text-xs text-ink-soft">
-          Illustrative — the layout of your real approval queue.
-        </p>
       </section>
 
+      {/* Before / after */}
+      <section className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
+        <Eyebrow>Why Quotarly</Eyebrow>
+        <SectionTitle strong="Getting press" soft="without us," tail="and with us" />
+
+        <div className="mt-14 grid gap-3 rounded-2xl border border-rule bg-rule/40 p-3 lg:grid-cols-2">
+          {/* Before */}
+          <div className="flex flex-col rounded-xl bg-paper p-6 sm:p-8">
+            <span className="w-fit rounded-full bg-white/10 px-3 py-1 font-dispatch text-xs tracking-widest text-ink-soft uppercase">
+              Before
+            </span>
+            <h3 className="mt-4 font-display text-2xl font-semibold">
+              Chasing queries on your own
+            </h3>
+
+            <div className="relative mt-8 mb-16 rounded-lg border border-rule bg-surface">
+              <div className="flex items-center justify-between border-b border-rule px-4 py-3">
+                <span className="flex items-center gap-2 text-sm font-medium text-ink">
+                  <Mail className="h-4 w-4 text-ink-soft" aria-hidden="true" />
+                  Inbox
+                </span>
+                <span className="rounded-full bg-wire/15 px-2 py-0.5 font-dispatch text-[11px] text-wire">
+                  142 unread
+                </span>
+              </div>
+              {[
+                ["Source digest — Morning edition", "47 new requests"],
+                ["Source digest — Afternoon edition", "52 new requests"],
+                ["Re: your pitch", "Thanks, but we've already filed"],
+              ].map(([subject, preview], i) => (
+                <div
+                  key={subject}
+                  className={`flex items-center justify-between gap-4 border-b border-rule px-4 py-3 last:border-0 ${
+                    i === 2 ? "opacity-60" : ""
+                  }`}
+                >
+                  <span className="truncate text-sm text-ink">{subject}</span>
+                  <span className="shrink-0 truncate text-xs text-ink-soft">{preview}</span>
+                </div>
+              ))}
+              <div className="absolute -right-2 -bottom-12 w-56 rounded-lg border border-wire/40 bg-paper p-3 shadow-2xl sm:-right-4">
+                <p className="flex items-center gap-1.5 font-dispatch text-[11px] text-wire">
+                  <Clock className="h-3 w-3" aria-hidden="true" />
+                  Deadline passed 3h ago
+                </p>
+                <p className="mt-1 text-xs leading-5 text-ink-soft">
+                  &ldquo;Founder who scaled support past 50 people…&rdquo;
+                </p>
+              </div>
+            </div>
+
+            <IconList items={before} tone="soft" />
+          </div>
+
+          {/* After */}
+          <div className="flex flex-col rounded-xl border border-brand/30 bg-brand/[0.07] p-6 sm:p-8">
+            <span className="w-fit rounded-full bg-brand-solid px-3 py-1 font-dispatch text-xs tracking-widest text-white uppercase">
+              After
+            </span>
+            <h3 className="mt-4 font-display text-2xl font-semibold">
+              Getting quoted with Quotarly
+            </h3>
+
+            <div className="relative mt-8 mb-16 rounded-lg border border-rule bg-surface">
+              <div className="flex items-center justify-between border-b border-rule px-4 py-3">
+                <span className="text-sm font-medium text-ink">Matched queries</span>
+                <span className="font-dispatch text-[11px] text-ink-soft">match score</span>
+              </div>
+              {[
+                { outlet: "The Growth Brief", q: "Scaling a support team past 50", score: 92, state: "Sent" },
+                { outlet: "Founder Weekly", q: "First ops hire mistakes", score: 81, state: "Sent" },
+                { outlet: "Retail Pulse", q: "Holiday returns policy", score: 31, state: "Skipped" },
+              ].map((r) => (
+                <div
+                  key={r.outlet}
+                  className="flex items-center justify-between gap-4 border-b border-rule px-4 py-3 last:border-0"
+                >
+                  <div className="min-w-0">
+                    <p className="font-dispatch text-[11px] text-ink-soft">{r.outlet}</p>
+                    <p className="truncate text-sm text-ink">{r.q}</p>
+                  </div>
+                  <div className="flex shrink-0 items-center gap-3">
+                    <span
+                      className={`font-dispatch text-xs ${r.score >= 70 ? "text-press" : "text-ink-soft"}`}
+                    >
+                      {r.score}%
+                    </span>
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-[11px] ${
+                        r.state === "Sent" ? "bg-press/15 text-press" : "bg-white/5 text-ink-soft"
+                      }`}
+                    >
+                      {r.state}
+                    </span>
+                  </div>
+                </div>
+              ))}
+              <div className="absolute -right-2 -bottom-12 flex w-56 items-center gap-2 rounded-lg border border-press/40 bg-paper p-3 shadow-2xl sm:-right-4">
+                <Link2 className="h-4 w-4 shrink-0 text-press" aria-hidden="true" />
+                <div>
+                  <p className="font-dispatch text-[11px] text-press">Link live · DR 71</p>
+                  <p className="text-xs text-ink-soft">thegrowthbrief.com</p>
+                </div>
+              </div>
+            </div>
+
+            <IconList items={after} tone="brand" />
+          </div>
+        </div>
+      </section>
+
+      {/* How it works */}
       <section className="border-t border-rule">
-        <div className="mx-auto max-w-5xl px-6 py-20">
-          <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
-            From first query to a live backlink
-          </h2>
-          <div className="mt-14 space-y-16">
-            {workflow.map((step) => (
+        <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
+          <Eyebrow>How it works</Eyebrow>
+          <SectionTitle strong="Four steps" soft="to your first live backlink" />
+
+          <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+            {steps.map((s, i) => (
               <div
-                key={step.title}
-                className={`grid items-center gap-10 sm:grid-cols-2 ${
-                  step.reverse ? "sm:[&>*:first-child]:order-2" : ""
+                key={s.n}
+                className={`relative flex flex-col rounded-xl border p-6 ${
+                  s.highlight
+                    ? "border-brand/40 bg-gradient-to-b from-brand/[0.12] to-transparent"
+                    : "border-rule bg-surface/40"
                 }`}
               >
-                <div>
-                  <p className="font-dispatch text-xs text-brand">
-                    {step.eyebrow}
-                  </p>
-                  <h3 className="mt-2 font-display text-xl font-semibold">
-                    {step.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-6 text-ink-soft">
-                    {step.body}
-                  </p>
-                </div>
-                <div className="rounded-md border border-rule bg-surface p-6">
-                  {step.mock}
+                {i < steps.length - 1 && (
+                  <ArrowRight
+                    className="absolute top-1/2 -right-6 hidden h-4 w-4 -translate-y-1/2 text-ink-soft/60 lg:block"
+                    aria-hidden="true"
+                  />
+                )}
+                <span
+                  className={`flex h-9 w-9 items-center justify-center rounded-md font-dispatch text-sm font-semibold ${
+                    s.highlight ? "bg-brand-solid text-white" : "bg-brand/15 text-brand"
+                  }`}
+                >
+                  {s.n}
+                </span>
+                <h3 className="mt-5 font-display text-xl font-semibold">{s.title}</h3>
+                <p className="mt-3 flex-1 text-sm leading-6 text-ink-soft">{s.body}</p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {s.chips.map((c) => (
+                    <span
+                      key={c}
+                      className={`rounded-md px-2.5 py-1 text-xs font-medium ${
+                        s.highlight ? "bg-brand/15 text-brand" : "bg-white/5 text-ink"
+                      }`}
+                    >
+                      {c}
+                    </span>
+                  ))}
                 </div>
               </div>
             ))}
@@ -458,86 +604,372 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-t border-rule">
-        <div className="mx-auto max-w-5xl px-6 py-20">
-          <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
-            Doing it yourself vs. Quotarly
-          </h2>
-          <div className="mt-10 grid gap-10 sm:grid-cols-2">
-            <div className="rounded-md border border-rule p-6">
-              <p className="font-dispatch text-xs text-ink-soft">
-                Doing it yourself
-              </p>
-              <ul className="mt-4 space-y-3 text-sm text-ink-soft">
-                <li>› Scanning every newsletter by hand for a fit</li>
-                <li>› Writing each quote from scratch, on deadline</li>
-                <li>› No way to know which links actually landed</li>
-              </ul>
-            </div>
-            <div className="rounded-md border border-brand/40 bg-brand/[0.06] p-6">
-              <p className="font-dispatch text-xs text-brand">
-                With Quotarly
-              </p>
-              <ul className="mt-4 space-y-3 text-sm text-ink">
-                <li>› Queries scored against your profile automatically</li>
-                <li>
-                  › A drafted quote in your voice, sent the moment it clears
-                  your bar — or held for your review, your call
-                </li>
-                <li>› Every link checked daily and reported to you</li>
-              </ul>
+      {/* Routing network */}
+      <section className="border-y border-rule bg-surface/60">
+        <div className="mx-auto grid max-w-6xl items-center gap-14 px-6 py-24 lg:grid-cols-[1fr_1.15fr] lg:py-32">
+          <div>
+            <Eyebrow>Query routing</Eyebrow>
+            <SectionTitle strong="Every newsroom query," soft="routed to the right expert" />
+            <p className="mt-6 max-w-md text-lg leading-8 text-ink-soft">
+              Quotarly watches journalist requests from trusted sources around
+              the clock. The ones that fit{" "}
+              <strong className="font-semibold text-ink">your expertise</strong>{" "}
+              get routed to you. The rest never reach your inbox.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm">
+              <span className="flex items-center gap-2 text-ink">
+                <span className="h-0.5 w-6 rounded bg-brand" aria-hidden="true" />
+                Matched and pitched
+              </span>
+              <span className="flex items-center gap-2 text-ink-soft">
+                <span className="h-0 w-6 border-t border-dashed border-ink-soft/50" aria-hidden="true" />
+                Filtered out
+              </span>
             </div>
           </div>
+          <RoutingNetwork />
         </div>
       </section>
 
-      <section className="border-t border-rule">
-        <div className="mx-auto max-w-5xl px-6 py-20">
-          <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
-            Quotarly vs. the alternatives
-          </h2>
-          <div className="mt-10 overflow-x-auto">
-            <table className="w-full min-w-[560px] border-collapse text-sm">
-              <thead>
-                <tr className="border-b border-rule text-left text-ink-soft">
-                  <th className="py-3 pr-4 font-normal"> </th>
-                  <th className="py-3 px-4 font-normal">Quotarly</th>
-                  <th className="py-3 px-4 font-normal">Doing it yourself</th>
-                  <th className="py-3 px-4 font-normal">Generic AI chatbot</th>
-                </tr>
-              </thead>
-              <tbody>
-                {comparisonRows.map(([label, a, b, c]) => (
-                  <tr key={label as string} className="border-b border-rule">
-                    <td className="py-3 pr-4 text-ink-soft">{label}</td>
-                    <Cell value={a} />
-                    <Cell value={b} />
-                    <Cell value={c} />
-                  </tr>
+      {/* Filtering + tracking */}
+      <section>
+        <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
+          <div className="max-w-3xl">
+            <Eyebrow>Built to be picky</Eyebrow>
+            <SectionTitle strong="Only the queries you'd win" soft="ever get a pitch" />
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-ink-soft">
+              Spraying generic pitches burns your name with journalists.
+              Quotarly drops everything outside your expertise or below your
+              bar — so the pitches that do go out are ones worth reading.
+            </p>
+          </div>
+
+          <div className="mt-14 grid gap-3 rounded-2xl border border-rule bg-rule/40 p-3 lg:grid-cols-2">
+            <div className="rounded-xl bg-paper p-6 sm:p-8">
+              <h3 className="font-display text-2xl font-semibold">
+                Most queries never reach you
+              </h3>
+              <p className="mt-3 text-sm leading-6 text-ink-soft">
+                Every query is scored on topic fit, your credentials and the
+                time left. You only hear about the ones that clear all three.
+              </p>
+              <div className="mt-10 space-y-3">
+                {funnel.map((row) => (
+                  <div key={row.label} className="flex items-center gap-4">
+                    <div className="min-w-0 flex-1">
+                      <div
+                        className={`min-w-[8.5rem] rounded-md px-4 py-3 text-sm font-medium ${
+                          row.final ? "bg-brand-solid text-white" : "bg-brand/[0.12] text-ink"
+                        }`}
+                        style={{ width: `${row.width}%` }}
+                      >
+                        {row.label}
+                      </div>
+                    </div>
+                    <span
+                      className={`w-20 shrink-0 text-right font-dispatch text-sm ${
+                        row.final ? "text-ink" : "text-ink-soft"
+                      }`}
+                    >
+                      {row.value}
+                    </span>
+                  </div>
                 ))}
-              </tbody>
-            </table>
+              </div>
+              <p className="mt-6 text-xs text-ink-soft">
+                Illustrative — a typical single-topic expert profile.
+              </p>
+            </div>
+
+            <div className="flex flex-col rounded-xl bg-paper p-6 sm:p-8">
+              <h3 className="font-display text-2xl font-semibold">
+                You see every link you earn
+              </h3>
+              <p className="mt-3 text-sm leading-6 text-ink-soft">
+                The outlet, the article, the domain rating and whether the
+                link is still live — checked daily.
+              </p>
+
+              <div className="mt-10 grid grid-cols-3 gap-3">
+                {[
+                  { k: "Quotes sent", v: "38" },
+                  { k: "Published", v: "9" },
+                  { k: "Live links", v: "7" },
+                ].map((s) => (
+                  <div key={s.k} className="rounded-lg border border-rule bg-surface p-4">
+                    <p className="text-xs text-ink-soft">{s.k}</p>
+                    <p className="mt-1 font-display text-2xl font-semibold">{s.v}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-3 overflow-hidden rounded-lg border border-rule bg-surface">
+                {trackedLinks.map((l) => (
+                  <div
+                    key={l.site}
+                    className="flex items-center gap-3 border-b border-rule px-4 py-3 last:border-0"
+                  >
+                    <span className="shrink-0 rounded bg-brand/15 px-1.5 py-0.5 font-dispatch text-[10px] text-brand">
+                      DR {l.dr}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm text-ink">{l.title}</p>
+                      <p className="font-dispatch text-[11px] text-ink-soft">{l.site}</p>
+                    </div>
+                    <span
+                      className={`shrink-0 text-xs ${
+                        l.status === "live" ? "text-press" : "text-ink-soft"
+                      }`}
+                    >
+                      {l.status === "live" ? "● live" : "checking…"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-6 text-xs text-ink-soft">
+                Illustrative — the layout of your real backlinks dashboard.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="border-t border-rule">
-        <div className="mx-auto max-w-5xl px-6 py-20">
-          <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
-            Who is Quotarly for?
-          </h2>
-          <div className="mt-10 grid gap-8 sm:grid-cols-3">
-            {useCases.map((uc) => (
-              <div key={uc.title} className="rounded-md border border-rule p-6">
-                <h3 className="font-display text-lg font-semibold">
-                  {uc.title}
-                </h3>
-                <p className="mt-2 text-sm leading-6 text-ink-soft">
-                  {uc.body}
+      {/* Anatomy of a placement */}
+      <section className="border-y border-rule bg-surface/60">
+        <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
+          <Eyebrow>The result</Eyebrow>
+          <SectionTitle strong="What a placement" soft="actually looks like" />
+
+          <div className="mt-14 grid gap-4 lg:grid-cols-[1.6fr_1fr]">
+            <ArticleMock />
+
+            <div className="flex flex-col gap-4">
+              <div className="overflow-hidden rounded-xl border border-rule bg-paper">
+                <p className="border-b border-rule px-5 py-3 font-dispatch text-[11px] tracking-widest text-ink-soft uppercase">
+                  The placement
                 </p>
-                <ul className="mt-4 space-y-2 text-sm text-ink-soft">
+                <dl className="divide-y divide-rule text-sm">
+                  {[
+                    ["Outlet", <span key="o">retailpulse.com</span>],
+                    ["Site quality", <span key="q">DR 78</span>],
+                    [
+                      "Link given",
+                      <span key="l" className="text-brand underline underline-offset-2">
+                        northdesk.io
+                      </span>,
+                    ],
+                    ["Link type", <span key="t" className="text-press">dofollow</span>],
+                    ["Where", <span key="w">In-body, under your quote</span>],
+                    ["Match score", <span key="m">92% · support ops</span>],
+                  ].map(([k, v]) => (
+                    <div key={k as string} className="flex items-center justify-between gap-4 px-5 py-3.5">
+                      <dt className="text-ink-soft">{k}</dt>
+                      <dd className="text-right font-medium text-ink">{v}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+
+              <div className="flex flex-1 flex-col rounded-xl border border-brand/30 bg-brand/[0.08] p-5">
+                <p className="font-dispatch text-[11px] tracking-widest text-brand uppercase">
+                  The query it answered
+                </p>
+                <p className="mt-3 text-base leading-7 text-ink">
+                  &ldquo;Looking for a founder who&apos;s scaled a support team
+                  past 50 people. What broke first?&rdquo;
+                </p>
+                <div className="mt-auto flex flex-wrap gap-2 pt-5 text-xs">
+                  <span className="rounded-full bg-wire/10 px-2.5 py-1 font-dispatch text-wire">
+                    Due in 2h
+                  </span>
+                  <span className="rounded-full bg-press/15 px-2.5 py-1 font-dispatch text-press">
+                    Pitched in 6 min
+                  </span>
+                  <span className="rounded-full bg-white/5 px-2.5 py-1 font-dispatch text-ink-soft">
+                    Live 3 days later
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p className="mt-6 text-xs text-ink-soft">
+            Illustrative — a fictional outlet and expert, showing how a real
+            placement is reported in your dashboard.
+          </p>
+        </div>
+      </section>
+
+      {/* Cost comparison */}
+      <section className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
+        <Eyebrow>Cost comparison</Eyebrow>
+        <SectionTitle
+          strong="How we compare"
+          soft="to doing it yourself or hiring a PR agency"
+        />
+        <div className="mt-14 overflow-x-auto">
+          <div className="grid min-w-[720px] grid-cols-[160px_1fr_1fr_1fr] overflow-hidden rounded-2xl border border-rule">
+            <div className="border-b border-rule bg-surface/60" />
+            <div className="border-b border-l border-rule bg-surface/60 px-6 py-5 font-dispatch text-xs tracking-widest text-ink-soft uppercase">
+              Do it yourself
+            </div>
+            <div className="border-b border-l border-rule bg-surface/60 px-6 py-5 font-dispatch text-xs tracking-widest text-ink-soft uppercase">
+              A PR agency
+            </div>
+            <div className="flex items-center gap-2 border-b border-white/15 bg-brand-solid px-6 py-5 font-dispatch text-xs font-semibold tracking-widest text-white uppercase">
+              <Quote className="h-3.5 w-3.5" aria-hidden="true" />
+              Quotarly
+            </div>
+            {compareRows.map((r, i) => {
+              const last = i === compareRows.length - 1;
+              const b = last ? "" : "border-b";
+              return (
+                <Fragment key={r.label}>
+                  <div className={`${b} border-rule px-6 py-5 text-sm font-medium text-ink`}>
+                    {r.label}
+                  </div>
+                  <div className={`${b} border-l border-rule px-6 py-5 text-sm text-ink-soft`}>
+                    {r.diy}
+                  </div>
+                  <div className={`${b} border-l border-rule px-6 py-5 text-sm text-ink-soft`}>
+                    {r.agency}
+                  </div>
+                  <div
+                    className={`${last ? "" : "border-b border-white/15"} bg-brand-solid px-6 py-5 text-sm font-semibold text-white`}
+                  >
+                    {r.us}
+                  </div>
+                </Fragment>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Platform features */}
+      <section className="border-t border-rule bg-surface/60">
+        <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
+          <Eyebrow>Under the hood</Eyebrow>
+          <SectionTitle strong="More than a pitch bot" soft="— built so nothing embarrassing goes out" />
+          <div className="mt-14 grid gap-4 md:grid-cols-2">
+            <FeatureCard
+              icon={Target}
+              title="Expertise profile"
+              body="Your topics, credentials and the subjects you never want to be quoted on. Every query is scored against it."
+            >
+              <div className="w-full max-w-xs space-y-3">
+                <p className="font-dispatch text-[11px] text-ink-soft">Quoted on</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {["Support ops", "Team scaling", "B2B SaaS", "Hiring"].map((t) => (
+                    <span key={t} className="rounded-full bg-brand/15 px-2.5 py-1 text-xs text-brand">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                <p className="pt-1 font-dispatch text-[11px] text-ink-soft">Never quoted on</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {["Legal advice", "Crypto"].map((t) => (
+                    <span
+                      key={t}
+                      className="rounded-full border border-dashed border-rule px-2.5 py-1 text-xs text-ink-soft line-through"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </FeatureCard>
+
+            <FeatureCard
+              icon={ListChecks}
+              title="Approval queue"
+              body="Prefer to read every quote first? Turn on manual review and drafts wait for you — editable, nothing sent until you approve."
+            >
+              <div className="w-full max-w-xs rounded-lg border border-rule bg-surface p-4">
+                <div className="flex items-center justify-between">
+                  <span className="font-dispatch text-[11px] text-ink-soft">Founder Weekly</span>
+                  <span className="font-dispatch text-[11px] text-wire">Due in 5h</span>
+                </div>
+                <p className="mt-2 text-xs leading-5 text-ink">
+                  &ldquo;Our first ops hire should have been a systems person,
+                  not another manager…&rdquo;
+                </p>
+                <div className="mt-3 flex gap-2">
+                  <span className="rounded bg-brand-solid px-2.5 py-1 text-[11px] font-medium text-white">
+                    Approve &amp; send
+                  </span>
+                  <span className="rounded border border-rule px-2.5 py-1 text-[11px] text-ink-soft">
+                    Edit
+                  </span>
+                </div>
+              </div>
+            </FeatureCard>
+
+            <FeatureCard
+              icon={ShieldCheck}
+              title="Fact guard"
+              body="Anything the AI isn't sure about gets a [VERIFY] tag. A draft with an open tag can't be approved until you fix it."
+            >
+              <div className="w-full max-w-xs rounded-lg border border-rule bg-surface p-4">
+                <p className="text-xs leading-5 text-ink">
+                  &ldquo;We cut first-response time by{" "}
+                  <span className="rounded bg-wire/15 px-1 font-dispatch text-[11px] text-wire">
+                    [VERIFY] 40%
+                  </span>{" "}
+                  in one quarter.&rdquo;
+                </p>
+                <div className="mt-3 flex items-center justify-between gap-2 border-t border-rule pt-3">
+                  <span className="text-[11px] text-ink-soft">1 tag to resolve</span>
+                  <span className="cursor-not-allowed rounded bg-white/5 px-2.5 py-1 text-[11px] text-ink-soft/60">
+                    Approve
+                  </span>
+                </div>
+              </div>
+            </FeatureCard>
+
+            <FeatureCard
+              icon={Link2}
+              title="Link monitor"
+              body="Once an article runs, Quotarly checks daily that your link is there, still dofollow, and hasn't been quietly removed."
+            >
+              <div className="w-full max-w-xs overflow-hidden rounded-lg border border-rule bg-surface text-xs">
+                {[
+                  { site: "thegrowthbrief.com", s: "live", c: "text-press" },
+                  { site: "founderweekly.co", s: "live", c: "text-press" },
+                  { site: "opsjournal.com", s: "removed", c: "text-wire" },
+                ].map((r) => (
+                  <div
+                    key={r.site}
+                    className="flex items-center justify-between border-b border-rule px-3 py-2.5 last:border-0"
+                  >
+                    <span className="font-dispatch text-[11px] text-ink">{r.site}</span>
+                    <span className={r.c}>● {r.s}</span>
+                  </div>
+                ))}
+                <p className="bg-paper/60 px-3 py-2 font-dispatch text-[10px] text-ink-soft">
+                  Last checked today, 06:00
+                </p>
+              </div>
+            </FeatureCard>
+          </div>
+        </div>
+      </section>
+
+      {/* Who it's for */}
+      <section className="border-t border-rule">
+        <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
+          <Eyebrow>Who it&apos;s for</Eyebrow>
+          <SectionTitle strong="Built for experts" soft="journalists want to hear from" />
+          <div className="mt-14 grid gap-4 lg:grid-cols-3">
+            {useCases.map((uc) => (
+              <div key={uc.title} className="rounded-xl border border-rule bg-surface/40 p-7">
+                <h3 className="font-display text-xl font-semibold">{uc.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-ink-soft">{uc.body}</p>
+                <ul className="mt-6 space-y-3 border-t border-rule pt-6 text-sm text-ink">
                   {uc.points.map((p) => (
-                    <li key={p}>› {p}</li>
+                    <li key={p} className="flex gap-3">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-press" aria-hidden="true" />
+                      {p}
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -546,68 +978,78 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-t border-rule">
-        <div className="mx-auto max-w-5xl px-6 py-20">
-          <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
-            Simple, fair pricing
-          </h2>
-          <div className="mt-10 grid gap-px overflow-hidden rounded-md border border-rule bg-rule sm:grid-cols-3">
-            {[
-              { name: "Starter", price: 149, note: "1 expert profile" },
-              { name: "Pro", price: 199, note: "1 expert profile", featured: true },
-              { name: "Agency", price: 499, note: "5 expert profiles" },
-            ].map((plan) => (
-              <div
-                key={plan.name}
-                className={`flex flex-col bg-paper p-6 ${
-                  plan.featured
-                    ? "border-t-4 border-brand"
-                    : "border-t-4 border-transparent"
-                }`}
+      {/* Pricing */}
+      <section className="border-t border-rule bg-surface/60">
+        <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
+          <Eyebrow>Pricing</Eyebrow>
+          <SectionTitle strong="One plan," soft="cheaper than one agency week" />
+          <div className="card-elevated-brand mt-14 grid overflow-hidden rounded-2xl border border-brand/40 bg-paper lg:grid-cols-[1fr_1.5fr]">
+            <div className="flex flex-col border-b border-rule bg-gradient-to-b from-brand/[0.14] to-transparent p-7 sm:p-9 lg:border-r lg:border-b-0">
+              <h3 className="font-display text-2xl font-semibold">{plan.name}</h3>
+              <p className="mt-2 text-sm leading-6 text-ink-soft">
+                Everything Quotarly does, for one expert.
+              </p>
+              <p className="mt-8 font-display text-6xl font-semibold tracking-tight">
+                ${plan.price}
+                <span className="ml-1 text-base font-normal text-ink-soft">/month</span>
+              </p>
+              <Link
+                href="/login"
+                className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-brand-solid px-6 py-3.5 text-sm font-medium text-white transition-colors hover:bg-brand-solid/90"
               >
-                <p className="text-sm text-brand">
-                  {plan.featured ? "Most chosen" : " "}
-                </p>
-                <h3 className="mt-1 font-display text-xl font-semibold">
-                  {plan.name}
-                </h3>
-                <p className="mt-3 font-display text-3xl font-semibold">
-                  ${plan.price}
-                  <span className="text-sm font-normal text-ink-soft">
-                    /mo
-                  </span>
-                </p>
-                <p className="mt-2 text-sm text-ink-soft">{plan.note}</p>
-              </div>
-            ))}
+                Start getting quoted
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+              <p className="mt-4 text-center text-xs text-ink-soft">
+                Cancel anytime · No setup fees
+              </p>
+            </div>
+            <div className="grid content-center gap-8 p-7 sm:grid-cols-3 sm:p-9">
+              {plan.groups.map((g) => (
+                <div key={g.title}>
+                  <p className="font-dispatch text-[11px] font-medium tracking-widest text-brand uppercase">
+                    {g.title}
+                  </p>
+                  <ul className="mt-4 space-y-3 text-sm text-ink">
+                    {g.items.map((item) => (
+                      <li key={item} className="flex gap-2.5">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-press" aria-hidden="true" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
           </div>
           <div className="mt-8">
-            <Link
-              href="/pricing"
-              className="text-sm font-medium text-brand hover:underline"
-            >
-              See full plan details
+            <Link href="/pricing" className="text-sm font-medium text-brand hover:underline">
+              See full plan details →
             </Link>
           </div>
         </div>
       </section>
 
+      {/* FAQ */}
       <section className="border-t border-rule">
-        <div className="mx-auto max-w-3xl px-6 py-20">
-          <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
-            Frequently asked questions
-          </h2>
-          <div className="mt-10 divide-y divide-rule border-t border-b border-rule">
+        <div className="mx-auto grid max-w-6xl gap-12 px-6 py-24 lg:grid-cols-[1fr_1.6fr] lg:py-32">
+          <div>
+            <SectionTitle strong="FAQs" />
+            <p className="mt-5 text-sm leading-6 text-ink-soft">
+              Something else on your mind? Email{" "}
+              <a href="mailto:hello@quotarly.com" className="text-brand hover:underline">
+                hello@quotarly.com
+              </a>
+              .
+            </p>
+          </div>
+          <div className="divide-y divide-rule border-y border-rule">
             {faqs.map((f) => (
-              <details key={f.q} className="group py-4">
-                <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-medium text-ink">
+              <details key={f.q} className="group py-5">
+                <summary className="flex cursor-pointer list-none items-center justify-between text-base font-medium text-ink">
                   {f.q}
-                  <span className="ml-4 text-ink-soft group-open:hidden">
-                    +
-                  </span>
-                  <span className="ml-4 hidden text-ink-soft group-open:inline">
-                    −
-                  </span>
+                  <span className="ml-4 text-ink-soft group-open:hidden">+</span>
+                  <span className="ml-4 hidden text-ink-soft group-open:inline">−</span>
                 </summary>
                 <p className="mt-3 text-sm leading-6 text-ink-soft">{f.a}</p>
               </details>
@@ -616,27 +1058,29 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative isolate overflow-hidden border-t border-rule bg-brand">
+      {/* Final CTA */}
+      <section className="relative isolate overflow-hidden border-t border-rule bg-brand-solid">
         <div className="glow-field">
           <div
-            className="glow-blob h-[300px] w-[300px] bg-white"
-            style={{ top: "-80px", left: "10%", opacity: 0.15 }}
+            className="glow-blob h-[360px] w-[360px] bg-white"
+            style={{ top: "-120px", left: "10%", opacity: 0.15 }}
           />
         </div>
-        <div className="relative mx-auto max-w-5xl px-6 py-20 text-center text-white">
-          <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
-            Ready to see what's out there for you?
+        <div className="relative mx-auto max-w-4xl px-6 py-24 text-center text-white lg:py-32">
+          <h2 className="font-display text-4xl leading-tight font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+            Your next press mention is already in someone&apos;s inbox
           </h2>
-          <p className="mx-auto mt-4 max-w-md text-sm text-white/80">
+          <p className="mx-auto mt-6 max-w-lg text-lg text-white/80">
             Onboarding takes a few minutes. The first matches usually show up
             within a day.
           </p>
-          <div className="mt-8">
+          <div className="mt-10">
             <Link
               href="/login"
-              className="inline-block rounded-full bg-white px-6 py-3 text-sm font-medium text-brand transition-colors hover:bg-white/90"
+              className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-base font-medium text-brand-solid transition-colors hover:bg-white/90"
             >
-              Get started
+              Start getting quoted
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
         </div>
@@ -645,12 +1089,215 @@ export default function Home() {
   );
 }
 
-function Cell({ value }: { value: boolean | string }) {
-  if (value === true) {
-    return <td className="py-3 px-4 text-press">Yes</td>;
-  }
-  if (value === false) {
-    return <td className="py-3 px-4 text-ink-soft">—</td>;
-  }
-  return <td className="py-3 px-4 text-ink-soft">Partial</td>;
+// --- Small building blocks ----------------------------------------------
+
+function Eyebrow({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="font-dispatch text-xs font-medium tracking-[0.18em] text-brand uppercase">
+      {children}
+    </p>
+  );
+}
+
+/** Two-tone heading: the key phrase in full ink, the rest dimmed. */
+function SectionTitle({ strong, soft, tail }: { strong: string; soft?: string; tail?: string }) {
+  return (
+    <h2 className="mt-4 font-display text-4xl leading-[1.08] font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+      {strong}
+      {soft && <span className="text-ink-soft/60"> {soft}</span>}
+      {tail && <> {tail}</>}
+    </h2>
+  );
+}
+
+function IconList({
+  items,
+  tone,
+}: {
+  items: { icon: React.ComponentType<{ className?: string }>; text: string }[];
+  tone: "soft" | "brand";
+}) {
+  return (
+    <ul className="mt-auto space-y-4">
+      {items.map(({ icon: Icon, text }) => (
+        <li key={text} className="flex items-start gap-3 text-base">
+          <Icon
+            className={`mt-0.5 h-5 w-5 shrink-0 ${tone === "brand" ? "text-brand" : "text-ink-soft"}`}
+            aria-hidden="true"
+          />
+          <span className={tone === "brand" ? "text-ink" : "text-ink-soft"}>{text}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+// --- Illustrations -------------------------------------------------------
+
+// Positions are in a 600×500 box; the HTML cards sit on top of the SVG lines.
+const NET_CENTER = { x: 300, y: 250 };
+const netNodes = [
+  { x: 95, y: 70, label: "SaaS newsletter", score: 92, match: true },
+  { x: 300, y: 45, label: "National daily", score: 34 },
+  { x: 505, y: 70, label: "Founder podcast", score: 81, match: true },
+  { x: 70, y: 250, label: "Retail trade desk", score: 22 },
+  { x: 530, y: 250, label: "Tech outlet", score: 88, match: true },
+  { x: 95, y: 430, label: "Personal finance", score: 18 },
+  { x: 300, y: 455, label: "HR magazine", score: 74, match: true },
+  { x: 505, y: 430, label: "Travel blog", score: 9 },
+];
+
+function RoutingNetwork() {
+  return (
+    <div className="relative mx-auto aspect-[6/5] w-full max-w-xl" aria-hidden="true">
+      <svg viewBox="0 0 600 500" className="absolute inset-0 h-full w-full">
+        {netNodes.map((n) => (
+          <line
+            key={n.label}
+            x1={n.x}
+            y1={n.y}
+            x2={NET_CENTER.x}
+            y2={NET_CENTER.y}
+            stroke={n.match ? "var(--brand)" : "var(--ink-soft)"}
+            strokeOpacity={n.match ? 0.9 : 0.3}
+            strokeWidth={n.match ? 1.5 : 1}
+            strokeDasharray={n.match ? undefined : "4 5"}
+          />
+        ))}
+        <g className="motion-reduce:hidden">
+          {netNodes
+            .filter((n) => n.match)
+            .map((n, i) => (
+              <circle key={n.label} r="3.5" fill="var(--brand)">
+                <animateMotion
+                  dur="2.4s"
+                  begin={`${i * 0.6}s`}
+                  repeatCount="indefinite"
+                  path={`M${n.x},${n.y} L${NET_CENTER.x},${NET_CENTER.y}`}
+                />
+              </circle>
+            ))}
+        </g>
+      </svg>
+
+      {netNodes.map((n) => (
+        <div
+          key={n.label}
+          className={`absolute w-[29%] max-w-[150px] -translate-x-1/2 -translate-y-1/2 rounded-lg border px-2.5 py-2 ${
+            n.match ? "border-brand/50 bg-paper shadow-lg shadow-brand/10" : "border-rule bg-paper/90 opacity-55"
+          }`}
+          style={{ left: `${(n.x / 600) * 100}%`, top: `${(n.y / 500) * 100}%` }}
+        >
+          <p className="truncate text-[10px] text-ink-soft sm:text-[11px]">{n.label}</p>
+          <div className="mt-1 flex items-center justify-between gap-1">
+            <span className="h-1 flex-1 rounded-full bg-rule">
+              <span
+                className={`block h-1 rounded-full ${n.match ? "bg-brand" : "bg-ink-soft/50"}`}
+                style={{ width: `${n.score}%` }}
+              />
+            </span>
+            <span
+              className={`font-dispatch text-[10px] ${n.match ? "text-brand" : "text-ink-soft"}`}
+            >
+              {n.score}
+            </span>
+          </div>
+        </div>
+      ))}
+
+      <div className="absolute top-1/2 left-1/2 w-[34%] max-w-[180px] -translate-x-1/2 -translate-y-1/2 rounded-xl border border-brand/60 bg-surface p-3 text-center shadow-2xl shadow-brand/25">
+        <span className="mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-brand-solid font-display text-sm font-semibold text-white">
+          You
+        </span>
+        <p className="mt-2 font-dispatch text-[10px] tracking-widest text-brand uppercase">
+          Your profile
+        </p>
+        <p className="mt-0.5 truncate text-[11px] text-ink-soft">Support ops · SaaS</p>
+      </div>
+    </div>
+  );
+}
+
+function ArticleMock() {
+  return (
+    <div className="overflow-hidden rounded-xl border border-rule bg-paper">
+      <div className="flex items-center gap-3 border-b border-rule bg-surface px-4 py-3">
+        <div className="flex gap-1.5" aria-hidden="true">
+          <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
+          <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
+          <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
+        </div>
+        <span className="min-w-0 flex-1 truncate rounded-md bg-paper px-3 py-1 font-dispatch text-[11px] text-ink-soft">
+          https://retailpulse.com/cx/the-handoff-problem
+        </span>
+        <span className="hidden shrink-0 rounded-full border border-brand/50 px-2.5 py-0.5 text-[11px] text-brand sm:inline">
+          View article ↗
+        </span>
+      </div>
+
+      <div className="p-5 sm:p-7">
+        <p className="font-dispatch text-[11px] tracking-widest text-ink-soft uppercase">
+          Customer experience
+        </p>
+        <h3 className="mt-2 font-display text-xl leading-tight font-semibold sm:text-2xl">
+          The handoff problem: why support teams break at 50 people
+        </h3>
+        <p className="mt-2 text-xs text-ink-soft">Updated Nov 3, 2026 · 6 min read</p>
+
+        <div
+          className="mt-5 h-36 rounded-lg border border-rule sm:h-44"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 25% 30%, color-mix(in srgb, var(--brand) 45%, transparent), transparent 55%), radial-gradient(circle at 80% 75%, color-mix(in srgb, var(--press) 30%, transparent), transparent 50%), linear-gradient(135deg, var(--surface), var(--paper))",
+          }}
+          aria-hidden="true"
+        />
+
+        <p className="mt-5 text-sm leading-7 text-ink-soft">
+          Most teams assume growing pains come from hiring too slowly. The
+          founders we spoke to described something else entirely.
+        </p>
+        <blockquote className="mt-4 rounded-r-lg border-l-2 border-brand bg-brand/[0.08] py-3 pr-4 pl-4 text-sm leading-7 text-ink">
+          &ldquo;The first thing that broke wasn&apos;t headcount, it was
+          handoffs — tickets sat untouched between shifts,&rdquo; says Dana
+          Reyes, founder of{" "}
+          <span className="font-medium text-brand underline underline-offset-2">Northdesk</span>.
+          <span className="mt-2 flex items-center gap-1.5 font-dispatch text-[11px] text-press">
+            <Link2 className="h-3 w-3" aria-hidden="true" />
+            Your quote · your link
+          </span>
+        </blockquote>
+        <div className="mt-5 space-y-2" aria-hidden="true">
+          <span className="block h-2 w-full rounded bg-white/5" />
+          <span className="block h-2 w-11/12 rounded bg-white/5" />
+          <span className="block h-2 w-3/4 rounded bg-white/5" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FeatureCard({
+  icon: Icon,
+  title,
+  body,
+  children,
+}: {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  body: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col rounded-xl border border-rule bg-paper p-6 sm:p-7">
+      <div className="flex items-start justify-between gap-4">
+        <h3 className="font-display text-xl font-semibold">{title}</h3>
+        <Icon className="h-5 w-5 shrink-0 text-ink-soft" />
+      </div>
+      <p className="mt-3 text-sm leading-6 text-ink-soft">{body}</p>
+      <div className="mt-8 flex flex-1 items-center justify-center rounded-lg bg-surface/60 px-4 py-8">
+        {children}
+      </div>
+    </div>
+  );
 }
