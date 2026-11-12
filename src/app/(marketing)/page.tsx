@@ -366,7 +366,7 @@ export default function Home() {
                   See how it works
                 </Link>
               </div>
-              <ul className="mt-10 flex flex-wrap gap-x-6 gap-y-2 border-t border-rule pt-6 text-sm text-ink-soft">
+              <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 border-t border-rule pt-6 text-sm text-ink-soft">
                 {["Manual review optional", "Every link tracked daily", "Cancel anytime"].map(
                   (t) => (
                     <li key={t} className="flex items-center gap-2">
@@ -397,7 +397,7 @@ export default function Home() {
 
       {/* Value strip */}
       <section className="border-y border-rule bg-surface/60">
-        <div className="mx-auto grid max-w-[66rem] divide-y divide-rule sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+        <div className="mx-auto grid max-w-[88rem] divide-y divide-rule sm:grid-cols-3 sm:divide-x sm:divide-y-0">
           {valueProps.map((v) => (
             <div key={v.eyebrow} className="px-6 py-10">
               <Eyebrow>{v.eyebrow}</Eyebrow>
@@ -412,11 +412,11 @@ export default function Home() {
       </section>
 
       {/* Before / after */}
-      <section className="mx-auto max-w-[66rem] px-6 lg:px-10 py-16 lg:py-20">
+      <section className="mx-auto max-w-[88rem] px-6 lg:px-10 py-12 lg:py-16">
         <Eyebrow>Why Quotarly</Eyebrow>
         <SectionTitle strong="Getting press" soft="without us," tail="and with us" />
 
-        <div className="mt-10 grid gap-3 rounded-2xl border border-rule bg-rule/40 p-3 lg:grid-cols-2">
+        <div className="mt-8 grid gap-3 rounded-2xl border border-rule bg-rule/40 p-3 lg:grid-cols-2">
           {/* Before */}
           <div className="flex flex-col rounded-xl bg-paper p-5 sm:p-6">
             <span className="w-fit rounded-full bg-white/10 px-3 py-1 font-dispatch text-xs tracking-widest text-ink-soft uppercase">
@@ -426,7 +426,7 @@ export default function Home() {
               Chasing queries on your own
             </h3>
 
-            <div className="relative mt-5 mb-12 rounded-lg border border-rule bg-surface">
+            <div className="relative mt-4 mb-10 rounded-lg border border-rule bg-surface">
               <div className="flex items-center justify-between border-b border-rule px-4 py-3">
                 <span className="flex items-center gap-2 text-sm font-medium text-ink">
                   <Mail className="h-4 w-4 text-ink-soft" aria-hidden="true" />
@@ -474,7 +474,7 @@ export default function Home() {
               Getting quoted with Quotarly
             </h3>
 
-            <div className="relative mt-5 mb-12 rounded-lg border border-rule bg-surface">
+            <div className="relative mt-4 mb-10 rounded-lg border border-rule bg-surface">
               <div className="flex items-center justify-between border-b border-rule px-4 py-3">
                 <span className="text-sm font-medium text-ink">Matched queries</span>
                 <span className="font-dispatch text-[11px] text-ink-soft">match score</span>
@@ -524,11 +524,11 @@ export default function Home() {
 
       {/* How it works */}
       <section className="border-t border-rule">
-        <div className="mx-auto max-w-[66rem] px-6 lg:px-10 py-16 lg:py-20">
+        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-12 lg:py-16">
           <Eyebrow>How it works</Eyebrow>
           <SectionTitle strong="Four steps" soft="to your first live backlink" />
 
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
             {steps.map((s, i) => (
               <div
                 key={s.n}
@@ -551,9 +551,9 @@ export default function Home() {
                 >
                   {s.n}
                 </span>
-                <h3 className="mt-5 font-display text-xl font-semibold">{s.title}</h3>
+                <h3 className="mt-4 font-display text-lg font-semibold">{s.title}</h3>
                 <p className="mt-3 flex-1 text-sm leading-6 text-ink-soft">{s.body}</p>
-                <div className="mt-6 flex flex-wrap gap-2">
+                <div className="mt-4 flex flex-wrap gap-2">
                   {s.chips.map((c) => (
                     <span
                       key={c}
@@ -573,7 +573,7 @@ export default function Home() {
 
       {/* One query, start to finish */}
       <section className="border-y border-rule bg-surface/60">
-        <div className="mx-auto grid max-w-[66rem] items-center gap-14 px-6 lg:px-10 py-16 lg:grid-cols-[1fr_1fr] lg:py-20">
+        <div className="mx-auto grid max-w-[88rem] items-center gap-14 px-6 lg:px-10 py-12 lg:grid-cols-[1fr_1fr] lg:py-16">
           <div>
             <Eyebrow>One query, start to finish</Eyebrow>
             <SectionTitle strong="From a newsroom request" soft="to a live backlink" />
@@ -591,7 +591,7 @@ export default function Home() {
 
       {/* Filtering + tracking */}
       <section>
-        <div className="mx-auto max-w-[66rem] px-6 lg:px-10 py-16 lg:py-20">
+        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-12 lg:py-16">
           <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr] lg:items-end lg:gap-16">
             <div>
               <Eyebrow>Built to be picky</Eyebrow>
@@ -604,21 +604,21 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mt-10 grid gap-3 rounded-2xl border border-rule bg-rule/40 p-3 lg:grid-cols-2">
-            <div className="rounded-xl bg-paper p-6 sm:p-8">
-              <h3 className="font-display text-2xl font-semibold">
+          <div className="mt-8 grid gap-3 rounded-2xl border border-rule bg-rule/40 p-3 lg:grid-cols-2">
+            <div className="rounded-xl bg-paper p-5 sm:p-6">
+              <h3 className="font-display text-xl font-semibold">
                 Most queries never reach you
               </h3>
               <p className="mt-3 text-sm leading-6 text-ink-soft">
                 Every query is scored on topic fit, your credentials and the
                 time left. You only hear about the ones that clear all three.
               </p>
-              <div className="mt-10 space-y-3">
+              <div className="mt-6 space-y-2">
                 {funnel.map((row) => (
                   <div key={row.label} className="flex items-center gap-4">
                     <div className="min-w-0 flex-1">
                       <div
-                        className={`min-w-[8.5rem] rounded-md px-4 py-3 text-sm font-medium ${
+                        className={`min-w-[8.5rem] rounded-md px-3 py-2 text-sm font-medium ${
                           row.final ? "bg-brand-solid text-white" : "bg-brand/[0.12] text-ink"
                         }`}
                         style={{ width: `${row.width}%` }}
@@ -641,8 +641,8 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="flex flex-col rounded-xl bg-paper p-6 sm:p-8">
-              <h3 className="font-display text-2xl font-semibold">
+            <div className="flex flex-col rounded-xl bg-paper p-5 sm:p-6">
+              <h3 className="font-display text-xl font-semibold">
                 You see every link you earn
               </h3>
               <p className="mt-3 text-sm leading-6 text-ink-soft">
@@ -650,7 +650,7 @@ export default function Home() {
                 link is still live — checked daily.
               </p>
 
-              <div className="mt-10 grid grid-cols-3 gap-3">
+              <div className="mt-8 grid grid-cols-3 gap-3">
                 {[
                   { k: "Quotes sent", v: "38" },
                   { k: "Published", v: "9" },
@@ -696,11 +696,11 @@ export default function Home() {
 
       {/* Anatomy of a placement */}
       <section className="border-y border-rule bg-surface/60">
-        <div className="mx-auto max-w-[66rem] px-6 lg:px-10 py-16 lg:py-20">
+        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-12 lg:py-16">
           <Eyebrow>The result</Eyebrow>
           <SectionTitle strong="What a placement" soft="actually looks like" />
 
-          <div className="mt-10 grid gap-4 lg:grid-cols-[1.6fr_1fr]">
+          <div className="mt-8 grid gap-4 lg:grid-cols-[1.6fr_1fr]">
             <ArticleMock />
 
             <div className="flex flex-col gap-4">
@@ -760,13 +760,13 @@ export default function Home() {
       </section>
 
       {/* Cost comparison */}
-      <section className="mx-auto max-w-[66rem] px-6 lg:px-10 py-16 lg:py-20">
+      <section className="mx-auto max-w-[88rem] px-6 lg:px-10 py-12 lg:py-16">
         <Eyebrow>Cost comparison</Eyebrow>
         <SectionTitle
           strong="How we compare"
           soft="to doing it yourself or hiring a PR agency"
         />
-        <div className="mt-10 overflow-x-auto">
+        <div className="mt-8 overflow-x-auto">
           <div className="grid min-w-[720px] grid-cols-[160px_1fr_1fr_1fr] overflow-hidden rounded-2xl border border-rule">
             <div className="border-b border-rule bg-surface/60" />
             <div className="border-b border-l border-rule bg-surface/60 px-6 py-5 font-dispatch text-xs tracking-widest text-ink-soft uppercase">
@@ -807,10 +807,10 @@ export default function Home() {
 
       {/* Platform features */}
       <section className="border-t border-rule bg-surface/60">
-        <div className="mx-auto max-w-[66rem] px-6 lg:px-10 py-16 lg:py-20">
+        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-12 lg:py-16">
           <Eyebrow>Under the hood</Eyebrow>
           <SectionTitle strong="More than a pitch bot" soft="— built so nothing embarrassing goes out" />
-          <div className="mt-10 grid gap-4 md:grid-cols-2">
+          <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <FeatureCard
               icon={Target}
               title="Expertise profile"
@@ -916,15 +916,15 @@ export default function Home() {
 
       {/* Who it's for */}
       <section className="border-t border-rule">
-        <div className="mx-auto max-w-[66rem] px-6 lg:px-10 py-16 lg:py-20">
+        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-12 lg:py-16">
           <Eyebrow>Who it&apos;s for</Eyebrow>
           <SectionTitle strong="Built for experts" soft="journalists want to hear from" />
-          <div className="mt-10 grid gap-4 lg:grid-cols-3">
+          <div className="mt-8 grid gap-4 lg:grid-cols-3">
             {useCases.map((uc) => (
               <div key={uc.title} className="rounded-xl border border-rule bg-surface/40 p-7">
                 <h3 className="font-display text-xl font-semibold">{uc.title}</h3>
                 <p className="mt-3 text-sm leading-6 text-ink-soft">{uc.body}</p>
-                <ul className="mt-6 space-y-3 border-t border-rule pt-6 text-sm text-ink">
+                <ul className="mt-4 space-y-2 border-t border-rule pt-4 text-sm text-ink">
                   {uc.points.map((p) => (
                     <li key={p} className="flex gap-3">
                       <Check className="mt-0.5 h-4 w-4 shrink-0 text-press" aria-hidden="true" />
@@ -940,10 +940,10 @@ export default function Home() {
 
       {/* Pricing */}
       <section className="border-t border-rule bg-surface/60">
-        <div className="mx-auto max-w-[66rem] px-6 lg:px-10 py-16 lg:py-20">
+        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-12 lg:py-16">
           <Eyebrow>Pricing</Eyebrow>
           <SectionTitle strong="One plan," soft="cheaper than one agency week" />
-          <div className="card-elevated-brand mt-10 grid overflow-hidden rounded-2xl border border-brand/40 bg-paper lg:grid-cols-[1fr_1.5fr]">
+          <div className="card-elevated-brand mt-8 grid overflow-hidden rounded-2xl border border-brand/40 bg-paper lg:grid-cols-[1fr_1.5fr]">
             <div className="flex flex-col border-b border-rule bg-gradient-to-b from-brand/[0.14] to-transparent p-7 sm:p-9 lg:border-r lg:border-b-0">
               <h3 className="font-display text-2xl font-semibold">{plan.name}</h3>
               <p className="mt-2 text-sm leading-6 text-ink-soft">
@@ -992,7 +992,7 @@ export default function Home() {
 
       {/* FAQ */}
       <section className="border-t border-rule">
-        <div className="mx-auto grid max-w-[66rem] gap-12 px-6 lg:px-10 py-16 lg:grid-cols-[1fr_1.6fr] lg:py-20">
+        <div className="mx-auto grid max-w-[88rem] gap-12 px-6 lg:px-10 py-12 lg:grid-cols-[1fr_1.6fr] lg:py-16">
           <div>
             <SectionTitle strong="FAQs" />
             <p className="mt-5 text-sm leading-6 text-ink-soft">
@@ -1062,7 +1062,7 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 /** Two-tone heading: the key phrase in full ink, the rest dimmed. */
 function SectionTitle({ strong, soft, tail }: { strong: string; soft?: string; tail?: string }) {
   return (
-    <h2 className="mt-3 font-display text-3xl leading-[1.1] font-semibold tracking-tight sm:text-4xl lg:text-5xl">
+    <h2 className="mt-2 font-display text-3xl leading-[1.1] font-semibold tracking-tight lg:text-4xl">
       {strong}
       {soft && <span className="text-ink-soft/60"> {soft}</span>}
       {tail && <> {tail}</>}
@@ -1205,7 +1205,7 @@ function ArticleMock() {
         <p className="mt-2 text-xs text-ink-soft">Updated Nov 3, 2026 · 6 min read</p>
 
         <div
-          className="mt-5 h-36 rounded-lg border border-rule sm:h-44"
+          className="mt-4 h-24 rounded-lg border border-rule sm:h-28"
           style={{
             backgroundImage:
               "radial-gradient(circle at 25% 30%, color-mix(in srgb, var(--brand) 45%, transparent), transparent 55%), radial-gradient(circle at 80% 75%, color-mix(in srgb, var(--press) 30%, transparent), transparent 50%), linear-gradient(135deg, var(--surface), var(--paper))",
