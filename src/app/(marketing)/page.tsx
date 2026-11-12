@@ -397,7 +397,7 @@ export default function Home() {
 
       {/* Value strip */}
       <section className="border-y border-rule bg-surface/60">
-        <div className="mx-auto grid max-w-[88rem] divide-y divide-rule sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+        <div className="mx-auto grid max-w-[66rem] divide-y divide-rule sm:grid-cols-3 sm:divide-x sm:divide-y-0">
           {valueProps.map((v) => (
             <div key={v.eyebrow} className="px-6 py-10">
               <Eyebrow>{v.eyebrow}</Eyebrow>
@@ -412,7 +412,7 @@ export default function Home() {
       </section>
 
       {/* Before / after */}
-      <section className="mx-auto max-w-[88rem] px-6 lg:px-10 py-16 lg:py-20">
+      <section className="mx-auto max-w-[66rem] px-6 lg:px-10 py-16 lg:py-20">
         <Eyebrow>Why Quotarly</Eyebrow>
         <SectionTitle strong="Getting press" soft="without us," tail="and with us" />
 
@@ -524,7 +524,7 @@ export default function Home() {
 
       {/* How it works */}
       <section className="border-t border-rule">
-        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-16 lg:py-20">
+        <div className="mx-auto max-w-[66rem] px-6 lg:px-10 py-16 lg:py-20">
           <Eyebrow>How it works</Eyebrow>
           <SectionTitle strong="Four steps" soft="to your first live backlink" />
 
@@ -573,7 +573,7 @@ export default function Home() {
 
       {/* One query, start to finish */}
       <section className="border-y border-rule bg-surface/60">
-        <div className="mx-auto grid max-w-[88rem] items-center gap-14 px-6 lg:px-10 py-16 lg:grid-cols-[1fr_1fr] lg:py-20">
+        <div className="mx-auto grid max-w-[66rem] items-center gap-14 px-6 lg:px-10 py-16 lg:grid-cols-[1fr_1fr] lg:py-20">
           <div>
             <Eyebrow>One query, start to finish</Eyebrow>
             <SectionTitle strong="From a newsroom request" soft="to a live backlink" />
@@ -591,7 +591,7 @@ export default function Home() {
 
       {/* Filtering + tracking */}
       <section>
-        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-16 lg:py-20">
+        <div className="mx-auto max-w-[66rem] px-6 lg:px-10 py-16 lg:py-20">
           <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr] lg:items-end lg:gap-16">
             <div>
               <Eyebrow>Built to be picky</Eyebrow>
@@ -696,7 +696,7 @@ export default function Home() {
 
       {/* Anatomy of a placement */}
       <section className="border-y border-rule bg-surface/60">
-        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-16 lg:py-20">
+        <div className="mx-auto max-w-[66rem] px-6 lg:px-10 py-16 lg:py-20">
           <Eyebrow>The result</Eyebrow>
           <SectionTitle strong="What a placement" soft="actually looks like" />
 
@@ -760,7 +760,7 @@ export default function Home() {
       </section>
 
       {/* Cost comparison */}
-      <section className="mx-auto max-w-[88rem] px-6 lg:px-10 py-16 lg:py-20">
+      <section className="mx-auto max-w-[66rem] px-6 lg:px-10 py-16 lg:py-20">
         <Eyebrow>Cost comparison</Eyebrow>
         <SectionTitle
           strong="How we compare"
@@ -807,10 +807,10 @@ export default function Home() {
 
       {/* Platform features */}
       <section className="border-t border-rule bg-surface/60">
-        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-16 lg:py-20">
+        <div className="mx-auto max-w-[66rem] px-6 lg:px-10 py-16 lg:py-20">
           <Eyebrow>Under the hood</Eyebrow>
           <SectionTitle strong="More than a pitch bot" soft="— built so nothing embarrassing goes out" />
-          <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-10 grid gap-4 md:grid-cols-2">
             <FeatureCard
               icon={Target}
               title="Expertise profile"
@@ -916,7 +916,7 @@ export default function Home() {
 
       {/* Who it's for */}
       <section className="border-t border-rule">
-        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-16 lg:py-20">
+        <div className="mx-auto max-w-[66rem] px-6 lg:px-10 py-16 lg:py-20">
           <Eyebrow>Who it&apos;s for</Eyebrow>
           <SectionTitle strong="Built for experts" soft="journalists want to hear from" />
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
@@ -940,7 +940,7 @@ export default function Home() {
 
       {/* Pricing */}
       <section className="border-t border-rule bg-surface/60">
-        <div className="mx-auto max-w-[88rem] px-6 lg:px-10 py-16 lg:py-20">
+        <div className="mx-auto max-w-[66rem] px-6 lg:px-10 py-16 lg:py-20">
           <Eyebrow>Pricing</Eyebrow>
           <SectionTitle strong="One plan," soft="cheaper than one agency week" />
           <div className="card-elevated-brand mt-10 grid overflow-hidden rounded-2xl border border-brand/40 bg-paper lg:grid-cols-[1fr_1.5fr]">
@@ -992,7 +992,7 @@ export default function Home() {
 
       {/* FAQ */}
       <section className="border-t border-rule">
-        <div className="mx-auto grid max-w-[88rem] gap-12 px-6 lg:px-10 py-16 lg:grid-cols-[1fr_1.6fr] lg:py-20">
+        <div className="mx-auto grid max-w-[66rem] gap-12 px-6 lg:px-10 py-16 lg:grid-cols-[1fr_1.6fr] lg:py-20">
           <div>
             <SectionTitle strong="FAQs" />
             <p className="mt-5 text-sm leading-6 text-ink-soft">
