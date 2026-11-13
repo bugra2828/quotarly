@@ -51,6 +51,7 @@ export async function getMonthlyStats(
     .from("backlinks")
     .select("outlet_domain, article_url, authority_score, is_dofollow, first_seen_at")
     .eq("expert_profile_id", expertProfileId)
+    .eq("origin", "quotarly")
     .gte("first_seen_at", start.toISOString())
     .lt("first_seen_at", end.toISOString())
     .order("first_seen_at", { ascending: false });

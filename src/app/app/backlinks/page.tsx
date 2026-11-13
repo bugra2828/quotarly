@@ -10,6 +10,7 @@ export default async function BacklinksPage() {
   const { data: backlinks, error } = await supabase
     .from("backlinks")
     .select("*, expert_profiles(owner_id)")
+    .eq("origin", "quotarly")
     .order("first_seen_at", { ascending: false });
 
   return (

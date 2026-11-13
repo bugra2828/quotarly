@@ -71,6 +71,7 @@ export default async function DashboardPage({
             .from("backlinks")
             .select("id, outlet_domain, article_url, authority_score, is_dofollow, status, first_seen_at")
             .in("expert_profile_id", expertProfileIds)
+            .eq("origin", "quotarly")
             .order("first_seen_at", { ascending: false })
             .limit(5),
         ])

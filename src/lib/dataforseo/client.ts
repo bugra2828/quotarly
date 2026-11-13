@@ -20,8 +20,13 @@ export type BacklinkItem = {
 // https://docs.dataforseo.com/v3/backlinks/backlinks/live
 export async function fetchLiveBacklinks(
   targetDomain: string,
-  limit = 100
+  options: { limit?: number; firstSeenAfter?: Date } = {}
 ): Promise<BacklinkItem[]> {
+  const { limit = 1000, firstSeenAfter } = options;
+  // Newest first, so the links we care about are never cut off by the limit.
+  const filters = firstSeenAfter
+    ? [["first_seen", ">", toDataForSeoTime(firstSeenAfter)]]
+    : undefined;
   const res = await fetch(`${BASE_URL}/backlinks/backlinks/live`, {
     method: "POST",
     headers: {
@@ -33,13 +38,19 @@ export async function fetchLiveBacklinks(
         target: targetDomain,
         mode: "as_is",
         limit,
-        filters: [["dofollow", "in", [true, false]]],
+        order_by: ["first_seen,desc"],
+        ...(filters ? { filters } : {}),
       },
     ]),
   });
 
+  if (!res.ok) throw new Error(`DataForSEO backlinks failed: ${res.status}`);
   const json = await res.json();
-  const items = json?.tasks?.[0]?.result?.[0]?.items ?? [];
+  const task = json?.tasks?.[0];
+  if (task && task.status_code !== 20000) {
+    throw new Error(`DataForSEO backlinks failed: ${task.status_code} ${task.status_message}`);
+  }
+  const items = task?.result?.[0]?.items ?? [];
 
   return items.map(
     (item: {
@@ -60,4 +71,31 @@ export async function fetchLiveBacklinks(
       first_seen: item.first_seen,
     })
   );
+}
+
+// "2026-11-13 06:00:00 +00:00", the time format DataForSEO filters expect.
+function toDataForSeoTime(date: Date): string {
+  return `${date.toISOString().slice(0, 19).replace("T", " ")} +00:00`;
+}
+
+// Google organic results for a query (US, English), via DataForSEO SERP API.
+// https://docs.dataforseo.com/v3/serp/google/organic/live/advanced
+export async function searchGoogle(keyword: string): Promise<string[]> {
+  const res = await fetch(`${BASE_URL}/serp/google/organic/live/advanced`, {
+    method: "POST",
+    headers: {
+      Authorization: authHeader(),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify([{ keyword, location_code: 2840, language_code: "en", depth: 10 }]),
+  });
+
+  if (!res.ok) throw new Error(`DataForSEO SERP failed: ${res.status}`);
+  const json = await res.json();
+  const task = json?.tasks?.[0];
+  if (task && task.status_code !== 20000) {
+    throw new Error(`DataForSEO SERP failed: ${task.status_code} ${task.status_message}`);
+  }
+  const items: { type: string; url?: string }[] = task?.result?.[0]?.items ?? [];
+  return items.filter((i) => i.type === "organic" && i.url).map((i) => i.url!);
 }

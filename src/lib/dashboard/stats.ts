@@ -92,12 +92,14 @@ export async function getDashboardStats(
       .from("backlinks")
       .select("first_seen_at, authority_score")
       .in("expert_profile_id", expertProfileIds)
+      .eq("origin", "quotarly")
       .gte("first_seen_at", start.toISOString()),
     days
       ? supabase
           .from("backlinks")
           .select("*", { count: "exact", head: true })
           .in("expert_profile_id", expertProfileIds)
+          .eq("origin", "quotarly")
           .gte("first_seen_at", prevStart.toISOString())
           .lt("first_seen_at", prevEnd.toISOString())
       : Promise.resolve({ count: 0 }),

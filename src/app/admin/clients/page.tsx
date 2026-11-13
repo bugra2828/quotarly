@@ -38,6 +38,7 @@ export default async function AdminClientsPage() {
           .from("backlinks")
           .select("expert_profile_id, first_seen_at")
           .in("expert_profile_id", expertIds)
+          .eq("origin", "quotarly")
           .gte("first_seen_at", startOfMonth.toISOString())
       : { data: [] };
 
