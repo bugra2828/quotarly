@@ -107,7 +107,7 @@ export async function getDashboardStats(
       .from("pitches")
       .select("*", { count: "exact", head: true })
       .in("expert_profile_id", expertProfileIds)
-      .eq("status", "pending_approval"),
+      .in("status", ["awaiting_answers", "pending_approval"]),
   ]);
 
   const buckets = buildDayBuckets(start, now);

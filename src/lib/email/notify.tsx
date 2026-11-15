@@ -37,8 +37,8 @@ export async function sendPendingApprovalNotification(params: {
     from: FROM,
     to: params.toEmail,
     subject: params.outletName
-      ? `A quote is waiting for you — ${params.outletName}`
-      : "A quote is waiting for you",
+      ? `${params.outletName} wants an expert like you: 2-3 quick questions`
+      : "A journalist request fits you: 2-3 quick questions",
     react: (
       <PendingApprovalEmail
         outletName={params.outletName}

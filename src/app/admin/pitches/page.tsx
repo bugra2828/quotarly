@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 const statusColor: Record<string, string> = {
   sent: "bg-press/15 text-press",
   approved: "bg-press/15 text-press",
+  awaiting_answers: "bg-wire/15 text-wire",
   pending_approval: "bg-wire/15 text-wire",
   failed: "bg-wire/15 text-wire",
   rejected: "bg-ink-soft/15 text-ink-soft",

@@ -56,7 +56,7 @@ export default async function DashboardPage({
             .from("pitches")
             .select("id, subject, created_at, matches(query_id)")
             .in("expert_profile_id", expertProfileIds)
-            .eq("status", "pending_approval")
+            .in("status", ["awaiting_answers", "pending_approval"])
             .order("created_at", { ascending: false })
             .limit(5),
           supabase

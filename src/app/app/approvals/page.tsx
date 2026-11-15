@@ -1,7 +1,15 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getSessionUser } from "@/lib/supabase/session";
-import { approvePitch, rejectPitch } from "@/app/actions/pitches";
+import {
+  approvePitch,
+  rejectPitch,
+  submitInterviewAnswers,
+} from "@/app/actions/pitches";
+
+// Pitches the expert still has to act on: answer the questions, or review
+// the assembled draft and send it.
+const OPEN_STATUSES = ["awaiting_answers", "pending_approval"];
 import { groupByMonth, parseMonthKey } from "@/lib/pitches/months";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -23,7 +31,7 @@ export default async function ApprovalsPage({
     const { data: pending, error: monthsError } = await supabase
       .from("pitches")
       .select("created_at")
-      .eq("status", "pending_approval");
+      .in("status", OPEN_STATUSES);
 
     const months = groupByMonth((pending ?? []).map((p) => p.created_at));
 
@@ -46,7 +54,7 @@ export default async function ApprovalsPage({
         ) : (
           !months.length && (
             <p className="text-sm text-ink-soft">
-              Nothing waiting for your approval right now.
+              Nothing waiting for you right now.
             </p>
           )
         )}
@@ -78,8 +86,10 @@ export default async function ApprovalsPage({
 
   const { data: pitches, error: queryError } = await supabase
     .from("pitches")
-    .select("*, matches(query_id, score, reasoning, expert_profiles(display_name))")
-    .eq("status", "pending_approval")
+    .select(
+      "*, matches(query_id, score, reasoning, expert_profiles(display_name))",
+    )
+    .in("status", OPEN_STATUSES)
     .gte("created_at", month.start.toISOString())
     .lt("created_at", month.end.toISOString())
     .order("created_at", { ascending: false });
@@ -91,7 +101,7 @@ export default async function ApprovalsPage({
           const m = Array.isArray(p.matches) ? p.matches[0] : p.matches;
           return m?.query_id;
         })
-        .filter(Boolean)
+        .filter(Boolean),
     ),
   ] as string[];
 
@@ -136,7 +146,7 @@ export default async function ApprovalsPage({
       ) : (
         !pitches?.length && (
           <p className="text-sm text-ink-soft">
-            Nothing waiting for your approval in {month.label}.
+            Nothing waiting for you in {month.label}.
           </p>
         )
       )}
@@ -145,7 +155,11 @@ export default async function ApprovalsPage({
         {pitches?.map((p) => {
           const match = Array.isArray(p.matches) ? p.matches[0] : p.matches;
           const query = match ? queryById.get(match.query_id) : null;
-          const hasVerify = p.body.includes("[VERIFY");
+          const awaitingAnswers = p.status === "awaiting_answers";
+          const questions: string[] = Array.isArray(p.interview_questions)
+            ? p.interview_questions.map(String)
+            : [];
+          const hasVerify = (p.body ?? "").includes("[VERIFY");
           const deadlinePassed =
             query?.deadline && new Date(query.deadline) < new Date();
 
@@ -159,7 +173,16 @@ export default async function ApprovalsPage({
                     </p>
                     <p className="mt-0.5 font-dispatch text-xs text-ink-soft">
                       {query?.outlet_name ? `${query.outlet_name} · ` : ""}
-                      Arrived {new Date(p.created_at).toLocaleDateString("en-GB")}
+                      Arrived{" "}
+                      {new Date(p.created_at).toLocaleDateString("en-GB")}
+                      {" · "}
+                      <span
+                        className={awaitingAnswers ? "text-wire" : "text-press"}
+                      >
+                        {awaitingAnswers
+                          ? "Needs your answers"
+                          : "Ready to review"}
+                      </span>
                     </p>
                   </div>
                   <span className="shrink-0 text-ink-soft transition-transform group-open:rotate-180">
@@ -182,7 +205,8 @@ export default async function ApprovalsPage({
                           deadlinePassed ? "text-wire" : "text-ink-soft"
                         }`}
                       >
-                        Deadline: {new Date(query.deadline).toLocaleString("en-GB")}
+                        Deadline:{" "}
+                        {new Date(query.deadline).toLocaleString("en-GB")}
                         {deadlinePassed ? " (passed)" : ""}
                       </p>
                     )}
@@ -190,46 +214,82 @@ export default async function ApprovalsPage({
 
                   <div>
                     <p className="font-dispatch text-xs text-ink-soft">
-                      Your draft (match score: {match?.score})
+                      {awaitingAnswers
+                        ? `Answer in your own words (match score: ${match?.score})`
+                        : `Your pitch (match score: ${match?.score})`}
                     </p>
-                    <form action={approvePitch} className="mt-2 space-y-2">
-                      <input type="hidden" name="pitch_id" value={p.id} />
-                      <input type="hidden" name="month" value={month.key} />
-                      <input
-                        type="text"
-                        defaultValue={p.subject}
-                        disabled
-                        className="w-full rounded-md border border-rule bg-paper px-3 py-2 text-sm text-ink-soft"
-                      />
-                      <textarea
-                        name="body"
-                        defaultValue={p.body}
-                        rows={8}
-                        className="w-full rounded-md border border-rule bg-paper px-3 py-2 text-sm text-ink focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/40"
-                      />
-                      {hasVerify && (
-                        <p className="text-xs text-wire">
-                          This draft has [VERIFY: ...] placeholders — edit
-                          them out before you can send.
+                    {awaitingAnswers ? (
+                      <form
+                        action={submitInterviewAnswers}
+                        className="mt-2 space-y-4"
+                      >
+                        <input type="hidden" name="pitch_id" value={p.id} />
+                        <input type="hidden" name="month" value={month.key} />
+                        <p className="text-xs text-ink-soft">
+                          A sentence or two each is enough. Quotarly only puts
+                          your answers in order and fixes typos. It won&apos;t
+                          add anything you didn&apos;t write.
                         </p>
-                      )}
-                      <div className="flex gap-2">
+                        {questions.map((question, i) => (
+                          <label key={i} className="block space-y-1.5">
+                            <span className="text-sm font-medium text-ink">
+                              {i + 1}. {question}
+                            </span>
+                            <textarea
+                              name={`answer_${i}`}
+                              rows={3}
+                              className="w-full rounded-md border border-rule bg-paper px-3 py-2 text-sm text-ink focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/40"
+                            />
+                          </label>
+                        ))}
                         <button
                           type="submit"
                           disabled={!!deadlinePassed}
                           className="rounded-full bg-brand-solid px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-solid/90 disabled:opacity-50"
                         >
-                          Approve & send
+                          Build my pitch
                         </button>
-                      </div>
-                    </form>
+                      </form>
+                    ) : (
+                      <form action={approvePitch} className="mt-2 space-y-2">
+                        <input type="hidden" name="pitch_id" value={p.id} />
+                        <input type="hidden" name="month" value={month.key} />
+                        <input
+                          type="text"
+                          defaultValue={p.subject}
+                          disabled
+                          className="w-full rounded-md border border-rule bg-paper px-3 py-2 text-sm text-ink-soft"
+                        />
+                        <textarea
+                          name="body"
+                          defaultValue={p.body}
+                          rows={8}
+                          className="w-full rounded-md border border-rule bg-paper px-3 py-2 text-sm text-ink focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/40"
+                        />
+                        {hasVerify && (
+                          <p className="text-xs text-wire">
+                            This draft has [VERIFY: ...] placeholders — edit
+                            them out before you can send.
+                          </p>
+                        )}
+                        <div className="flex gap-2">
+                          <button
+                            type="submit"
+                            disabled={!!deadlinePassed}
+                            className="rounded-full bg-brand-solid px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-solid/90 disabled:opacity-50"
+                          >
+                            Approve & send
+                          </button>
+                        </div>
+                      </form>
+                    )}
                     <form action={rejectPitch} className="mt-2">
                       <input type="hidden" name="pitch_id" value={p.id} />
                       <button
                         type="submit"
                         className="text-sm text-ink-soft underline hover:text-ink"
                       >
-                        Reject
+                        {awaitingAnswers ? "Skip this one" : "Reject"}
                       </button>
                     </form>
                   </div>

@@ -1,6 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { matchQueryToProfile, quickKeywordOverlap } from "@/lib/ai/matcher";
-import { writePitch } from "@/lib/ai/writer";
+import { askInterviewQuestions } from "@/lib/ai/writer";
 import { sendPendingApprovalNotification } from "@/lib/email/notify";
 
 // Starter plan cap — see pricing page. Enforced per expert profile, per
@@ -84,13 +84,11 @@ export async function runMatchingForQueries(queryIds: string[]) {
 
         if (matchError || !match) continue;
 
-        const pitch = await writePitch(queryText, query.requirements, {
+        // Interview mode: the AI asks questions; the expert writes the answer.
+        const interview = await askInterviewQuestions(queryText, query.requirements, {
           display_name: profile.display_name,
           job_title: profile.job_title,
           company: profile.company,
-          tone: profile.tone,
-          sample_quotes: profile.sample_quotes ?? [],
-          website_url: profile.website_url,
         });
 
         const { data: newPitch } = await supabase
@@ -98,9 +96,10 @@ export async function runMatchingForQueries(queryIds: string[]) {
           .insert({
             match_id: match.id,
             expert_profile_id: profile.id,
-            subject: pitch.subject,
-            body: pitch.body,
-            status: "pending_approval",
+            subject: interview.subject || query.title,
+            body: null,
+            interview_questions: interview.questions,
+            status: "awaiting_answers",
           })
           .select()
           .single();
@@ -120,9 +119,9 @@ export async function runMatchingForQueries(queryIds: string[]) {
           ownerEmailByProfileId.set(profile.id, ownerEmail);
         }
 
-        // Every pitch waits for the expert to review, edit and send it
-        // themselves. Auto-send was removed because journalist request
-        // services ban unreviewed AI pitches.
+        // The expert answers the questions, reviews the result and sends it
+        // themselves. Nothing is written or sent for them, because journalist
+        // request services ban AI-written and unreviewed pitches.
         if (ownerEmail) {
           await sendPendingApprovalNotification({
             toEmail: ownerEmail,
