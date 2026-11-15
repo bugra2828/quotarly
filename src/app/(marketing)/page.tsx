@@ -109,14 +109,14 @@ const dispatch = [
     ),
   },
   {
-    time: "9:20 AM",
-    label: "Sent",
+    time: "9:31 AM",
+    label: "You approved",
     color: "text-ink",
     dot: "bg-ink",
     body: (
       <p className="flex items-center gap-2 font-sans text-sm text-ink-soft">
         <Check className="h-4 w-4 shrink-0 text-press" aria-hidden="true" />
-        Cleared your bar, sent with 1h 54m to spare.
+        You tweaked one line and sent it from your Gmail, 1h 43m before the deadline.
       </p>
     ),
   },
@@ -150,15 +150,15 @@ const valueProps = [
   },
   {
     eyebrow: "Where they come from",
-    lead: "Queries from ",
-    strong: "trusted, vetted journalist sources",
+    lead: "Requests from ",
+    strong: "established journalist request services",
     tail: ", scored against your expertise.",
   },
   {
     eyebrow: "You stay in control",
-    lead: "Auto-send what clears your bar, or ",
-    strong: "approve every quote yourself",
-    tail: ".",
+    lead: "Nothing goes out until ",
+    strong: "you read, edit and send it",
+    tail: ", from your own Gmail.",
   },
 ];
 
@@ -171,8 +171,8 @@ const before = [
 
 const after = [
   { icon: Target, text: "Every query scored against your exact expertise" },
-  { icon: Timer, text: "Drafted and sent within minutes, deadline-aware" },
-  { icon: PenLine, text: "Quotes written in your voice, from your own facts" },
+  { icon: Timer, text: "A ready-to-edit draft within minutes, deadline-aware" },
+  { icon: PenLine, text: "Drafts built from your own facts, in your voice" },
   { icon: ShieldCheck, text: "Every published link checked daily and reported" },
 ];
 
@@ -191,9 +191,9 @@ const steps = [
   },
   {
     n: "03",
-    title: "Quotes go out",
-    body: "Matches get a quote drafted in your voice and sent before the deadline — or held for your approval.",
-    chips: ["Your voice", "Deadline-aware"],
+    title: "You review and send",
+    body: "Each match gets a draft built from your own facts. You check it, put it in your own words and send it before the deadline.",
+    chips: ["Your words", "Deadline-aware"],
   },
   {
     n: "04",
@@ -211,7 +211,7 @@ const funnel = [
   { label: "Outside your expertise", sign: "−", n: 640, suffix: " out", width: 78 },
   { label: "Below your match bar", sign: "−", n: 230, suffix: " out", width: 64 },
   { label: "Deadline too close", sign: "−", n: 40, suffix: " out", width: 52 },
-  { label: "Pitched for you", n: 90, width: 40, final: true },
+  { label: "Drafted for your review", n: 90, width: 40, final: true },
 ];
 
 const trackedLinks = [
@@ -231,13 +231,13 @@ const compareRows: { label: string; diy: string; agency: string; us: string }[] 
     label: "Effort",
     diy: "Read every query, write every pitch",
     agency: "Briefings, calls, approvals",
-    us: "5-min setup, optional review",
+    us: "5-min setup, 2-min review per pitch",
   },
   {
     label: "Speed",
     diy: "Whenever you get to the inbox",
     agency: "Business hours",
-    us: "Minutes after a query lands",
+    us: "Draft ready minutes after a query lands",
   },
   {
     label: "Link tracking",
@@ -289,9 +289,9 @@ const plan = {
     {
       title: "Pitching",
       items: [
-        "Up to 200 personalized pitches a month",
-        "Written in your voice",
-        "Auto-send or manual review",
+        "Only the requests you can genuinely answer",
+        "Drafts from your own facts, in your voice",
+        "You review every pitch, sent from your Gmail",
       ],
     },
     {
@@ -307,8 +307,8 @@ const faqs = [
     a: "Every incoming journalist query is scored against your profile — your bio, expertise topics, and the ones you've excluded. Only queries above your threshold get a drafted quote; everything else is silently skipped.",
   },
   {
-    q: "Can I edit a quote before it's sent?",
-    a: "By default, a quote sends automatically once it clears your match bar. Turn on manual review in your dashboard and every draft lands in your approval queue instead — editable, and nothing reaches a journalist until you approve it.",
+    q: "Does Quotarly send pitches without me?",
+    a: "No. Every draft lands in your approval queue. You read it, edit it into your own words and send it yourself — nothing reaches a journalist until you do. Connect Gmail and it goes out from your own address.",
   },
   {
     q: "What if the AI gets a fact wrong?",
@@ -350,12 +350,13 @@ export default function Home() {
               <h1 className="mt-5 font-display text-[2.6rem] leading-[1.05] font-semibold tracking-tight sm:text-6xl lg:text-7xl">
                 Get{" "}
 <span className="text-brand">quoted by journalists</span>{" "}
-                without reading a single query
+                in your own words, in 2 minutes
               </h1>
               <p className="mt-7 max-w-xl font-sans text-lg leading-8 text-ink-soft">
-                Quotarly reads every journalist request from trusted sources,
-                picks the ones that fit your expertise, and sends a quote in
-                your voice before the deadline. You collect the backlinks.
+                Quotarly finds the journalist requests that fit your
+                expertise and turns your own facts into a ready-to-edit
+                pitch. You review it and send it from your own Gmail. We
+                track the backlinks.
               </p>
               <div className="mt-9 flex flex-wrap items-center gap-4">
                 <Link
@@ -373,7 +374,7 @@ export default function Home() {
                 </Link>
               </div>
               <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 border-t border-rule pt-6 text-sm text-ink-soft">
-                {["Manual review optional", "Every link tracked daily", "Cancel anytime"].map(
+                {["You approve every pitch", "Every link tracked daily", "Cancel anytime"].map(
                   (t) => (
                     <li key={t} className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-press" aria-hidden="true" />
@@ -489,7 +490,7 @@ export default function Home() {
               </div>
               {[
                 { outlet: "The Growth Brief", q: "Scaling a support team past 50", score: 92, state: "Sent" },
-                { outlet: "Founder Weekly", q: "First ops hire mistakes", score: 81, state: "Sent" },
+                { outlet: "Founder Weekly", q: "First ops hire mistakes", score: 81, state: "Draft ready" },
                 { outlet: "Retail Pulse", q: "Holiday returns policy", score: 31, state: "Skipped" },
               ].map((r, i) => (
                 <div
@@ -510,7 +511,7 @@ export default function Home() {
                     </span>
                     <span
                       className={`rounded-full px-2 py-0.5 text-[11px] ${
-                        r.state === "Sent" ? "bg-press/15 text-press" : "bg-white/5 text-ink-soft"
+                        r.state === "Skipped" ? "bg-white/5 text-ink-soft" : "bg-press/15 text-press"
                       }`}
                     >
                       {r.state}
@@ -592,11 +593,12 @@ export default function Home() {
             <Eyebrow>One query, start to finish</Eyebrow>
             <SectionTitle strong="From a newsroom request" soft="to a live backlink" />
             <p data-reveal="left" style={delay(160)} className="mt-6 max-w-md text-lg leading-8 text-ink-soft">
-              Quotarly watches journalist requests from trusted sources around
+              Quotarly watches established journalist request services around
               the clock. When one fits{" "}
               <strong className="font-semibold text-ink">your expertise</strong>,
-              it drafts a quote in your voice, sends it before the deadline and
-              tracks the link until it goes live.
+              it drafts a pitch from your own facts. You review it, send it
+              before the deadline, and Quotarly tracks the link until it goes
+              live.
             </p>
           </div>
           <QueryTimeline />
@@ -867,7 +869,7 @@ export default function Home() {
               index={1}
               icon={ListChecks}
               title="Approval queue"
-              body="Prefer to read every quote first? Turn on manual review and drafts wait for you — editable, nothing sent until you approve."
+              body="Every draft waits here for you. Edit it into your own words and send it — nothing reaches a journalist without you."
             >
               <div className="w-full max-w-xs rounded-lg border border-rule bg-surface p-4">
                 <div className="flex items-center justify-between">

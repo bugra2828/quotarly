@@ -278,6 +278,13 @@ textarea,
 select {
   font-family: var(--font-sans);
 }
+/* The side-slide start state (translateX ±56px) pushes cards past the
+   viewport edge; clip it so the page never scrolls sideways. `clip` (not
+   `hidden`) keeps position: sticky working. */
+html,
+body {
+  overflow-x: clip;
+}
 /* Scroll animations for the marketing pages; see (marketing)/scroll-reveal.tsx.
    The hidden start state only applies once JS has added .reveal-ready. */
 @media (prefers-reduced-motion: no-preference) {

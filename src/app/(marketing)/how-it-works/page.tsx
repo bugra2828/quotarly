@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "How it works",
   description:
-    "How Quotarly's AI PR pitch tool turns live journalist requests into quotes you approve, and quotes into backlinks it tracks for you.",
+    "How Quotarly's AI PR pitch tool turns live journalist requests into pitches you review and send, and quotes into backlinks it tracks for you.",
   alternates: { canonical: "/how-it-works" },
 };
 
@@ -14,11 +14,11 @@ const stages = [
   },
   {
     title: "Match & draft",
-    body: "Quotarly watches the queries coming in from the journalist sources we monitor. Each one is scored against your profile. Anything below your bar is dropped silently — no noise in your inbox. Anything above it gets a quote drafted in your voice, built from your bio and past answers.",
+    body: "Quotarly watches the queries coming in from the journalist sources we monitor. Each one is scored against your profile. Anything below your bar is dropped silently — no noise in your inbox. Anything above it gets a draft built from your bio and past answers, ready for you to edit.",
   },
   {
-    title: "We send, you're in control",
-    body: "By default, a quote that clears your bar goes out the moment it's drafted — fast enough to beat the deadline. Prefer to read every one first? Turn on manual review in your dashboard and nothing sends until you approve it.",
+    title: "You review and send",
+    body: "Every draft waits in your approval queue. Read it, put it in your own words and send it before the deadline. Connect Gmail and it goes out from your own address. Nothing reaches a journalist without you.",
   },
   {
     title: "Track the link",
@@ -48,7 +48,7 @@ export default function HowItWorksPage() {
         How it works
       </h1>
       <p className="mt-4 text-ink-soft">
-        Four stages — review is optional, everything else runs on its own.
+        Four stages. You review and send every pitch; the rest runs on its own.
       </p>
 
       <div className="mt-14 space-y-4">

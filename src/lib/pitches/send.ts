@@ -25,9 +25,8 @@ export type SendPitchResult =
       message: string;
     };
 
-// Shared by the manual "Approve & send" action and the auto-send path in the
-// matcher/writer pipeline — one place that decides whether a drafted pitch is
-// actually safe to send, and sends it.
+// Used by the "Approve & send" action: one place that decides whether a
+// drafted pitch is actually safe to send, and sends it.
 export async function attemptSendPitch(params: {
   supabase: SupabaseLike;
   pitchId: string;

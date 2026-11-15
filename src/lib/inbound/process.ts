@@ -40,7 +40,9 @@ function detectSource(fromEmail: string, subject: string): string {
   return "other";
 }
 
-export type StoredInboundEmail = InboundEmail & { id: string; source: string };
+const DISABLED_SOURCES = new Set(["qwoted"]);
+
+export type StoredInboundEmail =InboundEmail & { id: string; source: string };
 
 export type StoreResult =
   | { status: "stored"; email: StoredInboundEmail }
@@ -101,6 +103,12 @@ export async function processInboundEmail(email: InboundEmail): Promise<ProcessR
 export async function parseStoredEmail(email: StoredInboundEmail): Promise<ProcessResult> {
   const { id: inboundEmailId, source, subject, textBody, htmlBody } = email;
   const supabase = createAdminClient();
+
+  // Qwoted's rules forbid AI-written pitches and replies sent outside its
+  // platform, so its emails are kept for the record but never parsed.
+  if (DISABLED_SOURCES.has(source)) {
+    return { status: 200, body: { ok: true, skipped: source } };
+  }
 
   try {
     const queries = await parseNewsletter(textBody || htmlBody);

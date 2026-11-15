@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Pricing",
-  description: "One plan: get quoted by journalists and earn backlinks from press, up to 200 queries a month.",
+  description: "One plan: get quoted by journalists and earn backlinks from press, with every pitch reviewed and sent by you.",
   alternates: { canonical: "/pricing" },
 };
 
@@ -21,7 +21,7 @@ const PLAN: {
   price: 149,
   features: [
     "1 expert profile",
-    "Up to 200 personalized pitches a month",
+    "Only the requests you can genuinely answer",
     "Live tracking dashboard",
   ],
 };

@@ -1,7 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getSessionUser } from "@/lib/supabase/session";
-import { toggleAutoApprove } from "@/app/actions/expert-profile";
 import { getDashboardStats, type DateRange } from "@/lib/dashboard/stats";
 import { computeTrend } from "@/lib/dashboard/trend";
 import { PitchesBarChart, BacklinksAreaChart } from "./DashboardCharts";
@@ -192,42 +191,7 @@ export default async function DashboardPage({
                       {ep.job_title} {ep.company ? `@ ${ep.company}` : ""}
                     </p>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="text-right">
-                      <p className="text-sm font-medium text-ink">Auto-send</p>
-                      <p className="text-xs text-ink-soft">
-                        {ep.auto_approve
-                          ? "Sends automatically"
-                          : "Waits for your review"}
-                      </p>
-                    </div>
-                    <form action={toggleAutoApprove}>
-                      <input
-                        type="hidden"
-                        name="expert_profile_id"
-                        value={ep.id}
-                      />
-                      <input
-                        type="hidden"
-                        name="next_value"
-                        value={(!ep.auto_approve).toString()}
-                      />
-                      <button
-                        type="submit"
-                        aria-pressed={ep.auto_approve}
-                        aria-label="Toggle auto-send"
-                        className={`relative h-7 w-12 shrink-0 rounded-full transition-colors ${
-                          ep.auto_approve ? "bg-press" : "bg-rule"
-                        }`}
-                      >
-                        <span
-                          className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all ${
-                            ep.auto_approve ? "left-6" : "left-1"
-                          }`}
-                        />
-                      </button>
-                    </form>
-                  </div>
+                  <p className="text-xs text-ink-soft">Every pitch waits for your review</p>
                 </li>
               ))}
             </ul>

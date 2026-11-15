@@ -33,12 +33,11 @@ export default function TermsPage() {
             Accuracy is on you
           </h2>
           <p className="mt-2">
-            Quotarly drafts quotes from the profile and bio you give it. By
-            default, a quote sends automatically once it clears your match
-            bar; you can switch to manual review in your dashboard if you'd
-            rather approve each one yourself. Either way, you're responsible
-            for keeping your profile and bio accurate, since that's what
-            every quote is built from.
+            Quotarly drafts quotes from the profile and bio you give it.
+            Nothing is sent automatically: you review, edit and send every
+            pitch yourself, so you're responsible for what it says and for
+            keeping your profile and bio accurate, since that's what every
+            draft is built from.
           </p>
         </section>
 

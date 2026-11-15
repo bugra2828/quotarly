@@ -2,7 +2,6 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { matchQueryToProfile, quickKeywordOverlap } from "@/lib/ai/matcher";
 import { writePitch } from "@/lib/ai/writer";
 import { sendPendingApprovalNotification } from "@/lib/email/notify";
-import { attemptSendPitch } from "@/lib/pitches/send";
 
 // Starter plan cap — see pricing page. Enforced per expert profile, per
 // calendar month, counting every pitch drafted (not just sent), so a flood
@@ -121,33 +120,10 @@ export async function runMatchingForQueries(queryIds: string[]) {
           ownerEmailByProfileId.set(profile.id, ownerEmail);
         }
 
-        let stillPending = true;
-
-        if (profile.auto_approve) {
-          const sendResult = await attemptSendPitch({
-            supabase,
-            pitchId: newPitch.id,
-            expertProfileId: profile.id,
-            expertDisplayName: profile.display_name,
-            subject: pitch.subject,
-            body: pitch.body,
-            replyEmail: query.reply_email,
-            deadline: query.deadline,
-            ownerEmail,
-          });
-
-          // Only the reasons below leave the pitch sitting in
-          // pending_approval — deadline_passed/send_failed already moved it
-          // to expired/failed inside attemptSendPitch, so there's nothing
-          // left to notify about.
-          stillPending =
-            !sendResult.ok &&
-            (sendResult.reason === "verify_tag" ||
-              sendResult.reason === "daily_limit" ||
-              sendResult.reason === "missing_reply_email");
-        }
-
-        if (stillPending && ownerEmail) {
+        // Every pitch waits for the expert to review, edit and send it
+        // themselves. Auto-send was removed because journalist request
+        // services ban unreviewed AI pitches.
+        if (ownerEmail) {
           await sendPendingApprovalNotification({
             toEmail: ownerEmail,
             outletName: query.outlet_name,
